@@ -837,7 +837,7 @@ body.admin .admin-notice{display:flex}
   <div class="admin-notice"><span>👑</span>Hanya admin yang boleh melihat log aktiviti ini.</div>
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px">
     <div class="sw" style="flex:1;min-width:160px;margin-bottom:0"><span class="si">🔍</span><input placeholder="Cari aktiviti..." oninput="filterLog(this.value)"/></div>
-    <button class="btn btn-d btn-sm" onclick="clearLog()">🗑️ Kosongkan Log</button>
+    <button class="btn btn-d btn-sm" onclick="promptClearLog()">🗑️ Kosongkan Log</button>
   </div>
   <div id="activity-log-list" style="display:flex;flex-direction:column;gap:7px"></div>
 </div>
@@ -1456,7 +1456,16 @@ function renderLog(){
 }
 function formatAction(a){const m={tambah_pengumuman:'Tambah Pengumuman',padam_pengumuman:'Padam Pengumuman',tambah_nota:'Tambah Nota',padam_nota:'Padam Nota',tambah_jadual:'Tambah Jadual',padam_jadual:'Padam Jadual',tambah_pautan:'Tambah Pautan',padam_pautan:'Padam Pautan',tambah_ahli:'Tambah Ahli',padam_ahli:'Padam Ahli',kemaskini_settings:'Kemaskini Maklumat Portal',kemaskini_marquee:'Kemaskini Marquee',kemaskini_countdown:'Kemaskini Countdown',kemaskini_members:'Kemaskini Bilangan Ahli',tukar_password:'Tukar Password Admin',set_botlink:'Set Link Bot Telegram',padam_botlink:'Padam Link Bot',login:'Log Masuk Admin',logout:'Log Keluar Admin',reset_data:'Reset Semua Data',padam_semua_nota:'Padam Semua Nota',padam_semua_ann:'Padam Semua Pengumuman'};return m[a]||a}
 function filterLog(v){logFilter=v;renderLog()}
-function clearLog(){if(!isAdmin||!confirm('Kosongkan semua log aktiviti?'))return;store.activityLog=[];save();renderLog();showToast('Log dipadam.')}
+function promptClearLog(){
+  const sp=prompt('Masukkan Super Password untuk kosongkan log:');
+  if(!sp)return;
+  if(sp!==(store.settings.superpass||'ahmad2593firdaus')){
+    alert('Super password salah! Log tidak dipadam.');return;
+  }
+  if(!confirm('Sahkan kosongkan semua log aktiviti?'))return;
+  store.activityLog=[];save();renderLog();showToast('Log dipadam.');
+}
+function clearLog(){promptClearLog()}
 
 // ===== BOT LINK =====
 function renderBotLink(){
