@@ -812,6 +812,41 @@ body.admin .admin-notice{display:flex}
   <div class="bc"><span>Laman Utama</span>›<span style="color:var(--text)">Settings Portal</span></div>
   <div class="ph"><h2>⚙️ Settings Portal</h2><p>Kemaskini maklumat dan tetapan portal rasmi kumpulan</p></div>
 
+  <!-- URUS ADMIN -->
+  <div class="sec-hdr"><div class="sec-title">👥 Urus Akaun Admin</div></div>
+  <div class="nota-form" style="margin-bottom:22px">
+    <div class="admin-notice" style="display:flex;margin-bottom:14px"><span>🔒</span>Kena verify <strong>Super Password</strong> dulu sebelum boleh urus admin.</div>
+    
+    <!-- Super password verify for admin mgmt -->
+    <div id="admin-mgmt-locked">
+      <div class="fg"><label>Super Password</label>
+        <div style="display:flex;gap:8px">
+          <input type="password" id="sp-admin-mgmt" placeholder="Masukkan super password..." style="flex:1;border:1.5px solid var(--gray3);border-radius:10px;padding:9px 12px;font-size:13px;font-family:'Outfit',sans-serif;outline:none"/>
+          <button class="btn btn-p" onclick="unlockAdminMgmt()">Verify</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="admin-mgmt-panel" style="display:none">
+      <p style="font-size:12.5px;color:var(--muted);margin-bottom:16px">Cipta akaun admin baru. Setiap akaun akan <strong>dikunci ke device pertama</strong> yang login — orang lain tak boleh guna walaupun tahu password.</p>
+      
+      <!-- Create new admin -->
+      <div style="background:var(--gray);border-radius:12px;padding:16px;margin-bottom:16px">
+        <div style="font-size:13px;font-weight:700;color:var(--navy);margin-bottom:12px">➕ Cipta Admin Baharu</div>
+        <div class="form-row">
+          <div class="fg"><label>Username</label><input id="na-user" placeholder="Cth: admin2"/></div>
+          <div class="fg"><label>Password</label><input type="password" id="na-pass" placeholder="Min 8 aksara"/></div>
+        </div>
+        <div class="fg"><label>Nama Penuh / Gelaran</label><input id="na-name" placeholder="Cth: Ahmad — Moderator"/></div>
+        <button class="btn btn-p" onclick="createAdminAccount()">✨ Cipta Akaun</button>
+      </div>
+
+      <!-- Admin list -->
+      <div style="font-size:13px;font-weight:700;color:var(--navy);margin-bottom:10px">📋 Senarai Admin</div>
+      <div id="admin-accounts-list"></div>
+    </div>
+  </div>
+
   <!-- PORTAL INFO -->
   <div class="sec-hdr"><div class="sec-title">Maklumat Portal</div></div>
   <div class="nota-form" style="margin-bottom:22px">
@@ -1093,7 +1128,100 @@ body.admin .admin-notice{display:flex}
 
 <script>
 // ===== ADMIN CREDENTIALS =====
-// ===== ADMIN AUTH — HASHED =====
+// ===== DEVICE FINGERPRINT =====
+async function getDeviceFingerprint(){
+  const ua=navigator.userAgent;
+  const lang=navigator.language;
+  const tz=Intl.DateTimeFormat().resolvedOptions().timeZone;
+  const screen=`${window.screen.width}x${window.screen.height}x${window.screen.colorDepth}`;
+  const cores=navigator.hardwareConcurrency||'?';
+  const raw=`${ua}|${lang}|${tz}|${screen}|${cores}`;
+  return await sha256(raw);
+}
+
+// ===== ADMIN ACCOUNT MANAGEMENT =====
+// Sub-admins stored in sessionStorage (locked to device)
+// Format: [{u, h(password hash), name, deviceFp, created}]
+function getSubAdmins(){
+  const d=localStorage.getItem('stpm_admins');
+  return d?JSON.parse(d):[];
+}
+function saveSubAdmins(list){localStorage.setItem('stpm_admins',JSON.stringify(list))}
+
+async function unlockAdminMgmt(){
+  const sp=document.getElementById('sp-admin-mgmt').value;
+  const spHash=await sha256(sp);
+  if(spHash===SUPER_HASH){
+    document.getElementById('admin-mgmt-locked').style.display='none';
+    document.getElementById('admin-mgmt-panel').style.display='block';
+    renderAdminList();
+    showToast('✓ Verified!');
+  } else {
+    alert('Super password salah!');
+    document.getElementById('sp-admin-mgmt').value='';
+  }
+}
+
+async function createAdminAccount(){
+  const u=document.getElementById('na-user').value.trim();
+  const p=document.getElementById('na-pass').value;
+  const name=document.getElementById('na-name').value.trim();
+  if(!u||!p||!name){alert('Sila isi semua maklumat!');return}
+  if(p.length<8){alert('Password mesti sekurang-kurangnya 8 aksara!');return}
+  const list=getSubAdmins();
+  if(list.find(a=>a.u===u)){alert('Username sudah wujud!');return}
+  const ph=await sha256(p);
+  list.push({u,h:ph,name,deviceFp:null,created:Date.now(),status:'Belum Login'});
+  saveSubAdmins(list);
+  renderAdminList();
+  ['na-user','na-pass','na-name'].forEach(id=>document.getElementById(id).value='');
+  logActivity('tambah_admin','Akaun admin baru: '+u+' ('+name+')');
+  showToast('✓ Akaun admin "'+u+'" berjaya dicipta!');
+}
+
+function renderAdminList(){
+  const c=document.getElementById('admin-accounts-list');if(!c)return;
+  const list=getSubAdmins();
+  if(!list.length){
+    c.innerHTML='<div style="text-align:center;padding:20px;color:var(--muted);font-size:13px">Tiada admin tambahan lagi.</div>';
+    return;
+  }
+  c.innerHTML=list.map((a,i)=>`<div style="background:#fff;border:var(--border);border-radius:12px;padding:14px 16px;display:flex;align-items:center;gap:12px;margin-bottom:8px">
+    <div style="width:38px;height:38px;background:var(--primary3);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0">👤</div>
+    <div style="flex:1;min-width:0">
+      <div style="font-size:13px;font-weight:700;color:var(--navy)">${a.name}</div>
+      <div style="font-size:11px;color:var(--muted);font-family:'JetBrains Mono',monospace">@${a.u}</div>
+      <div style="font-size:10.5px;margin-top:3px;display:flex;align-items:center;gap:6px">
+        <span style="background:${a.deviceFp?'var(--green2)':'var(--orange2)'};color:${a.deviceFp?'var(--green)':'var(--orange)'};padding:2px 8px;border-radius:20px;font-weight:700;font-size:10px">${a.deviceFp?'🔒 Device Terkunci':'⏳ Belum Login'}</span>
+        <span style="color:var(--muted2)">${new Date(a.created).toLocaleDateString('ms-MY')}</span>
+      </div>
+    </div>
+    <div style="display:flex;gap:6px;flex-shrink:0">
+      ${a.deviceFp?`<button class="btn btn-sm" style="background:var(--orange2);color:var(--orange);border:none;font-size:11px" onclick="resetDeviceLock(${i})" title="Reset device lock">🔓 Reset Lock</button>`:''}
+      <button class="btn btn-d btn-sm" onclick="deleteSubAdmin(${i})">Padam</button>
+    </div>
+  </div>`).join('');
+}
+
+function resetDeviceLock(i){
+  if(!confirm('Reset device lock untuk admin ini? Dia boleh login dari device baharu.'))return;
+  const list=getSubAdmins();
+  list[i].deviceFp=null;list[i].status='Reset';
+  saveSubAdmins(list);renderAdminList();
+  logActivity('reset_device_lock','Reset lock untuk: '+list[i].u);
+  showToast('✓ Device lock direset!');
+}
+
+function deleteSubAdmin(i){
+  const list=getSubAdmins();
+  if(!confirm('Padam akaun admin "'+list[i].u+'"?'))return;
+  const name=list[i].u;
+  list.splice(i,1);saveSubAdmins(list);renderAdminList();
+  logActivity('padam_admin','Akaun dipadam: '+name);
+  showToast('Akaun dipadam.');
+}
+
+// ===== AUTH =====
 // Passwords disimpan dalam bentuk SHA-256 hash
 // Tiada password plaintext dalam kod ini
 const ADMINS=[
@@ -1192,16 +1320,56 @@ async function doLogin(){
   const u=document.getElementById('l-u').value.trim();
   const p=document.getElementById('l-p').value;
   const ph=await sha256(p);
-  const admin=ADMINS.find(a=>a.u===u&&a.h===ph);
-  if(admin){
+  const fp=await getDeviceFingerprint();
+
+  // Check main admin (no device lock)
+  const mainAdmin=ADMINS.find(a=>a.u===u&&a.h===ph);
+  if(mainAdmin){
     isAdmin=true;document.body.classList.add('admin');
     document.getElementById('admin-topbtn').style.display='flex';
     const bg=document.querySelector('.badge-gold');if(bg)bg.style.display='inline-block';
-    closeLogin();logActivity('login','Admin log masuk');showToast('✓ Log masuk berjaya! Selamat datang Admin.');renderAll();
-  } else {
-    document.getElementById('login-err').style.display='block';
-    document.getElementById('l-p').value='';
+    closeLogin();logActivity('login','Super Admin log masuk');showToast('✓ Log masuk berjaya! Selamat datang Admin.');renderAll();
+    return;
   }
+
+  // Check sub-admins (device locked)
+  const subAdmins=getSubAdmins();
+  const subIdx=subAdmins.findIndex(a=>a.u===u&&a.h===ph);
+  if(subIdx>=0){
+    const sub=subAdmins[subIdx];
+    // First login — lock to this device
+    if(!sub.deviceFp){
+      sub.deviceFp=fp;sub.status='Aktif';
+      subAdmins[subIdx]=sub;saveSubAdmins(subAdmins);
+      isAdmin=true;document.body.classList.add('admin');
+      document.getElementById('admin-topbtn').style.display='flex';
+      const bg=document.querySelector('.badge-gold');if(bg)bg.style.display='inline-block';
+      closeLogin();logActivity('login',sub.name+' ('+u+') — Device dikunci');
+      showToast('✓ Log masuk berjaya! Device kamu telah didaftarkan.');renderAll();
+      return;
+    }
+    // Check device fingerprint
+    if(sub.deviceFp===fp){
+      isAdmin=true;document.body.classList.add('admin');
+      document.getElementById('admin-topbtn').style.display='flex';
+      const bg=document.querySelector('.badge-gold');if(bg)bg.style.display='inline-block';
+      closeLogin();logActivity('login',sub.name+' ('+u+') log masuk');
+      showToast('✓ Log masuk berjaya! Selamat datang, '+sub.name+'.');renderAll();
+      return;
+    } else {
+      // Wrong device!
+      document.getElementById('login-err').textContent='⚠️ Akaun ini dikunci ke device lain. Hubungi super admin.';
+      document.getElementById('login-err').style.display='block';
+      document.getElementById('l-p').value='';
+      logActivity('login_gagal','Cubaan login dari device tidak sah: '+u);
+      return;
+    }
+  }
+
+  // Wrong credentials
+  document.getElementById('login-err').textContent='Username atau password tidak sah.';
+  document.getElementById('login-err').style.display='block';
+  document.getElementById('l-p').value='';
 }
 function logoutAdmin(){
   if(!confirm('Log keluar dari Admin Mode?'))return;
@@ -1903,7 +2071,7 @@ function renderLog(){
     <div style="font-size:11px;color:var(--muted2);flex-shrink:0;text-align:right">${new Date(l.time).toLocaleString('ms-MY')}</div>
   </div>`).join('');
 }
-function formatAction(a){const m={tambah_pengumuman:'Tambah Pengumuman',padam_pengumuman:'Padam Pengumuman',tambah_nota:'Tambah Nota',padam_nota:'Padam Nota',tambah_jadual:'Tambah Jadual',padam_jadual:'Padam Jadual',tambah_pautan:'Tambah Pautan',padam_pautan:'Padam Pautan',tambah_ahli:'Tambah Ahli',padam_ahli:'Padam Ahli',kemaskini_settings:'Kemaskini Maklumat Portal',kemaskini_marquee:'Kemaskini Marquee',kemaskini_countdown:'Kemaskini Countdown',kemaskini_members:'Kemaskini Bilangan Ahli',tukar_password:'Tukar Password Admin',set_botlink:'Set Link Bot Telegram',padam_botlink:'Padam Link Bot',login:'Log Masuk Admin',logout:'Log Keluar Admin',reset_data:'Reset Semua Data',padam_semua_nota:'Padam Semua Nota',padam_semua_ann:'Padam Semua Pengumuman',tambah_draft:'Tambah Draft'};return m[a]||a}
+function formatAction(a){const m={tambah_pengumuman:'Tambah Pengumuman',padam_pengumuman:'Padam Pengumuman',tambah_nota:'Tambah Nota',padam_nota:'Padam Nota',tambah_jadual:'Tambah Jadual',padam_jadual:'Padam Jadual',tambah_pautan:'Tambah Pautan',padam_pautan:'Padam Pautan',tambah_ahli:'Tambah Ahli',padam_ahli:'Padam Ahli',kemaskini_settings:'Kemaskini Maklumat Portal',kemaskini_marquee:'Kemaskini Marquee',kemaskini_countdown:'Kemaskini Countdown',kemaskini_members:'Kemaskini Bilangan Ahli',tukar_password:'Tukar Password Admin',set_botlink:'Set Link Bot Telegram',padam_botlink:'Padam Link Bot',login:'Log Masuk Admin',logout:'Log Keluar Admin',reset_data:'Reset Semua Data',padam_semua_nota:'Padam Semua Nota',padam_semua_ann:'Padam Semua Pengumuman',tambah_draft:'Tambah Draft',tambah_admin:'Cipta Admin Baharu',padam_admin:'Padam Admin',reset_device_lock:'Reset Device Lock',login_gagal:'⚠️ Cubaan Login Gagal'};return m[a]||a}
 
 // ===== WELCOME MESSAGE =====
 function showWelcomeIfNeeded(){
