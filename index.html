@@ -1364,9 +1364,75 @@ renderAhli();
 
 // ===== ACTIVITY LOG =====
 const ACTION_ICONS={tambah_pengumuman:'📢',padam_pengumuman:'🗑️',tambah_nota:'📝',padam_nota:'🗑️',tambah_jadual:'📅',padam_jadual:'🗑️',tambah_pautan:'🔗',padam_pautan:'🗑️',tambah_ahli:'👤',padam_ahli:'🗑️',kemaskini_settings:'⚙️',kemaskini_marquee:'📡',kemaskini_countdown:'⏳',kemaskini_members:'👥',tukar_password:'🔒',set_botlink:'🤖',padam_botlink:'🤖',login:'🔐',logout:'🚪',reset_data:'⚠️',padam_semua_nota:'🗑️',padam_semua_ann:'🗑️'};
+function getDeviceInfo(){
+  const ua=navigator.userAgent;
+  let device='Desktop';
+  let model='';
+  // iPhone model
+  if(/iPhone/i.test(ua)){
+    device='iPhone';
+    const match=ua.match(/iPhone OS ([\d_]+)/);
+    if(match){const v=match[1].replace(/_/g,'.');device='iPhone (iOS '+v+')';}
+  }
+  // iPad
+  else if(/iPad/i.test(ua)){
+    device='iPad';
+    const match=ua.match(/OS ([\d_]+)/);
+    if(match){const v=match[1].replace(/_/g,'.');device='iPad (iPadOS '+v+')';}
+  }
+  // Android — cuba detect model
+  else if(/Android/i.test(ua)){
+    const verMatch=ua.match(/Android ([\d.]+)/);
+    const ver=verMatch?verMatch[1]:'';
+    // Model biasanya dalam format: ; MODEL Build/ atau ; MODEL)
+    const modelMatch=ua.match(/;\s*([^;)]+?)\s*(Build\/|MIUI|HMNote|\))/);
+    if(modelMatch){
+      model=modelMatch[1].trim();
+      // Buang perkataan generic
+      model=model.replace(/Linux|Android|Mobile/gi,'').trim();
+    }
+    const isMobile=/Mobile/i.test(ua);
+    const brand=model?model:'Android';
+    device=(isMobile?'':'Tablet ')+(brand+(ver?' (Android '+ver+')':''));
+  }
+  // Mac
+  else if(/Macintosh/i.test(ua)){
+    const match=ua.match(/Mac OS X ([\d_]+)/);
+    const v=match?match[1].replace(/_/g,'.'):'';
+    device='Mac'+(v?' (macOS '+v+')':'');
+  }
+  // Windows
+  else if(/Windows/i.test(ua)){
+    let win='Windows';
+    if(/Windows NT 10/i.test(ua))win='Windows 10/11';
+    else if(/Windows NT 6.3/i.test(ua))win='Windows 8.1';
+    else if(/Windows NT 6.1/i.test(ua))win='Windows 7';
+    device=win;
+  }
+  // Linux
+  else if(/Linux/i.test(ua)){device='Linux';}
+
+  let browser='Browser';
+  if(/Edg\//i.test(ua)){
+    const m=ua.match(/Edg\/([\d.]+)/);browser='Edge'+(m?' '+m[1]:'');
+  } else if(/OPR\//i.test(ua)||/Opera/i.test(ua)){
+    browser='Opera';
+  } else if(/CriOS\//i.test(ua)){
+    const m=ua.match(/CriOS\/([\d.]+)/);browser='Chrome (iOS)'+(m?' '+m[1]:'');
+  } else if(/Chrome\//i.test(ua)){
+    const m=ua.match(/Chrome\/([\d.]+)/);browser='Chrome'+(m?' '+m[1]:'');
+  } else if(/FxiOS\//i.test(ua)){
+    browser='Firefox (iOS)';
+  } else if(/Firefox\//i.test(ua)){
+    const m=ua.match(/Firefox\/([\d.]+)/);browser='Firefox'+(m?' '+m[1]:'');
+  } else if(/Safari\//i.test(ua)){
+    const m=ua.match(/Version\/([\d.]+)/);browser='Safari'+(m?' '+m[1]:'');
+  }
+  return device+' · '+browser;
+}
 function logActivity(action,detail=''){
   if(!store.activityLog)store.activityLog=[];
-  store.activityLog.unshift({id:Date.now(),action,detail,time:Date.now()});
+  store.activityLog.unshift({id:Date.now(),action,detail,device:getDeviceInfo(),time:Date.now()});
   if(store.activityLog.length>200)store.activityLog=store.activityLog.slice(0,200);
   save();
 }
@@ -1381,6 +1447,9 @@ function renderLog(){
     <div style="flex:1;min-width:0">
       <div style="font-size:13px;font-weight:600;color:var(--navy)">${formatAction(l.action)}</div>
       <div style="font-size:11.5px;color:var(--muted);margin-top:2px">${l.detail||'—'}</div>
+      <div style="font-size:11px;color:var(--muted2);margin-top:3px;display:flex;align-items:center;gap:5px">
+        <span style="background:var(--gray2);padding:1px 7px;border-radius:20px">${l.device||'Unknown Device'}</span>
+      </div>
     </div>
     <div style="font-size:11px;color:var(--muted2);flex-shrink:0;text-align:right">${new Date(l.time).toLocaleString('ms-MY')}</div>
   </div>`).join('');
