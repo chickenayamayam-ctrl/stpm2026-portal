@@ -1104,7 +1104,31 @@ body.admin .admin-notice{display:flex}
 </div>
 </div>
 
-<!-- SEARCH MODAL -->
+<!-- BACKGROUND MUSIC PLAYER -->
+<div id="music-player" style="position:fixed;bottom:22px;left:22px;z-index:400;display:flex;align-items:center;gap:10px;background:rgba(26,26,46,.92);backdrop-filter:blur(12px);border:1px solid rgba(108,99,255,.25);border-radius:50px;padding:8px 16px 8px 8px;box-shadow:0 8px 32px rgba(108,99,255,.2);transition:.3s">
+  <!-- Hidden YouTube player -->
+  <iframe id="yt-player" width="0" height="0" style="position:absolute;opacity:0;pointer-events:none"
+    src="https://www.youtube.com/embed/cuSR3a409Tc?autoplay=1&loop=1&playlist=cuSR3a409Tc&controls=0&mute=0&enablejsapi=1"
+    allow="autoplay" frameborder="0"></iframe>
+  <!-- Album art animation -->
+  <div id="music-disc" style="width:36px;height:36px;background:linear-gradient(135deg,var(--primary),var(--mint));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;animation:spin 4s linear infinite;animation-play-state:paused;flex-shrink:0;box-shadow:0 0 0 3px rgba(108,99,255,.2)">🎵</div>
+  <!-- Song info -->
+  <div style="min-width:0">
+    <div style="font-size:11px;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:130px" id="music-title">Background Music</div>
+    <div style="font-size:10px;color:rgba(255,255,255,.5);margin-top:1px" id="music-status">⏸ Muat...</div>
+  </div>
+  <!-- Controls -->
+  <button id="music-toggle-btn" onclick="toggleMusic()" style="width:30px;height:30px;background:rgba(108,99,255,.3);border:none;border-radius:50%;color:#fff;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;transition:.2s;flex-shrink:0" title="Play/Pause">▶️</button>
+  <button onclick="toggleMusicPlayer()" style="width:22px;height:22px;background:rgba(255,255,255,.1);border:none;border-radius:50%;color:rgba(255,255,255,.5);cursor:pointer;font-size:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0" title="Sorok">✕</button>
+</div>
+
+<!-- Music show button (when hidden) -->
+<button id="music-show-btn" onclick="toggleMusicPlayer()" style="position:fixed;bottom:22px;left:22px;z-index:400;display:none;width:44px;height:44px;background:linear-gradient(135deg,var(--primary),var(--mint));border:none;border-radius:50%;color:#fff;cursor:pointer;font-size:20px;box-shadow:0 4px 16px rgba(108,99,255,.4);transition:.2s;animation:musicPulse 2s infinite" title="Tunjuk Music Player">🎵</button>
+
+<style>
+@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+@keyframes musicPulse{0%,100%{box-shadow:0 4px 16px rgba(108,99,255,.4)}50%{box-shadow:0 4px 24px rgba(108,99,255,.7)}}
+</style>
 <div id="search-modal" style="position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:700;display:none;align-items:flex-start;justify-content:center;padding:60px 16px 16px;backdrop-filter:blur(4px)" onclick="closeSearch(event)">
   <div onclick="event.stopPropagation()" style="background:#fff;border-radius:16px;width:100%;max-width:580px;box-shadow:0 20px 60px rgba(0,0,0,.2);overflow:hidden;animation:mi .2s ease">
     <div style="padding:16px;border-bottom:1px solid var(--gray3);display:flex;gap:10px;align-items:center">
@@ -1925,7 +1949,52 @@ function saveAhli(){
 function deleteAhli(id){if(!isAdmin||!confirm('Padam?'))return;const a=store.ahli.find(x=>x.id===id);store.ahli=store.ahli.filter(a=>a.id!==id);save();renderAhli();logActivity('padam_ahli',a?.name||'')}
 renderAhli();
 
-// ===== VIEWER COUNT =====
+// ===== BACKGROUND MUSIC =====
+let musicPlaying=false;
+
+function startMusic(){
+  const iframe=document.getElementById('yt-player');
+  const btn=document.getElementById('music-toggle-btn');
+  const disc=document.getElementById('music-disc');
+  const status=document.getElementById('music-status');
+  iframe.src=`https://www.youtube.com/embed/cuSR3a409Tc?autoplay=1&loop=1&playlist=cuSR3a409Tc&controls=0&mute=0`;
+  musicPlaying=true;
+  btn.textContent='⏸';
+  disc.style.animationPlayState='running';
+  status.textContent='▶ Sedang main...';
+}
+
+function toggleMusic(){
+  const iframe=document.getElementById('yt-player');
+  const btn=document.getElementById('music-toggle-btn');
+  const disc=document.getElementById('music-disc');
+  const status=document.getElementById('music-status');
+  if(!musicPlaying){
+    startMusic();
+  } else {
+    iframe.src=`https://www.youtube.com/embed/cuSR3a409Tc?autoplay=0&loop=1&playlist=cuSR3a409Tc&controls=0&mute=1`;
+    musicPlaying=false;
+    btn.textContent='▶️';
+    disc.style.animationPlayState='paused';
+    status.textContent='⏸ Dijeda';
+  }
+}
+
+function toggleMusicPlayer(){
+  const player=document.getElementById('music-player');
+  const showBtn=document.getElementById('music-show-btn');
+  if(player.style.display==='none'){
+    player.style.display='flex';
+    showBtn.style.display='none';
+  } else {
+    player.style.display='none';
+    showBtn.style.display='flex';
+  }
+}
+
+setTimeout(()=>{
+  document.getElementById('music-status').textContent='Klik ▶️ untuk play';
+},1000);
 let viewerCount=1;
 function simulateViewers(){
   const hour=new Date().getHours();
@@ -2212,14 +2281,27 @@ function showWelcomeIfNeeded(){
   if(!s.welcomeEnabled)return;
   const dismissed=sessionStorage.getItem('wm_dismissed');
   const dontShow=localStorage.getItem('wm_dontshow');
-  if(dismissed||dontShow)return;
+  if(dismissed||dontShow){
+    // Returning visitor — autoplay on first click
+    const onFirstClick=()=>{
+      startMusic();
+      document.removeEventListener('click',onFirstClick);
+    };
+    document.addEventListener('click',onFirstClick);
+    return;
+  }
   const modal=document.getElementById('welcome-modal');if(!modal)return;
   document.getElementById('wm-emoji').textContent=s.welcomeEmoji||'🎓';
   document.getElementById('wm-title').textContent=s.welcomeTitle||'Selamat Datang!';
   document.getElementById('wm-msg').textContent=s.welcomeMsg||'';
   modal.style.display='flex';
 }
-function closeWelcome(){document.getElementById('welcome-modal').style.display='none';sessionStorage.setItem('wm_dismissed','1')}
+function closeWelcome(){
+  document.getElementById('welcome-modal').style.display='none';
+  sessionStorage.setItem('wm_dismissed','1');
+  // Autoplay music after user interaction
+  startMusic();
+}
 function dontShowWelcome(checked){if(checked)localStorage.setItem('wm_dontshow','1');else localStorage.removeItem('wm_dontshow')}
 function saveWelcome(){
   if(!isAdmin)return;
