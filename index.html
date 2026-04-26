@@ -1126,7 +1126,9 @@ body.admin .admin-notice{display:flex}
   <div>© 2026 STPM 2026 Kohort Baharu | @stpm20266 · Kandungan diurus oleh Admin sahaja</div>
 </footer>
 
-<script type="module">
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script>
 // ===== ADMIN CREDENTIALS =====
 // ===== DEVICE FINGERPRINT =====
 async function getDeviceFingerprint(){
@@ -1143,51 +1145,35 @@ async function getDeviceFingerprint(){
 // Sub-admins stored in sessionStorage (locked to device)
 // Format: [{u, h(password hash), name, deviceFp, created}]
 // ===== FIREBASE CONFIG =====
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, doc, getDoc, setDoc, deleteDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
 const firebaseConfig = {
   apiKey: "AIzaSyDSKq7EyYZCkGaFYga-QcmmUJ5h7fJNdRs",
   authDomain: "stpm2026-portal.firebaseapp.com",
   projectId: "stpm2026-portal",
   storageBucket: "stpm2026-portal.firebasestorage.app",
   messagingSenderId: "288142418649",
-  appId: "1:288142418649:web:9b90f9c025183dd48554c8",
-  measurementId: "G-RK3NZW70CB"
+  appId: "1:288142418649:web:9b90f9c025183dd48554c8"
 };
-
-const fbApp = initializeApp(firebaseConfig);
-const db = getFirestore(fbApp);
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
 
 // ===== FIREBASE ADMIN FUNCTIONS =====
 async function getSubAdmins(){
   try {
-    const snap = await getDocs(collection(db,'admins'));
+    const snap = await db.collection('admins').get();
     return snap.docs.map(d=>({id:d.id,...d.data()}));
-  } catch(e){
-    console.error('Firebase error:',e);
-    return [];
-  }
+  } catch(e){console.error('Firebase error:',e);return [];}
 }
-
 async function saveSubAdmin(admin){
   try {
-    await setDoc(doc(db,'admins',admin.u),admin);
+    await db.collection('admins').doc(admin.u).set(admin);
     return true;
-  } catch(e){
-    console.error('Firebase error:',e);
-    return false;
-  }
+  } catch(e){console.error('Firebase error:',e);return false;}
 }
-
 async function deleteSubAdminFb(username){
   try {
-    await deleteDoc(doc(db,'admins',username));
+    await db.collection('admins').doc(username).delete();
     return true;
-  } catch(e){
-    console.error('Firebase error:',e);
-    return false;
-  }
+  } catch(e){console.error('Firebase error:',e);return false;}
 }
 
 async function unlockAdminMgmt(){
@@ -1380,8 +1366,8 @@ async function doLogin(){
 
   // Check sub-admins from Firebase
   try {
-    const subDoc=await getDoc(doc(db,'admins',u));
-    if(subDoc.exists()){
+    const subDoc=await db.collection('admins').doc(u).get();
+    if(subDoc.exists){
       const sub=subDoc.data();
       if(sub.h!==ph){
         document.getElementById('login-err').textContent='Username atau password tidak sah.';
@@ -1391,7 +1377,7 @@ async function doLogin(){
       }
       // First login — lock to this device
       if(!sub.deviceFp){
-        await setDoc(doc(db,'admins',u),{...sub,deviceFp:fp,status:'Aktif'});
+        await db.collection('admins').doc(u).set({...sub,deviceFp:fp,status:'Aktif'});
         isAdmin=true;document.body.classList.add('admin');
         document.getElementById('admin-topbtn').style.display='flex';
         const bg=document.querySelector('.badge-gold');if(bg)bg.style.display='inline-block';
