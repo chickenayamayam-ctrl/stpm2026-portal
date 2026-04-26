@@ -32,7 +32,7 @@ body{font-family:'Outfit',sans-serif;background:var(--gray);color:var(--text);fo
 .live-dot{width:6px;height:6px;background:#10b981;border-radius:50%;display:inline-block;animation:pulse 2s infinite;margin-right:3px;box-shadow:0 0 0 2px rgba(16,185,129,.2)}
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
 .topbar-r{display:flex;gap:6px;align-items:center}
-.tplink{color:rgba(255,255,255,.6);text-decoration:none;font-size:11px;padding:3px 10px;border:1px solid rgba(255,255,255,.12);border-radius:20px;transition:.2s;background:none;cursor:pointer;font-family:'Outfit',sans-serif}
+.tplink{color:rgba(255,255,255,.6);text-decoration:none;font-size:11px;padding:3px 10px;border:1px solid rgba(255,255,255,.12);border-radius:20px;transition:.2s;background:none;cursor:pointer;font-family:inherit}
 .tplink:hover{color:#fff;background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.25)}
 .admin-pill{background:rgba(255,190,11,.12) !important;border:1px solid rgba(255,190,11,.3) !important;color:#ffbe0b !important}
 
@@ -482,7 +482,7 @@ body.admin .admin-notice{display:flex}
       <div class="hs"><div class="hs-n" id="hs-members">—</div><div class="hs-l">Ahli</div></div>
       <div class="hs"><div class="hs-n" id="hs-nota">0</div><div class="hs-l">Nota</div></div>
       <div class="hs"><div class="hs-n" id="hs-ann">0</div><div class="hs-l">Pengumuman</div></div>
-      <div class="hs"><div class="hs-n">3</div><div class="hs-l">Semester</div></div>
+      <div class="hs"><div class="hs-n" id="hs-semester">3</div><div class="hs-l">Semester</div></div>
     </div>
   </div>
 
@@ -869,6 +869,7 @@ body.admin .admin-notice{display:flex}
       <div class="fg"><label>Nama Peperiksaan</label><input id="st-examname" placeholder="Cth: STPM Semester 2 2026 (Bertulis)"/></div>
       <div class="fg"><label>Tarikh Peperiksaan</label><input type="date" id="st-examdate"/></div>
     </div>
+    <div class="fg"><label>Bilangan Semester (Hero Stats)</label><input id="st-semester" type="number" min="1" max="9" placeholder="3"/></div>
     <div class="form-actions"><button class="btn btn-p" onclick="saveCountdown()">💾 Simpan</button></div>
     <p style="font-size:11.5px;color:var(--muted);margin-top:10px">* Countdown di Laman Utama akan dikemaskini mengikut tarikh ini.</p>
   </div>
@@ -881,6 +882,31 @@ body.admin .admin-notice{display:flex}
       <textarea id="st-marquee" style="min-height:110px;font-size:12.5px" placeholder="📢 Portal Rasmi STPM 2026 Kohort Baharu&#10;📅 STPM Semester 2: 29 Jun 2026&#10;📚 Nota dikemaskini setiap minggu"></textarea>
     </div>
     <div class="form-actions"><button class="btn btn-p" onclick="saveMarquee()">💾 Simpan Marquee</button></div>
+  </div>
+
+  <!-- MUSIC SETTINGS -->
+  <div class="sec-hdr"><div class="sec-title">🎵 Lagu Background</div></div>
+  <div class="nota-form" style="margin-bottom:22px">
+    <p style="font-size:12.5px;color:var(--muted);margin-bottom:14px">Tukar lagu background portal. Kena verify Super Password dulu.</p>
+    <div id="music-settings-locked">
+      <div class="fg"><label>Super Password</label>
+        <div style="display:flex;gap:8px">
+          <input type="password" id="sp-music" placeholder="Masukkan super password..." style="flex:1;border:1.5px solid var(--gray3);border-radius:10px;padding:9px 12px;font-size:13px;font-family:'Outfit',sans-serif;outline:none"/>
+          <button class="btn btn-p" onclick="unlockMusicSettings()">Verify</button>
+        </div>
+      </div>
+    </div>
+    <div id="music-settings-panel" style="display:none">
+      <div class="fg"><label>Link YouTube Lagu</label>
+        <input id="st-music-url" placeholder="https://www.youtube.com/watch?v=..." style="border:1.5px solid var(--gray3);border-radius:10px;padding:9px 12px;font-size:13px;font-family:'Outfit',sans-serif;outline:none;width:100%"/>
+        <p style="font-size:11px;color:var(--muted);margin-top:5px">Paste link YouTube biasa atau YouTube Music. Contoh: https://youtu.be/cuSR3a409Tc</p>
+      </div>
+      <div id="music-current" style="font-size:12px;color:var(--muted);margin-bottom:10px"></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn btn-p" onclick="saveMusic()">🎵 Simpan Lagu</button>
+        <button class="btn btn-o" onclick="lockMusicSettings()">🔒 Kunci</button>
+      </div>
+    </div>
   </div>
 
   <!-- WELCOME MESSAGE -->
@@ -1045,7 +1071,7 @@ body.admin .admin-notice{display:flex}
     <div id="wm-emoji" style="font-size:52px;margin-bottom:12px">🎓</div>
     <h2 id="wm-title" style="font-size:18px;font-weight:800;color:var(--navy);margin-bottom:8px"></h2>
     <p id="wm-msg" style="font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:20px"></p>
-    <button onclick="closeWelcome()" style="background:var(--blue);color:#fff;border:none;padding:11px 28px;border-radius:9px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Outfit',sans-serif;width:100%">Masuk ke Portal →</button>
+    <button onclick="closeWelcome()" style="background:linear-gradient(135deg,var(--gold4),var(--gold));color:var(--dark);border:none;padding:11px 28px;border-radius:9px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Outfit',sans-serif;width:100%">Masuk ke Portal →</button>
   </div>
 </div>
 
@@ -1341,7 +1367,9 @@ let store={ann:[],nota:[],pautan:[],ahli:[],jadual:[],activityLog:[],feedbacks:[
   members:'—',groupname:'STPM 2026 Kohort Baharu',tguser:'@stpm20266',
   tglink:'https://t.me/stpm20266',desc:'',
   examname:'STPM Semester 2 2026 (Bertulis)',examdate:'2026-06-29',
+  semester:'3',
   botlink:'',
+  musicId:'cuSR3a409Tc',
   welcomeEnabled:true,
   welcomeTitle:'Selamat Datang ke Portal Rasmi! 👋',
   welcomeMsg:'Portal rasmi kumpulan Telegram @stpm20266 — semua maklumat STPM 2026 di satu tempat.',
@@ -1538,6 +1566,7 @@ function applySettings(){
     const nm=document.querySelector('.cd-info .nm');if(nm)nm.textContent=s.examname;
     const dt=document.querySelector('.cd-info .dt');if(dt)dt.textContent=s.examdate||'';
   }
+  const semEl=document.getElementById('hs-semester');if(semEl)semEl.textContent=s.semester||'3';
 }
 // initApp() handles applySettings, showWelcome, renderAll
 
@@ -1561,11 +1590,11 @@ function renderSection(id){
   if(id==='pautan')renderPautan();
   if(id==='ahli')renderAhli();
   if(id==='settings'){loadSettingsForm();
-    // Reset danger zone lock when entering settings
     const dl=document.getElementById('danger-locked');
     const du=document.getElementById('danger-unlocked');
     if(dl)dl.style.display='block';
     if(du)du.style.display='none';
+    lockMusicSettings();
   }
   if(id==='activitylog')renderLog();
   if(id==='bot')renderBotLink();
@@ -1926,31 +1955,23 @@ renderAhli();
 // ===== BACKGROUND MUSIC =====
 let musicPlaying=false;
 
+function getMusicId(){return store.settings.musicId||'cuSR3a409Tc';}
+
 function startMusic(){
+  const id=getMusicId();
   const iframe=document.getElementById('yt-player');
-  const btn=document.getElementById('music-toggle-btn');
-  const disc=document.getElementById('music-disc');
-  const status=document.getElementById('music-status');
-  iframe.src=`https://www.youtube.com/embed/cuSR3a409Tc?autoplay=1&loop=1&playlist=cuSR3a409Tc&controls=0&mute=0`;
+  iframe.src=`https://www.youtube.com/embed/${id}?autoplay=1&loop=1&playlist=${id}&controls=0&mute=0`;
   musicPlaying=true;
-  btn.textContent='⏸';
-  disc.style.animationPlayState='running';
-  status.textContent='▶ Sedang main...';
 }
 
 function toggleMusic(){
+  const id=getMusicId();
   const iframe=document.getElementById('yt-player');
-  const btn=document.getElementById('music-toggle-btn');
-  const disc=document.getElementById('music-disc');
-  const status=document.getElementById('music-status');
   if(!musicPlaying){
     startMusic();
   } else {
-    iframe.src=`https://www.youtube.com/embed/cuSR3a409Tc?autoplay=0&loop=1&playlist=cuSR3a409Tc&controls=0&mute=1`;
+    iframe.src=`https://www.youtube.com/embed/${id}?autoplay=0&loop=1&playlist=${id}&controls=0&mute=1`;
     musicPlaying=false;
-    btn.textContent='▶️';
-    disc.style.animationPlayState='paused';
-    status.textContent='⏸ Dijeda';
   }
 }
 
@@ -2249,7 +2270,53 @@ function renderLog(){
 }
 function formatAction(a){const m={tambah_pengumuman:'Tambah Pengumuman',padam_pengumuman:'Padam Pengumuman',tambah_nota:'Tambah Nota',padam_nota:'Padam Nota',tambah_jadual:'Tambah Jadual',padam_jadual:'Padam Jadual',tambah_pautan:'Tambah Pautan',padam_pautan:'Padam Pautan',tambah_ahli:'Tambah Ahli',padam_ahli:'Padam Ahli',kemaskini_settings:'Kemaskini Maklumat Portal',kemaskini_marquee:'Kemaskini Marquee',kemaskini_countdown:'Kemaskini Countdown',kemaskini_members:'Kemaskini Bilangan Ahli',tukar_password:'Tukar Password Admin',set_botlink:'Set Link Bot Telegram',padam_botlink:'Padam Link Bot',login:'Log Masuk Admin',logout:'Log Keluar Admin',reset_data:'Reset Semua Data',padam_semua_nota:'Padam Semua Nota',padam_semua_ann:'Padam Semua Pengumuman',tambah_draft:'Tambah Draft',tambah_admin:'Cipta Admin Baharu',padam_admin:'Padam Admin',reset_device_lock:'Reset Device Lock',login_gagal:'⚠️ Cubaan Login Gagal'};return m[a]||a}
 
-// ===== WELCOME MESSAGE =====
+// ===== MUSIC SETTINGS =====
+async function unlockMusicSettings(){
+  const sp=document.getElementById('sp-music').value;
+  const spHash=await sha256(sp);
+  if(spHash===SUPER_HASH){
+    document.getElementById('music-settings-locked').style.display='none';
+    document.getElementById('music-settings-panel').style.display='block';
+    document.getElementById('sp-music').value='';
+    const currentId=store.settings.musicId||'cuSR3a409Tc';
+    document.getElementById('st-music-url').value=`https://youtu.be/${currentId}`;
+    document.getElementById('music-current').textContent='ID semasa: '+currentId;
+    showToast('✓ Verified!');
+  } else {
+    alert('Super password salah!');
+    document.getElementById('sp-music').value='';
+  }
+}
+function lockMusicSettings(){
+  document.getElementById('music-settings-locked').style.display='block';
+  document.getElementById('music-settings-panel').style.display='none';
+}
+function extractYoutubeId(url){
+  // Handle various YouTube URL formats
+  const patterns=[
+    /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/|music\.youtube\.com\/watch\?v=)([a-zA-Z0-9_-]{11})/,
+    /^([a-zA-Z0-9_-]{11})$/
+  ];
+  for(const p of patterns){const m=url.match(p);if(m)return m[1];}
+  return null;
+}
+async function saveMusic(){
+  if(!isAdmin)return;
+  const url=document.getElementById('st-music-url').value.trim();
+  const id=extractYoutubeId(url);
+  if(!id){alert('Link YouTube tidak sah! Cuba paste link penuh contoh: https://youtu.be/cuSR3a409Tc');return}
+  store.settings.musicId=id;
+  save();
+  // Restart music with new ID if currently playing
+  if(musicPlaying){
+    musicPlaying=false;
+    startMusic();
+  }
+  document.getElementById('music-current').textContent='ID semasa: '+id;
+  logActivity('kemaskini_settings','Lagu ditukar — ID: '+id);
+  showToast('✓ Lagu berjaya ditukar!');
+  lockMusicSettings();
+}
 function showWelcomeIfNeeded(){
   const s=store.settings;
   const modal=document.getElementById('welcome-modal');if(!modal)return;
@@ -2466,7 +2533,7 @@ function loadSettingsForm(){
   const fields={
     'st-groupname':s.groupname,'st-tguser':s.tguser,'st-tglink':s.tglink,
     'st-members':s.members==='—'?'':s.members,'st-desc':s.desc,
-    'st-examname':s.examname,'st-examdate':s.examdate,
+    'st-examname':s.examname,'st-examdate':s.examdate,'st-semester':s.semester||'3',
     'st-marquee':(s.marquee||[]).join('\n')
   };
   Object.entries(fields).forEach(([id,val])=>{const el=document.getElementById(id);if(el)el.value=val||''});
@@ -2486,8 +2553,9 @@ function saveCountdown(){
   if(!isAdmin)return;
   const name=document.getElementById('st-examname').value.trim();
   const date=document.getElementById('st-examdate').value;
+  const sem=document.getElementById('st-semester').value||'3';
   if(!name||!date){alert('Sila isi nama dan tarikh peperiksaan!');return}
-  store.settings.examname=name;store.settings.examdate=date;
+  store.settings.examname=name;store.settings.examdate=date;store.settings.semester=sem;
   save();applySettings();logActivity('kemaskini_countdown',name+' — '+date);showToast('✓ Countdown dikemaskini!');
 }
 function saveMarquee(){
