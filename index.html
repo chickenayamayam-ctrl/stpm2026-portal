@@ -356,8 +356,11 @@ body.admin .admin-notice{display:flex}
     <span><span class="live-dot"></span>Portal Aktif</span>
     <span id="top-date"></span>
     <span>Ahli: <strong id="top-members" style="color:#fff">—</strong></span>
+    <span>👁 <strong id="top-viewers" style="color:#fff">1</strong> online</span>
   </div>
   <div class="topbar-r">
+    <button class="tplink" onclick="openSearch()" style="display:flex;align-items:center;gap:5px">🔍 Cari</button>
+    <button class="tplink" onclick="openQR()" style="display:flex;align-items:center;gap:5px">📲 QR</button>
     <a href="https://t.me/stpm20266" target="_blank" class="tplink">Telegram</a>
     <a href="https://portal.mpm.edu.my" target="_blank" class="tplink">Portal MPM</a>
     <button class="tplink admin-pill" id="admin-topbtn" onclick="logoutAdmin()" style="display:none">👑 Admin — Log Keluar</button>
@@ -389,13 +392,28 @@ body.admin .admin-notice{display:flex}
     <button class="nav-btn" onclick="goTo('feedback')">💬 Feedback</button>
     <button class="nav-btn admin-only" onclick="goTo('settings')" style="color:#b45309;background:#fef3c7">⚙️ Settings</button>
     <button class="nav-btn admin-only" onclick="goTo('activitylog')" style="color:#0d9488;background:#ccfbf1">📋 Log</button>
+    <button class="nav-btn admin-only" onclick="goTo('stats')" style="color:#7c3aed;background:#ede9fe">📊 Statistik</button>
   </nav>
   <div style="display:flex;gap:7px;align-items:center">
+    <!-- NOTIF BELL -->
+    <button onclick="toggleNotifPanel()" style="position:relative;background:none;border:none;cursor:pointer;padding:6px;border-radius:8px;transition:.2s" title="Notifikasi" id="notif-bell-btn">
+      <span style="font-size:20px">🔔</span>
+      <span id="notif-badge" style="display:none;position:absolute;top:2px;right:2px;background:var(--red);color:#fff;font-size:9px;font-weight:800;width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center;line-height:1" id="notif-count">0</span>
+    </button>
     <a class="tg-btn" href="https://t.me/stpm20266" target="_blank">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8l-1.7 8.02c-.12.56-.45.7-.91.43l-2.52-1.86-1.22 1.17c-.13.13-.25.25-.51.25l.18-2.57 4.64-4.2c.2-.18-.04-.28-.31-.1L7.11 15.3l-2.48-.77c-.54-.17-.55-.54.11-.8l9.69-3.74c.45-.16.85.11.71.81z"/></svg>
       Join
     </a>
     <button class="ham" onclick="document.getElementById('main-nav').classList.toggle('open')"><span></span><span></span><span></span></button>
+  </div>
+
+  <!-- NOTIF PANEL -->
+  <div id="notif-panel" style="display:none;position:absolute;top:100%;right:16px;width:320px;background:#fff;border:1px solid var(--gray3);border-radius:12px;box-shadow:var(--shadow2);z-index:300;overflow:hidden">
+    <div style="padding:14px 16px;border-bottom:1px solid var(--gray3);display:flex;justify-content:space-between;align-items:center">
+      <span style="font-size:14px;font-weight:700;color:var(--navy)">🔔 Notifikasi</span>
+      <button onclick="markAllRead()" style="font-size:11px;color:var(--blue);background:none;border:none;cursor:pointer;font-family:inherit;font-weight:600">Tandakan semua dibaca</button>
+    </div>
+    <div id="notif-list" style="max-height:320px;overflow-y:auto"></div>
   </div>
 </header>
 
@@ -481,6 +499,7 @@ body.admin .admin-notice{display:flex}
   <div style="display:flex;gap:9px;margin-bottom:13px;flex-wrap:wrap;align-items:center">
     <div class="sw" style="flex:1;min-width:160px;margin-bottom:0"><span class="si">🔍</span><input placeholder="Cari pengumuman..." oninput="filterAnn(this.value)"/></div>
     <button class="sbtn primary admin-only" onclick="openAnnForm()">+ Tambah Pengumuman</button>
+    <button class="sbtn admin-only" onclick="goTo('drafts')" style="background:#fef3c7;color:#b45309">📝 Draft</button>
   </div>
   <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:13px">
     <button class="sbtn" style="font-size:11px" onclick="setAnnTag('',this)">Semua</button>
@@ -796,6 +815,28 @@ body.admin .admin-notice{display:flex}
     <div class="form-actions"><button class="btn btn-p" onclick="saveMarquee()">💾 Simpan Marquee</button></div>
   </div>
 
+  <!-- WELCOME MESSAGE -->
+  <div class="sec-hdr"><div class="sec-title">Welcome Message</div></div>
+  <div class="nota-form" style="margin-bottom:22px">
+    <p style="font-size:12.5px;color:var(--muted);margin-bottom:12px">Mesej sambutan yang muncul bila pengunjung pertama kali buka portal.</p>
+    <div class="fg">
+      <label>Tunjuk Welcome Message?</label>
+      <select id="st-welcome-enabled" style="width:100%;border:1.5px solid var(--gray3);border-radius:8px;padding:9px 11px;font-size:13px;font-family:inherit;outline:none;background:#fff">
+        <option value="1">Ya — Tunjuk kepada pengunjung baru</option>
+        <option value="0">Tidak — Sembunyi</option>
+      </select>
+    </div>
+    <div class="form-row">
+      <div class="fg"><label>Emoji</label><input id="st-welcome-emoji" placeholder="🎓" maxlength="4"/></div>
+      <div class="fg"><label>Tajuk</label><input id="st-welcome-title" placeholder="Selamat Datang!"/></div>
+    </div>
+    <div class="fg"><label>Mesej</label><textarea id="st-welcome-msg" placeholder="Tulis mesej sambutan..." style="min-height:80px"></textarea></div>
+    <div class="form-actions">
+      <button class="btn btn-p" onclick="saveWelcome()">💾 Simpan Welcome</button>
+      <button class="btn btn-o" onclick="previewWelcome()">👁 Preview</button>
+    </div>
+  </div>
+
   <!-- ADMIN CREDENTIALS -->
   <div class="sec-hdr"><div class="sec-title">Tukar Password Admin</div></div>
   <div class="nota-form" style="margin-bottom:22px">
@@ -910,6 +951,102 @@ body.admin .admin-notice{display:flex}
 </div>
 </div>
 
+<!-- WELCOME MODAL -->
+<div id="welcome-modal" style="position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:600;display:none;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(4px)" onclick="closeWelcome()">
+  <div onclick="event.stopPropagation()" style="background:#fff;border-radius:18px;width:100%;max-width:420px;padding:32px;text-align:center;animation:mi .25s ease;box-shadow:0 20px 60px rgba(0,0,0,.2)">
+    <div id="wm-emoji" style="font-size:52px;margin-bottom:12px">🎓</div>
+    <h2 id="wm-title" style="font-size:18px;font-weight:800;color:var(--navy);margin-bottom:8px"></h2>
+    <p id="wm-msg" style="font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:20px"></p>
+    <button onclick="closeWelcome()" style="background:var(--blue);color:#fff;border:none;padding:11px 28px;border-radius:9px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;width:100%">Masuk ke Portal →</button>
+    <label style="display:flex;align-items:center;justify-content:center;gap:7px;margin-top:12px;font-size:12px;color:var(--muted);cursor:pointer">
+      <input type="checkbox" id="wm-dontshow" onchange="dontShowWelcome(this.checked)"> Jangan tunjuk lagi
+    </label>
+  </div>
+</div>
+
+<!-- DRAFT PENGUMUMAN (Admin) -->
+<div id="sec-drafts" class="section">
+<div class="con">
+  <div class="bc"><span>Laman Utama</span>›<span onclick="goTo('pengumuman')" style="cursor:pointer;color:var(--blue)">Pengumuman</span>›<span style="color:var(--text)">Draft</span></div>
+  <div class="ph"><h2>📝 Draft Pengumuman</h2><p>Simpan draf pengumuman — boleh edit dan publish bila dah ready</p></div>
+  <div class="admin-notice"><span>👑</span>Hanya admin yang boleh lihat dan urus draft.</div>
+  <div style="display:flex;gap:8px;margin-bottom:16px">
+    <button class="sbtn primary" onclick="openDraftForm()">+ Tambah Draft</button>
+    <button class="sbtn" onclick="goTo('pengumuman')">← Balik ke Pengumuman</button>
+  </div>
+  <div id="draft-list" style="display:flex;flex-direction:column;gap:10px"></div>
+</div>
+</div>
+
+<!-- STATISTIK (Admin) -->
+<div id="sec-stats" class="section">
+<div class="con">
+  <div class="bc"><span>Laman Utama</span>›<span style="color:var(--text)">Statistik Portal</span></div>
+  <div class="ph"><h2>📊 Statistik Portal</h2><p>Ringkasan aktiviti dan penggunaan portal</p></div>
+  <div class="admin-notice"><span>👑</span>Data statistik dikira secara automatik.</div>
+
+  <!-- STAT CARDS -->
+  <div class="stats-row" id="stats-cards" style="margin-bottom:22px"></div>
+
+  <!-- CHARTS ROW -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:22px" class="gap-2">
+    <!-- Nota by Subjek -->
+    <div style="background:#fff;border:1px solid var(--gray3);border-radius:var(--radius);padding:18px">
+      <div style="font-size:13px;font-weight:700;color:var(--navy);margin-bottom:14px">📚 Nota Mengikut Subjek</div>
+      <div id="stats-subj-chart"></div>
+    </div>
+    <!-- Feedback by Type -->
+    <div style="background:#fff;border:1px solid var(--gray3);border-radius:var(--radius);padding:18px">
+      <div style="font-size:13px;font-weight:700;color:var(--navy);margin-bottom:14px">💬 Feedback Mengikut Jenis</div>
+      <div id="stats-fb-chart"></div>
+    </div>
+  </div>
+
+  <!-- RECENT ACTIVITY -->
+  <div style="background:#fff;border:1px solid var(--gray3);border-radius:var(--radius);padding:18px;margin-bottom:22px">
+    <div style="font-size:13px;font-weight:700;color:var(--navy);margin-bottom:14px">🕐 Aktiviti Terkini (5 Terakhir)</div>
+    <div id="stats-recent-activity"></div>
+  </div>
+
+  <!-- POPULAR NOTA -->
+  <div style="background:#fff;border:1px solid var(--gray3);border-radius:var(--radius);padding:18px">
+    <div style="font-size:13px;font-weight:700;color:var(--navy);margin-bottom:14px">🔥 Nota Terkini</div>
+    <div id="stats-popular-nota"></div>
+  </div>
+</div>
+</div>
+
+<!-- SEARCH MODAL -->
+<div id="search-modal" style="position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:700;display:none;align-items:flex-start;justify-content:center;padding:60px 16px 16px;backdrop-filter:blur(4px)" onclick="closeSearch(event)">
+  <div onclick="event.stopPropagation()" style="background:#fff;border-radius:16px;width:100%;max-width:580px;box-shadow:0 20px 60px rgba(0,0,0,.2);overflow:hidden;animation:mi .2s ease">
+    <div style="padding:16px;border-bottom:1px solid var(--gray3);display:flex;gap:10px;align-items:center">
+      <span style="font-size:18px">🔍</span>
+      <input id="global-search-input" placeholder="Cari nota, pengumuman, pautan..." style="flex:1;border:none;outline:none;font-size:15px;font-family:inherit;color:var(--text)" oninput="globalSearch(this.value)" autocomplete="off"/>
+      <button onclick="closeSearch()" style="background:var(--gray2);border:none;width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:14px">✕</button>
+    </div>
+    <div id="search-results" style="max-height:420px;overflow-y:auto;padding:8px">
+      <div style="text-align:center;padding:32px;color:var(--muted)">
+        <div style="font-size:32px;margin-bottom:8px">🔍</div>
+        <p style="font-size:13px">Taip untuk mencari nota, pengumuman dan pautan</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- QR CODE MODAL -->
+<div id="qr-modal" style="position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:700;display:none;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(4px)" onclick="closeQR(event)">
+  <div onclick="event.stopPropagation()" style="background:#fff;border-radius:16px;width:100%;max-width:340px;padding:28px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.2);animation:mi .2s ease">
+    <h3 style="font-size:16px;font-weight:800;color:var(--navy);margin-bottom:4px">📲 QR Code Portal</h3>
+    <p style="font-size:12px;color:var(--muted);margin-bottom:18px">Imbas untuk buka portal ini</p>
+    <div id="qr-container" style="display:flex;justify-content:center;margin-bottom:16px"></div>
+    <div id="qr-url" style="font-size:11px;color:var(--muted);word-break:break-all;background:var(--gray2);padding:8px 12px;border-radius:8px;margin-bottom:16px"></div>
+    <div style="display:flex;gap:8px;justify-content:center">
+      <button onclick="downloadQR()" class="btn btn-p btn-sm">⬇️ Download QR</button>
+      <button onclick="closeQR()" class="btn btn-o btn-sm">Tutup</button>
+    </div>
+  </div>
+</div>
+
 <!-- FOOTER -->
 <footer style="background:var(--navy);color:rgba(255,255,255,.48);padding:20px;text-align:center;font-size:11px;margin-top:36px">
   <div style="display:flex;justify-content:center;gap:16px;margin-bottom:8px;flex-wrap:wrap">
@@ -974,12 +1111,15 @@ const ALL_SUBJ=Object.values(SUBJEK).flatMap(g=>g.items);
 
 // ===== STATE =====
 let isAdmin=false;
-let store={ann:[],nota:[],pautan:[],ahli:[],jadual:[],activityLog:[],feedbacks:[],settings:{
+let store={ann:[],nota:[],pautan:[],ahli:[],jadual:[],activityLog:[],feedbacks:[],drafts:[],stats:{pageViews:0,lastVisits:[]},settings:{
   members:'—',groupname:'STPM 2026 Kohort Baharu',tguser:'@stpm20266',
   tglink:'https://t.me/stpm20266',desc:'',
   examname:'STPM Semester 2 2026 (Bertulis)',examdate:'2026-06-29',
-  botlink:'',
-  superpass:'ahmad2593firdaus',
+  botlink:'',superpass:'ahmad2593firdaus',
+  welcomeEnabled:true,
+  welcomeTitle:'Selamat Datang ke Portal Rasmi! 👋',
+  welcomeMsg:'Portal rasmi kumpulan Telegram @stpm20266 — semua maklumat STPM 2026 di satu tempat.',
+  welcomeEmoji:'🎓',
   marquee:['📢 Portal Rasmi STPM 2026 Kohort Baharu | @stpm20266','📅 STPM Semester 2: 29 Jun 2026 — Bersedia!','📅 STPM Semester 3: 17 November 2026','📚 Nota & bahan dikuruskan oleh admin sahaja','🤖 Bot Telegram: Coming Soon!']
 }};
 let annTxt='',annTag='';
@@ -1056,6 +1196,7 @@ function applySettings(){
   }
 }
 applySettings();
+setTimeout(showWelcomeIfNeeded,800);
 
 // ===== NAV =====
 let curSec='home';
@@ -1063,7 +1204,7 @@ function goTo(id){
   document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById('sec-'+id).classList.add('active');
-  const idx={home:0,pengumuman:1,nota:2,jadual:3,pautan:4,ahli:5,bot:6,feedback:7,settings:8,activitylog:9}[id];
+  const idx={home:0,pengumuman:1,nota:2,jadual:3,pautan:4,ahli:5,bot:6,feedback:7,settings:8,activitylog:9,stats:10,drafts:11}[id];
   document.querySelectorAll('.nav-btn')[idx]?.classList.add('active');
   curSec=id;window.scrollTo({top:0,behavior:'smooth'});
   document.getElementById('main-nav').classList.remove('open');
@@ -1080,6 +1221,9 @@ function renderSection(id){
   if(id==='activitylog')renderLog();
   if(id==='bot')renderBotLink();
   if(id==='feedback')renderFeedback();
+  if(id==='stats')renderStats();
+  if(id==='drafts'&&isAdmin)renderDrafts();
+  if(id==='home'){renderHome();trackVisit();}
 }
 
 // ===== TOAST =====
@@ -1149,7 +1293,7 @@ function saveAnn(){
   const body=document.getElementById('af-body')?.value.trim();
   if(!title||!body){alert('Sila isi tajuk dan kandungan!');return}
   store.ann.push({id:Date.now(),title,body,tag:document.getElementById('af-tag').value,pinned:document.getElementById('af-pin').value==='1',emoji:document.getElementById('af-emoji').value||'📢',time:Date.now(),views:0});
-  save();closeVM();renderAnnFull();renderHome();logActivity('tambah_pengumuman',title);showToast('✓ Pengumuman disimpan!');
+  save();closeVM();renderAnnFull();renderHome();logActivity('tambah_pengumuman',title);updateNotifBadge();showToast('✓ Pengumuman disimpan!');
 }
 function deleteAnn(id){if(!isAdmin||!confirm('Padam pengumuman ini?'))return;const a=store.ann.find(x=>x.id===id);store.ann=store.ann.filter(a=>a.id!==id);save();renderAnnFull();renderHome();logActivity('padam_pengumuman',a?.title||'');showToast('Pengumuman dipadam.')}
 function viewAnn(id){
@@ -1430,6 +1574,111 @@ function saveAhli(){
 function deleteAhli(id){if(!isAdmin||!confirm('Padam?'))return;const a=store.ahli.find(x=>x.id===id);store.ahli=store.ahli.filter(a=>a.id!==id);save();renderAhli();logActivity('padam_ahli',a?.name||'')}
 renderAhli();
 
+// ===== VIEWER COUNT =====
+let viewerCount=1;
+function simulateViewers(){
+  const hour=new Date().getHours();
+  viewerCount=hour>=8&&hour<=22?Math.floor(Math.random()*6)+2:1;
+  const el=document.getElementById('top-viewers');if(el)el.textContent=viewerCount;
+}
+simulateViewers();
+setInterval(()=>{
+  viewerCount=Math.max(1,viewerCount+Math.floor(Math.random()*3)-1);
+  const el=document.getElementById('top-viewers');if(el)el.textContent=viewerCount;
+},30000);
+
+// ===== GLOBAL SEARCH =====
+function openSearch(){
+  document.getElementById('search-modal').style.display='flex';
+  setTimeout(()=>document.getElementById('global-search-input').focus(),100);
+}
+function closeSearch(e){
+  if(!e||e.target.id==='search-modal'){
+    document.getElementById('search-modal').style.display='none';
+    document.getElementById('global-search-input').value='';
+    document.getElementById('search-results').innerHTML='<div style="text-align:center;padding:32px;color:var(--muted)"><div style="font-size:32px;margin-bottom:8px">🔍</div><p style="font-size:13px">Taip untuk mencari nota, pengumuman dan pautan</p></div>';
+  }
+}
+function globalSearch(q){
+  const c=document.getElementById('search-results');
+  if(!q.trim()){c.innerHTML='<div style="text-align:center;padding:32px;color:var(--muted)"><div style="font-size:32px;margin-bottom:8px">🔍</div><p style="font-size:13px">Taip untuk mencari nota, pengumuman dan pautan</p></div>';return;}
+  const kw=q.toLowerCase();const results=[];
+  store.ann.filter(a=>a.title.toLowerCase().includes(kw)||a.body.toLowerCase().includes(kw)).forEach(a=>results.push({type:'📢 Pengumuman',title:a.title,sub:a.tag,onclick:`closeSearch();goTo('pengumuman');setTimeout(()=>viewAnn(${a.id}),300)`}));
+  store.nota.filter(n=>(n.title||'').toLowerCase().includes(kw)||(n.subj||'').toLowerCase().includes(kw)||(n.body||'').toLowerCase().includes(kw)).forEach(n=>results.push({type:'📚 Nota',title:n.title,sub:(n.subj||'')+'·'+n.type,onclick:`closeSearch();goTo('nota');setTimeout(()=>viewNota(${n.id}),300)`}));
+  store.pautan.filter(p=>p.name.toLowerCase().includes(kw)||(p.desc||'').toLowerCase().includes(kw)).forEach(p=>results.push({type:'🔗 Pautan',title:p.name,sub:p.url,onclick:`window.open('${p.url}','_blank')`}));
+  if(!results.length){c.innerHTML='<div style="text-align:center;padding:32px;color:var(--muted)"><div style="font-size:28px;margin-bottom:8px">😕</div><p style="font-size:13px">Tiada hasil untuk "'+q+'"</p></div>';return;}
+  c.innerHTML=`<div style="padding:8px 12px;font-size:11px;color:var(--muted);font-weight:600">${results.length} hasil dijumpai</div>`+
+    results.map(r=>`<div onclick="${r.onclick}" style="padding:11px 14px;cursor:pointer;border-radius:8px;transition:.15s;display:flex;gap:10px;align-items:center" onmouseover="this.style.background='var(--gray2)'" onmouseout="this.style.background='none'">
+      <span style="font-size:10px;background:var(--blue3);color:var(--blue);padding:2px 7px;border-radius:20px;font-weight:700;white-space:nowrap">${r.type}</span>
+      <div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:600;color:var(--navy);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${r.title}</div><div style="font-size:11px;color:var(--muted2)">${r.sub}</div></div>
+      <span style="color:var(--muted2)">→</span>
+    </div>`).join('');
+}
+document.addEventListener('keydown',e=>{if((e.metaKey||e.ctrlKey)&&e.key==='k'){e.preventDefault();openSearch();}if(e.key==='Escape'){closeSearch();closeQR();closeNotif();}});
+
+// ===== QR CODE =====
+function openQR(){
+  const url=window.location.href.split('?')[0];
+  document.getElementById('qr-url').textContent=url;
+  const qrUrl=`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(url)}&color=0f1e3d&bgcolor=ffffff&margin=10`;
+  document.getElementById('qr-container').innerHTML=`<img id="qr-img" src="${qrUrl}" width="200" height="200" style="border-radius:8px;border:2px solid var(--gray3)" alt="QR Code"/>`;
+  document.getElementById('qr-modal').style.display='flex';
+}
+function closeQR(e){if(!e||e.target.id==='qr-modal')document.getElementById('qr-modal').style.display='none';}
+function downloadQR(){const img=document.getElementById('qr-img');if(!img)return;const a=document.createElement('a');a.href=img.src;a.download='portal-stpm2026-qr.png';a.click();}
+
+// ===== NOTIFICATIONS =====
+let notifRead=JSON.parse(sessionStorage.getItem('notif_read')||'[]');
+function getNotifs(){
+  const all=[];
+  store.ann.slice(0,5).forEach(a=>all.push({id:'ann_'+a.id,type:'📢',title:a.title,sub:'Pengumuman',time:a.time,onclick:`closeNotif();goTo('pengumuman');setTimeout(()=>viewAnn(${a.id}),300)`}));
+  [...store.nota].reverse().slice(0,3).forEach(n=>all.push({id:'nota_'+n.id,type:'📚',title:n.title,sub:(n.subj||'')+'· Nota baru',time:n.time,onclick:`closeNotif();goTo('nota');setTimeout(()=>viewNota(${n.id}),300)`}));
+  return all.sort((a,b)=>b.time-a.time);
+}
+function getUnreadCount(){return getNotifs().filter(n=>!notifRead.includes(n.id)).length}
+function updateNotifBadge(){
+  const count=getUnreadCount();
+  const badge=document.getElementById('notif-badge');
+  if(badge){badge.textContent=count>9?'9+':count;badge.style.display=count>0?'flex':'none';}
+  const annBtn=document.querySelector('.nav-btn[onclick*="pengumuman"]');
+  if(annBtn){
+    const newAnn=store.ann.filter(a=>!notifRead.includes('ann_'+a.id)).length;
+    annBtn.innerHTML=newAnn>0?`Pengumuman <span style="background:var(--red);color:#fff;font-size:9px;font-weight:800;padding:1px 5px;border-radius:20px;margin-left:3px">${newAnn}</span>`:'Pengumuman';
+  }
+}
+function toggleNotifPanel(){
+  const p=document.getElementById('notif-panel');
+  p.style.display=(p.style.display==='none'||!p.style.display)?'block':'none';
+  if(p.style.display==='block')renderNotifPanel();
+}
+function closeNotif(){document.getElementById('notif-panel').style.display='none';}
+function renderNotifPanel(){
+  const notifs=getNotifs();const c=document.getElementById('notif-list');
+  if(!notifs.length){c.innerHTML='<div style="padding:24px;text-align:center;color:var(--muted);font-size:13px">Tiada notifikasi</div>';return;}
+  c.innerHTML=notifs.map(n=>{
+    const isNew=!notifRead.includes(n.id);
+    return `<div onclick="${n.onclick}" style="padding:12px 16px;cursor:pointer;display:flex;gap:10px;align-items:flex-start;border-bottom:1px solid var(--gray3);background:${isNew?'#f0f5ff':'#fff'}" onmouseover="this.style.background='var(--gray2)'" onmouseout="this.style.background='${isNew?'#f0f5ff':'#fff'}'">
+      <span style="font-size:18px;flex-shrink:0">${n.type}</span>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:12.5px;font-weight:${isNew?700:500};color:var(--navy);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${n.title}</div>
+        <div style="font-size:11px;color:var(--muted2);margin-top:2px">${n.sub}</div>
+        <div style="font-size:10.5px;color:var(--muted2);margin-top:2px">${new Date(n.time).toLocaleDateString('ms-MY')}</div>
+      </div>
+      ${isNew?'<span style="width:8px;height:8px;background:var(--blue);border-radius:50%;flex-shrink:0;margin-top:4px"></span>':''}
+    </div>`;
+  }).join('');
+}
+function markAllRead(){
+  getNotifs().forEach(n=>{if(!notifRead.includes(n.id))notifRead.push(n.id)});
+  sessionStorage.setItem('notif_read',JSON.stringify(notifRead));
+  updateNotifBadge();renderNotifPanel();
+}
+document.addEventListener('click',e=>{
+  const p=document.getElementById('notif-panel');const b=document.getElementById('notif-bell-btn');
+  if(p&&b&&!p.contains(e.target)&&!b.contains(e.target))p.style.display='none';
+});
+setTimeout(updateNotifBadge,600);
+
 // ===== FEEDBACK =====
 let fbRating=0;
 const ratingLabels=['','😞 Teruk','😐 Biasa','🙂 Okay','😊 Bagus','🤩 Sangat Bagus!'];
@@ -1597,7 +1846,171 @@ function renderLog(){
     <div style="font-size:11px;color:var(--muted2);flex-shrink:0;text-align:right">${new Date(l.time).toLocaleString('ms-MY')}</div>
   </div>`).join('');
 }
-function formatAction(a){const m={tambah_pengumuman:'Tambah Pengumuman',padam_pengumuman:'Padam Pengumuman',tambah_nota:'Tambah Nota',padam_nota:'Padam Nota',tambah_jadual:'Tambah Jadual',padam_jadual:'Padam Jadual',tambah_pautan:'Tambah Pautan',padam_pautan:'Padam Pautan',tambah_ahli:'Tambah Ahli',padam_ahli:'Padam Ahli',kemaskini_settings:'Kemaskini Maklumat Portal',kemaskini_marquee:'Kemaskini Marquee',kemaskini_countdown:'Kemaskini Countdown',kemaskini_members:'Kemaskini Bilangan Ahli',tukar_password:'Tukar Password Admin',set_botlink:'Set Link Bot Telegram',padam_botlink:'Padam Link Bot',login:'Log Masuk Admin',logout:'Log Keluar Admin',reset_data:'Reset Semua Data',padam_semua_nota:'Padam Semua Nota',padam_semua_ann:'Padam Semua Pengumuman'};return m[a]||a}
+function formatAction(a){const m={tambah_pengumuman:'Tambah Pengumuman',padam_pengumuman:'Padam Pengumuman',tambah_nota:'Tambah Nota',padam_nota:'Padam Nota',tambah_jadual:'Tambah Jadual',padam_jadual:'Padam Jadual',tambah_pautan:'Tambah Pautan',padam_pautan:'Padam Pautan',tambah_ahli:'Tambah Ahli',padam_ahli:'Padam Ahli',kemaskini_settings:'Kemaskini Maklumat Portal',kemaskini_marquee:'Kemaskini Marquee',kemaskini_countdown:'Kemaskini Countdown',kemaskini_members:'Kemaskini Bilangan Ahli',tukar_password:'Tukar Password Admin',set_botlink:'Set Link Bot Telegram',padam_botlink:'Padam Link Bot',login:'Log Masuk Admin',logout:'Log Keluar Admin',reset_data:'Reset Semua Data',padam_semua_nota:'Padam Semua Nota',padam_semua_ann:'Padam Semua Pengumuman',tambah_draft:'Tambah Draft'};return m[a]||a}
+
+// ===== WELCOME MESSAGE =====
+function showWelcomeIfNeeded(){
+  const s=store.settings;
+  if(!s.welcomeEnabled)return;
+  const dismissed=sessionStorage.getItem('wm_dismissed');
+  const dontShow=localStorage.getItem('wm_dontshow');
+  if(dismissed||dontShow)return;
+  const modal=document.getElementById('welcome-modal');if(!modal)return;
+  document.getElementById('wm-emoji').textContent=s.welcomeEmoji||'🎓';
+  document.getElementById('wm-title').textContent=s.welcomeTitle||'Selamat Datang!';
+  document.getElementById('wm-msg').textContent=s.welcomeMsg||'';
+  modal.style.display='flex';
+}
+function closeWelcome(){document.getElementById('welcome-modal').style.display='none';sessionStorage.setItem('wm_dismissed','1')}
+function dontShowWelcome(checked){if(checked)localStorage.setItem('wm_dontshow','1');else localStorage.removeItem('wm_dontshow')}
+function saveWelcome(){
+  if(!isAdmin)return;
+  store.settings.welcomeEnabled=document.getElementById('st-welcome-enabled').value==='1';
+  store.settings.welcomeEmoji=document.getElementById('st-welcome-emoji').value||'🎓';
+  store.settings.welcomeTitle=document.getElementById('st-welcome-title').value||'Selamat Datang!';
+  store.settings.welcomeMsg=document.getElementById('st-welcome-msg').value||'';
+  save();logActivity('kemaskini_settings','Welcome message dikemaskini');showToast('✓ Welcome message disimpan!');
+}
+function previewWelcome(){
+  localStorage.removeItem('wm_dontshow');sessionStorage.removeItem('wm_dismissed');
+  document.getElementById('wm-emoji').textContent=document.getElementById('st-welcome-emoji').value||store.settings.welcomeEmoji||'🎓';
+  document.getElementById('wm-title').textContent=document.getElementById('st-welcome-title').value||store.settings.welcomeTitle||'Selamat Datang!';
+  document.getElementById('wm-msg').textContent=document.getElementById('st-welcome-msg').value||store.settings.welcomeMsg||'';
+  document.getElementById('welcome-modal').style.display='flex';
+}
+function loadWelcomeSettings(){
+  const s=store.settings;
+  const el=document.getElementById('st-welcome-enabled');if(el)el.value=s.welcomeEnabled!==false?'1':'0';
+  const ee=document.getElementById('st-welcome-emoji');if(ee)ee.value=s.welcomeEmoji||'🎓';
+  const et=document.getElementById('st-welcome-title');if(et)et.value=s.welcomeTitle||'';
+  const em=document.getElementById('st-welcome-msg');if(em)em.value=s.welcomeMsg||'';
+}
+
+// ===== TRACK VISIT =====
+function trackVisit(){
+  if(!store.stats)store.stats={pageViews:0,lastVisits:[]};
+  store.stats.pageViews=(store.stats.pageViews||0)+1;
+  store.stats.lastVisits=store.stats.lastVisits||[];
+  store.stats.lastVisits.unshift({time:Date.now(),device:getDeviceInfo()});
+  if(store.stats.lastVisits.length>50)store.stats.lastVisits=store.stats.lastVisits.slice(0,50);
+  save();
+}
+
+// ===== DRAFT =====
+function openDraftForm(){
+  if(!isAdmin)return;
+  openVM('Tambah Draft Pengumuman',`
+    <div class="fg"><label style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;display:block;margin-bottom:4px">Tajuk</label><input id="df-title" placeholder="Tajuk draft..." style="width:100%;border:1.5px solid var(--gray3);border-radius:8px;padding:9px 11px;font-size:13px;font-family:inherit;outline:none"/></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0">
+      <div><label style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;display:block;margin-bottom:4px">Tag</label><select id="df-tag" style="width:100%;border:1.5px solid var(--gray3);border-radius:8px;padding:9px 11px;font-size:13px;font-family:inherit;outline:none;background:#fff"><option>Umum</option><option>Penting</option><option>Peperiksaan</option><option>Nota</option><option>Jadual</option></select></div>
+      <div><label style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;display:block;margin-bottom:4px">Emoji</label><input id="df-emoji" placeholder="📢" maxlength="4" style="width:100%;border:1.5px solid var(--gray3);border-radius:8px;padding:9px 11px;font-size:13px;font-family:inherit;outline:none"/></div>
+    </div>
+    <div class="fg"><label style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;display:block;margin-bottom:4px">Kandungan</label><textarea id="df-body" placeholder="Tulis draft pengumuman..." style="width:100%;border:1.5px solid var(--gray3);border-radius:8px;padding:9px 11px;font-size:13px;font-family:inherit;outline:none;min-height:100px;resize:vertical;line-height:1.6"></textarea></div>
+    <div style="display:flex;gap:8px;margin-top:12px">
+      <button class="btn btn-p" onclick="saveDraft()">💾 Simpan Draft</button>
+      <button class="btn btn-o" onclick="closeVM()">Batal</button>
+    </div>`);
+}
+function saveDraft(){
+  if(!isAdmin)return;
+  const title=document.getElementById('df-title')?.value.trim();
+  const body=document.getElementById('df-body')?.value.trim();
+  if(!title||!body){alert('Sila isi tajuk dan kandungan!');return}
+  if(!store.drafts)store.drafts=[];
+  store.drafts.unshift({id:Date.now(),title,body,tag:document.getElementById('df-tag').value,emoji:document.getElementById('df-emoji').value||'📢',time:Date.now()});
+  save();closeVM();renderDrafts();logActivity('tambah_draft',title);showToast('✓ Draft disimpan!');
+}
+function renderDrafts(){
+  const c=document.getElementById('draft-list');if(!c)return;
+  const drafts=store.drafts||[];
+  const tagCls2={Umum:'blue',Penting:'red',Peperiksaan:'orange',Nota:'green',Jadual:'teal'};
+  if(!drafts.length){c.innerHTML='<div style="text-align:center;padding:36px;color:var(--muted)"><div style="font-size:36px;margin-bottom:8px">📝</div><p>Tiada draft. Klik "+ Tambah Draft" untuk mula.</p></div>';return}
+  c.innerHTML=drafts.map(d=>`<div style="background:#fff;border:1.5px dashed var(--gray3);border-radius:var(--radius);padding:16px">
+    <div style="display:flex;align-items:flex-start;gap:12px">
+      <div style="width:44px;height:44px;background:#fef3c7;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">${d.emoji||'📢'}</div>
+      <div style="flex:1;min-width:0">
+        <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-bottom:5px">
+          <span class="atag ${tagCls2[d.tag]||'blue'}">${d.tag}</span>
+          <span style="font-size:10px;background:#fef3c7;color:#b45309;padding:2px 7px;border-radius:20px;font-weight:700">📝 DRAFT</span>
+        </div>
+        <div style="font-size:13.5px;font-weight:700;color:var(--navy);margin-bottom:4px">${d.title}</div>
+        <div style="font-size:12px;color:var(--muted);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;line-height:1.5">${d.body}</div>
+        <div style="font-size:11px;color:var(--muted2);margin-top:6px">Disimpan: ${new Date(d.time).toLocaleString('ms-MY')}</div>
+      </div>
+    </div>
+    <div style="display:flex;gap:7px;margin-top:12px;padding-top:11px;border-top:1px solid var(--gray3);flex-wrap:wrap">
+      <button class="btn btn-p btn-sm" onclick="publishDraft(${d.id})">🚀 Publish</button>
+      <button class="btn btn-o btn-sm" onclick="editDraft(${d.id})">✏️ Edit</button>
+      <button class="btn btn-d btn-sm" onclick="deleteDraft(${d.id})">Padam</button>
+    </div>
+  </div>`).join('');
+}
+function publishDraft(id){
+  if(!isAdmin||!confirm('Publish draft ini sebagai pengumuman rasmi?'))return;
+  const d=store.drafts.find(x=>x.id===id);if(!d)return;
+  store.ann.unshift({id:Date.now(),title:d.title,body:d.body,tag:d.tag,emoji:d.emoji,pinned:false,time:Date.now(),views:0});
+  store.drafts=store.drafts.filter(x=>x.id!==id);
+  save();renderDrafts();renderHome();logActivity('tambah_pengumuman','[Dari Draft] '+d.title);
+  showToast('✓ Draft berjaya dipublish!');
+}
+function editDraft(id){
+  if(!isAdmin)return;
+  const d=store.drafts.find(x=>x.id===id);if(!d)return;
+  openVM('Edit Draft',`
+    <div class="fg"><label style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;display:block;margin-bottom:4px">Tajuk</label><input id="df-edit-title" value="${d.title.replace(/"/g,'&quot;')}" style="width:100%;border:1.5px solid var(--gray3);border-radius:8px;padding:9px 11px;font-size:13px;font-family:inherit;outline:none"/></div>
+    <div class="fg" style="margin-top:10px"><label style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;display:block;margin-bottom:4px">Kandungan</label><textarea id="df-edit-body" style="width:100%;border:1.5px solid var(--gray3);border-radius:8px;padding:9px 11px;font-size:13px;font-family:inherit;outline:none;min-height:100px;resize:vertical;line-height:1.6">${d.body}</textarea></div>
+    <div style="display:flex;gap:8px;margin-top:12px">
+      <button class="btn btn-p" onclick="saveEditDraft(${id})">💾 Simpan</button>
+      <button class="btn btn-o" onclick="closeVM()">Batal</button>
+    </div>`);
+}
+function saveEditDraft(id){
+  const d=store.drafts.find(x=>x.id===id);if(!d)return;
+  const t=document.getElementById('df-edit-title')?.value.trim();
+  const b=document.getElementById('df-edit-body')?.value.trim();
+  if(t)d.title=t;if(b)d.body=b;d.time=Date.now();
+  save();closeVM();renderDrafts();showToast('✓ Draft dikemaskini!');
+}
+function deleteDraft(id){
+  if(!isAdmin||!confirm('Padam draft ini?'))return;
+  store.drafts=store.drafts.filter(x=>x.id!==id);save();renderDrafts();showToast('Draft dipadam.');
+}
+
+// ===== STATISTIK =====
+function renderStats(){
+  if(!store.stats)store.stats={pageViews:0,lastVisits:[]};
+  const notes=store.nota.length,anns=store.ann.length,fbs=(store.feedbacks||[]).length;
+  const views=store.stats.pageViews||0,drafts=(store.drafts||[]).length;
+  const fbWithRating=(store.feedbacks||[]).filter(f=>f.rating);
+  const avgRating=fbWithRating.length?(fbWithRating.reduce((a,b)=>a+b.rating,0)/fbWithRating.length).toFixed(1):'—';
+  const newFb=(store.feedbacks||[]).filter(f=>f.status==='baru').length;
+  document.getElementById('stats-cards').innerHTML=`
+    <div class="sc"><div class="sc-ico" style="background:#dbeafe">👁</div><div><div class="sc-n">${views}</div><div class="sc-l">Jumlah View</div></div></div>
+    <div class="sc"><div class="sc-ico" style="background:#dcfce7">📝</div><div><div class="sc-n">${notes}</div><div class="sc-l">Nota</div></div></div>
+    <div class="sc"><div class="sc-ico" style="background:#fff7ed">📢</div><div><div class="sc-n">${anns}</div><div class="sc-l">Pengumuman</div></div></div>
+    <div class="sc"><div class="sc-ico" style="background:#fef3c7">📋</div><div><div class="sc-n">${drafts}</div><div class="sc-l">Draft</div></div></div>
+    <div class="sc"><div class="sc-ico" style="background:#ede9fe">💬</div><div><div class="sc-n">${fbs}${newFb?'<span style="font-size:10px;color:var(--red);margin-left:3px">('+newFb+' baru)</span>':''}</div><div class="sc-l">Feedback</div></div></div>
+    <div class="sc"><div class="sc-ico" style="background:#ccfbf1">⭐</div><div><div class="sc-n">${avgRating}</div><div class="sc-l">Avg Rating</div></div></div>`;
+  // Nota by subjek
+  const subjCount={};store.nota.forEach(n=>{if(n.subj)subjCount[n.subj]=(subjCount[n.subj]||0)+1});
+  const maxS=Math.max(...Object.values(subjCount),1);
+  document.getElementById('stats-subj-chart').innerHTML=Object.keys(subjCount).length?
+    Object.entries(subjCount).sort((a,b)=>b[1]-a[1]).slice(0,6).map(([s,c])=>`<div style="margin-bottom:10px"><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span style="font-weight:500">${s}</span><strong>${c}</strong></div><div style="background:var(--gray3);height:8px;border-radius:4px;overflow:hidden"><div style="height:100%;background:linear-gradient(90deg,var(--blue),var(--blue4));border-radius:4px;width:${Math.round(c/maxS*100)}%"></div></div></div>`).join(''):
+    '<p style="font-size:12px;color:var(--muted)">Tiada nota lagi.</p>';
+  // Feedback by type
+  const fbCount={};(store.feedbacks||[]).forEach(f=>{fbCount[f.type]=(fbCount[f.type]||0)+1});
+  const maxF=Math.max(...Object.values(fbCount),1);
+  document.getElementById('stats-fb-chart').innerHTML=Object.keys(fbCount).length?
+    Object.entries(fbCount).sort((a,b)=>b[1]-a[1]).map(([t,c])=>`<div style="margin-bottom:10px"><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span style="font-weight:500">${t}</span><strong>${c}</strong></div><div style="background:var(--gray3);height:8px;border-radius:4px;overflow:hidden"><div style="height:100%;background:linear-gradient(90deg,#7c3aed,#a78bfa);border-radius:4px;width:${Math.round(c/maxF*100)}%"></div></div></div>`).join(''):
+    '<p style="font-size:12px;color:var(--muted)">Tiada feedback lagi.</p>';
+  // Recent activity
+  const rec=(store.activityLog||[]).slice(0,5);
+  document.getElementById('stats-recent-activity').innerHTML=rec.length?rec.map(l=>`<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--gray3)"><span style="font-size:16px">${ACTION_ICONS[l.action]||'📋'}</span><div style="flex:1"><div style="font-size:12.5px;font-weight:600;color:var(--navy)">${formatAction(l.action)}</div><div style="font-size:11px;color:var(--muted2)">${l.detail||'—'}</div></div><span style="font-size:11px;color:var(--muted2);flex-shrink:0">${new Date(l.time).toLocaleString('ms-MY')}</span></div>`).join(''):'<p style="font-size:12px;color:var(--muted)">Tiada aktiviti lagi.</p>';
+  // Recent nota
+  const rn=[...store.nota].reverse().slice(0,5);
+  document.getElementById('stats-popular-nota').innerHTML=rn.length?rn.map(n=>`<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--gray3)"><span style="font-size:16px">📝</span><div style="flex:1;min-width:0"><div style="font-size:12.5px;font-weight:600;color:var(--navy);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${n.title}</div><div style="font-size:11px;color:var(--muted2)">${n.subj||'—'} · ${n.type}</div></div><span style="font-size:11px;color:var(--muted2);flex-shrink:0">${new Date(n.time).toLocaleDateString('ms-MY')}</span></div>`).join(''):'<p style="font-size:12px;color:var(--muted)">Tiada nota lagi.</p>';
+}
+
 function filterLog(v){logFilter=v;renderLog()}
 function promptClearLog(){
   const sp=prompt('Masukkan Super Password untuk kosongkan log:');
@@ -1656,6 +2069,7 @@ function loadSettingsForm(){
     'st-marquee':(s.marquee||[]).join('\n')
   };
   Object.entries(fields).forEach(([id,val])=>{const el=document.getElementById(id);if(el)el.value=val||''});
+  loadWelcomeSettings();
 }
 function savePortalInfo(){
   if(!isAdmin)return;
