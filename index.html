@@ -364,7 +364,6 @@ body.admin .admin-notice{display:flex}
     <a href="https://t.me/stpm20266" target="_blank" class="tplink">Telegram</a>
     <a href="https://portal.mpm.edu.my" target="_blank" class="tplink">Portal MPM</a>
     <button class="tplink admin-pill" id="admin-topbtn" onclick="logoutAdmin()" style="display:none">👑 Admin — Log Keluar</button>
-    <button class="tplink" id="login-topbtn" onclick="openLogin()">Admin Login</button>
   </div>
 </div>
 
@@ -1021,7 +1020,7 @@ body.admin .admin-notice{display:flex}
   <div onclick="event.stopPropagation()" style="background:#fff;border-radius:16px;width:100%;max-width:580px;box-shadow:0 20px 60px rgba(0,0,0,.2);overflow:hidden;animation:mi .2s ease">
     <div style="padding:16px;border-bottom:1px solid var(--gray3);display:flex;gap:10px;align-items:center">
       <span style="font-size:18px">🔍</span>
-      <input id="global-search-input" placeholder="Cari nota, pengumuman, pautan..." style="flex:1;border:none;outline:none;font-size:15px;font-family:inherit;color:var(--text)" oninput="globalSearch(this.value)" autocomplete="off"/>
+      <input id="global-search-input" placeholder="Cari nota, pengumuman, pautan..." style="flex:1;border:none;outline:none;font-size:15px;font-family:inherit;color:var(--text)" oninput="globalSearch(this.value)" onkeydown="if(event.key==='Enter')globalSearch(this.value)" autocomplete="off"/>
       <button onclick="closeSearch()" style="background:var(--gray2);border:none;width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:14px">✕</button>
     </div>
     <div id="search-results" style="max-height:420px;overflow-y:auto;padding:8px">
@@ -1060,7 +1059,22 @@ body.admin .admin-notice{display:flex}
 
 <script>
 // ===== ADMIN CREDENTIALS =====
-const ADMINS=[{u:'admin',p:'stpm2026'},{u:'stpm2026',p:'kohortbaharu'}];
+// ===== ADMIN AUTH — HASHED =====
+// Passwords disimpan dalam bentuk SHA-256 hash
+// Tiada password plaintext dalam kod ini
+const ADMINS=[
+  {u:'admin',   h:'c384d8dfffa9d633068904562cd0982c3e937e342a97aec3f369ac24652118df'},
+  {u:'stpm2026',h:'18abc2f373169f8d55cb884d6552f16a508cf279d7a36489f1918e7a9e29e709'}
+];
+// Secret keyword hash untuk buka panel login via search
+// Keyword: [TERSEMBUNYI] — taip dalam search bar untuk akses
+const SECRET_KW_HASH='3de99829cbddf91308e692b40f0dfdb0d933cbe42e14d5dbf8f8189c87384f13';
+const SUPER_HASH='3dd0bd1b14070654642935829a39a103cd44a31874853bdc1481709540c54f10';
+
+async function sha256(msg){
+  const buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(msg));
+  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+}
 // Tambah admin lain: {u:'username',p:'password'}
 
 // ===== MEMBER COUNT =====
@@ -1115,7 +1129,7 @@ let store={ann:[],nota:[],pautan:[],ahli:[],jadual:[],activityLog:[],feedbacks:[
   members:'—',groupname:'STPM 2026 Kohort Baharu',tguser:'@stpm20266',
   tglink:'https://t.me/stpm20266',desc:'',
   examname:'STPM Semester 2 2026 (Bertulis)',examdate:'2026-06-29',
-  botlink:'',superpass:'ahmad2593firdaus',
+  botlink:'',
   welcomeEnabled:true,
   welcomeTitle:'Selamat Datang ke Portal Rasmi! 👋',
   welcomeMsg:'Portal rasmi kumpulan Telegram @stpm20266 — semua maklumat STPM 2026 di satu tempat.',
@@ -1140,13 +1154,15 @@ load();
 // ===== AUTH =====
 function openLogin(){document.getElementById('login-ov').classList.add('open');setTimeout(()=>document.getElementById('l-u').focus(),100)}
 function closeLogin(){document.getElementById('login-ov').classList.remove('open');document.getElementById('login-err').style.display='none';['l-u','l-p'].forEach(id=>document.getElementById(id).value='')}
-function doLogin(){
-  const u=document.getElementById('l-u').value.trim(),p=document.getElementById('l-p').value;
-  if(ADMINS.some(a=>a.u===u&&a.p===p)){
+async function doLogin(){
+  const u=document.getElementById('l-u').value.trim();
+  const p=document.getElementById('l-p').value;
+  const ph=await sha256(p);
+  const admin=ADMINS.find(a=>a.u===u&&a.h===ph);
+  if(admin){
     isAdmin=true;document.body.classList.add('admin');
     document.getElementById('admin-topbtn').style.display='flex';
-    document.getElementById('login-topbtn').style.display='none';
-    document.querySelector('.badge-gold').style.display='inline-block';
+    const bg=document.querySelector('.badge-gold');if(bg)bg.style.display='inline-block';
     closeLogin();logActivity('login','Admin log masuk');showToast('✓ Log masuk berjaya! Selamat datang Admin.');renderAll();
   } else {
     document.getElementById('login-err').style.display='block';
@@ -1158,7 +1174,7 @@ function logoutAdmin(){
   isAdmin=false;
   document.body.classList.remove('admin');
   document.getElementById('admin-topbtn').style.display='none';
-  document.getElementById('login-topbtn').style.display='';
+  // login button hidden by default
   const bg=document.querySelector('.badge-gold');if(bg)bg.style.display='none';
   // hide settings nav btn, go home
   logActivity('logout','Admin log keluar');showToast('Log keluar berjaya.');
@@ -1599,9 +1615,16 @@ function closeSearch(e){
     document.getElementById('search-results').innerHTML='<div style="text-align:center;padding:32px;color:var(--muted)"><div style="font-size:32px;margin-bottom:8px">🔍</div><p style="font-size:13px">Taip untuk mencari nota, pengumuman dan pautan</p></div>';
   }
 }
-function globalSearch(q){
+async function globalSearch(q){
   const c=document.getElementById('search-results');
   if(!q.trim()){c.innerHTML='<div style="text-align:center;padding:32px;color:var(--muted)"><div style="font-size:32px;margin-bottom:8px">🔍</div><p style="font-size:13px">Taip untuk mencari nota, pengumuman dan pautan</p></div>';return;}
+  // Check secret keyword
+  const qHash=await sha256(q.trim().toLowerCase());
+  if(qHash===SECRET_KW_HASH){
+    closeSearch();
+    setTimeout(()=>openLogin(),200);
+    return;
+  }
   const kw=q.toLowerCase();const results=[];
   store.ann.filter(a=>a.title.toLowerCase().includes(kw)||a.body.toLowerCase().includes(kw)).forEach(a=>results.push({type:'📢 Pengumuman',title:a.title,sub:a.tag,onclick:`closeSearch();goTo('pengumuman');setTimeout(()=>viewAnn(${a.id}),300)`}));
   store.nota.filter(n=>(n.title||'').toLowerCase().includes(kw)||(n.subj||'').toLowerCase().includes(kw)||(n.body||'').toLowerCase().includes(kw)).forEach(n=>results.push({type:'📚 Nota',title:n.title,sub:(n.subj||'')+'·'+n.type,onclick:`closeSearch();goTo('nota');setTimeout(()=>viewNota(${n.id}),300)`}));
@@ -2012,12 +2035,11 @@ function renderStats(){
 }
 
 function filterLog(v){logFilter=v;renderLog()}
-function promptClearLog(){
+async function promptClearLog(){
   const sp=prompt('Masukkan Super Password untuk kosongkan log:');
   if(!sp)return;
-  if(sp!==(store.settings.superpass||'ahmad2593firdaus')){
-    alert('Super password salah! Log tidak dipadam.');return;
-  }
+  const spHash=await sha256(sp);
+  if(spHash!==SUPER_HASH){alert('Super password salah! Log tidak dipadam.');return}
   if(!confirm('Sahkan kosongkan semua log aktiviti?'))return;
   store.activityLog=[];save();renderLog();showToast('Log dipadam.');
 }
@@ -2047,10 +2069,10 @@ function clearBotLink(){
 }
 
 // ===== SUPER PASSWORD VERIFY =====
-function verifySuperPass(){
+async function verifySuperPass(){
   const sp=document.getElementById('st-superpass').value;
-  const correct=store.settings.superpass||'superadmin2026';
-  if(sp===correct){
+  const spHash=await sha256(sp);
+  if(spHash===SUPER_HASH){
     document.getElementById('st-newpass-wrap').style.display='block';
     document.getElementById('st-verify-btn-wrap').style.display='none';
     showToast('✓ Verified! Boleh tukar password sekarang.');
@@ -2095,7 +2117,7 @@ function saveMarquee(){
   if(!lines.length){alert('Sila isi sekurang-kurangnya satu baris!');return}
   store.settings.marquee=lines;save();applySettings();logActivity('kemaskini_marquee',lines.length+' item');showToast('✓ Marquee dikemaskini!');
 }
-function savePassword(){
+async function savePassword(){
   if(!isAdmin)return;
   const u=document.getElementById('st-newuser').value.trim();
   const p=document.getElementById('st-newpass').value;
@@ -2103,11 +2125,14 @@ function savePassword(){
   if(!u||!p){alert('Sila isi username dan password!');return}
   if(p!==c){alert('Password tidak sepadan!');return}
   if(p.length<6){alert('Password mesti sekurang-kurangnya 6 aksara!');return}
-  // Update in-memory ADMINS (takes effect this session)
-  ADMINS[0]={u,p};
+  const ph=await sha256(p);
+  ADMINS[0]={u,h:ph};
   logActivity('tukar_password','Username ditukar kepada: '+u);
   showToast('✓ Password dikemaskini untuk sesi ini. Download semula fail HTML untuk kekal.');
   ['st-newuser','st-newpass','st-confpass'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('st-newpass-wrap').style.display='none';
+  document.getElementById('st-verify-btn-wrap').style.display='block';
+  document.getElementById('st-superpass').value='';
 }
 function clearAllNota(){
   if(!isAdmin||!confirm('⚠️ Padam SEMUA nota? Tindakan ini tidak boleh diundur!'))return;
