@@ -927,13 +927,33 @@ body.admin .admin-notice{display:flex}
   </div>
 
   <!-- DANGER ZONE -->
-  <div class="sec-hdr"><div class="sec-title" style="color:var(--red)">Zon Bahaya</div></div>
+  <div class="sec-hdr"><div class="sec-title" style="color:var(--red)">⚠️ Zon Bahaya</div></div>
   <div class="nota-form" style="border:1.5px solid var(--red);margin-bottom:22px">
-    <p style="font-size:13px;color:var(--muted);margin-bottom:14px">Tindakan ini <strong>tidak boleh diundur</strong>. Semua data akan dipadam.</p>
-    <div style="display:flex;gap:10px;flex-wrap:wrap">
-      <button class="btn btn-d" onclick="clearAllNota()">🗑️ Padam Semua Nota</button>
-      <button class="btn btn-d" onclick="clearAllAnn()">🗑️ Padam Semua Pengumuman</button>
-      <button class="btn btn-d" onclick="clearAllData()">⚠️ Reset Semua Data Portal</button>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:14px">Tindakan ini <strong>tidak boleh diundur</strong>. Kena verify Super Password dulu.</p>
+    
+    <!-- Locked state -->
+    <div id="danger-locked">
+      <div class="fg">
+        <label>Super Password</label>
+        <div style="display:flex;gap:8px">
+          <input type="password" id="sp-danger" placeholder="Masukkan super password untuk buka akses..." style="flex:1;border:1.5px solid var(--red);border-radius:10px;padding:9px 12px;font-size:13px;font-family:'Outfit',sans-serif;outline:none"/>
+          <button class="btn btn-d" onclick="unlockDanger()">🔓 Verify</button>
+        </div>
+      </div>
+      <p style="font-size:11.5px;color:var(--red);margin-top:6px">⚠️ Bahagian ini dilindungi — hanya Super Admin yang boleh akses.</p>
+    </div>
+
+    <!-- Unlocked state -->
+    <div id="danger-unlocked" style="display:none">
+      <div style="background:var(--red2);border-radius:10px;padding:11px 14px;margin-bottom:14px;font-size:12.5px;color:var(--red);font-weight:600">
+        ⚠️ Zon Bahaya dibuka. Berhati-hati — semua tindakan di bawah TIDAK BOLEH diundur!
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button class="btn btn-d" onclick="clearAllNota()">🗑️ Padam Semua Nota</button>
+        <button class="btn btn-d" onclick="clearAllAnn()">🗑️ Padam Semua Pengumuman</button>
+        <button class="btn btn-d" onclick="clearAllData()">⚠️ Reset Semua Data Portal</button>
+      </div>
+      <button onclick="lockDanger()" style="background:none;border:none;color:var(--muted);font-size:12px;margin-top:12px;cursor:pointer;font-family:'Outfit',sans-serif">🔒 Kunci semula</button>
     </div>
   </div>
 
@@ -1542,7 +1562,13 @@ function renderSection(id){
   if(id==='nota')renderNota();
   if(id==='pautan')renderPautan();
   if(id==='ahli')renderAhli();
-  if(id==='settings')loadSettingsForm();
+  if(id==='settings'){loadSettingsForm();
+    // Reset danger zone lock when entering settings
+    const dl=document.getElementById('danger-locked');
+    const du=document.getElementById('danger-unlocked');
+    if(dl)dl.style.display='block';
+    if(du)du.style.display='none';
+  }
   if(id==='activitylog')renderLog();
   if(id==='bot')renderBotLink();
   if(id==='feedback')renderFeedback();
@@ -2443,20 +2469,42 @@ async function savePassword(){
   document.getElementById('st-verify-btn-wrap').style.display='block';
   document.getElementById('st-superpass').value='';
 }
+async function unlockDanger(){
+  const sp=document.getElementById('sp-danger').value;
+  const spHash=await sha256(sp);
+  if(spHash===SUPER_HASH){
+    document.getElementById('danger-locked').style.display='none';
+    document.getElementById('danger-unlocked').style.display='block';
+    document.getElementById('sp-danger').value='';
+    showToast('⚠️ Zon Bahaya dibuka. Berhati-hati!');
+  } else {
+    alert('Super password salah!');
+    document.getElementById('sp-danger').value='';
+  }
+}
+function lockDanger(){
+  document.getElementById('danger-locked').style.display='block';
+  document.getElementById('danger-unlocked').style.display='none';
+  showToast('🔒 Zon Bahaya dikunci semula.');
+}
 function clearAllNota(){
-  if(!isAdmin||!confirm('⚠️ Padam SEMUA nota? Tindakan ini tidak boleh diundur!'))return;
-  const count=store.nota.length;store.nota=[];save();renderHome();logActivity('padam_semua_nota',count+' nota dipadam');showToast('Semua nota dipadam.');
+  if(!isAdmin||!confirm('⚠️ Padam SEMUA nota? Tidak boleh diundur!'))return;
+  const count=store.nota.length;store.nota=[];save();renderHome();
+  logActivity('padam_semua_nota',count+' nota dipadam');showToast('Semua nota dipadam.');
+  lockDanger();
 }
 function clearAllAnn(){
-  if(!isAdmin||!confirm('⚠️ Padam SEMUA pengumuman? Tindakan ini tidak boleh diundur!'))return;
-  const count=store.ann.length;store.ann=[];save();renderHome();logActivity('padam_semua_ann',count+' pengumuman dipadam');showToast('Semua pengumuman dipadam.');
+  if(!isAdmin||!confirm('⚠️ Padam SEMUA pengumuman? Tidak boleh diundur!'))return;
+  const count=store.ann.length;store.ann=[];save();renderHome();
+  logActivity('padam_semua_ann',count+' pengumuman dipadam');showToast('Semua pengumuman dipadam.');
+  lockDanger();
 }
 function clearAllData(){
-  if(!isAdmin||!confirm('⚠️ RESET SEMUA DATA PORTAL? Semua nota, pengumuman, pautan dan ahli akan dipadam. Tidak boleh diundur!'))return;
+  if(!isAdmin||!confirm('⚠️ RESET SEMUA DATA PORTAL? Tidak boleh diundur!'))return;
   if(!confirm('Tekan OK sekali lagi untuk sahkan reset penuh.'))return;
   logActivity('reset_data','Reset penuh portal dilakukan');
-  store={ann:[],nota:[],pautan:[],ahli:[],jadual:[],activityLog:store.activityLog||[],settings:{...store.settings}};
-  save();renderAll();showToast('Portal telah direset.');goTo('home');
+  store={ann:[],nota:[],pautan:[],ahli:[],jadual:[],activityLog:store.activityLog||[],feedbacks:[],drafts:[],stats:store.stats||{},settings:{...store.settings}};
+  save();renderAll();showToast('Portal telah direset.');goTo('home');lockDanger();
 }
 </script>
 </body>
