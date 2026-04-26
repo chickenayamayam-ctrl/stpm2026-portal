@@ -387,6 +387,7 @@ body.admin .admin-notice{display:flex}
     <button class="nav-btn" onclick="goTo('ahli')">Ahli</button>
     <button class="nav-btn" onclick="goTo('bot')">Bot</button>
     <button class="nav-btn admin-only" onclick="goTo('settings')" style="color:#b45309;background:#fef3c7">⚙️ Settings</button>
+    <button class="nav-btn admin-only" onclick="goTo('activitylog')" style="color:#0d9488;background:#ccfbf1">📋 Log</button>
   </nav>
   <div style="display:flex;gap:7px;align-items:center">
     <a class="tg-btn" href="https://t.me/stpm20266" target="_blank">
@@ -708,23 +709,45 @@ body.admin .admin-notice{display:flex}
 <div id="sec-bot" class="section">
 <div class="con">
   <div class="bc"><span>Laman Utama</span>›<span style="color:var(--text)">Bot Telegram</span></div>
-  <div class="ph"><h2>Bot Telegram</h2><p>Panduan bot automatik untuk kumpulan @stpm20266</p></div>
-  <div class="bot-wrap">
-    <h3 style="font-size:17px;font-weight:800;margin-bottom:5px">🤖 @STPM2026Bot</h3>
-    <p style="font-size:13px;opacity:.72;margin-bottom:18px;max-width:460px;line-height:1.7">Bot automatik — cari nota, semak jadual dan akses maklumat peperiksaan terus dari Telegram.</p>
-    <div class="bot-cmds">
-      <div class="bot-cmd"><span style="font-size:17px">📚</span><div><div class="cmd-n">/nota [subjek]</div><div class="cmd-d">Cari nota. Contoh: /nota Biology</div></div></div>
-      <div class="bot-cmd"><span style="font-size:17px">📅</span><div><div class="cmd-n">/jadual</div><div class="cmd-d">Jadual peperiksaan terkini</div></div></div>
-      <div class="bot-cmd"><span style="font-size:17px">📢</span><div><div class="cmd-n">/pengumuman</div><div class="cmd-d">Pengumuman terkini admin</div></div></div>
-      <div class="bot-cmd"><span style="font-size:17px">⏳</span><div><div class="cmd-n">/countdown</div><div class="cmd-d">Countdown ke peperiksaan</div></div></div>
-      <div class="bot-cmd"><span style="font-size:17px">🔗</span><div><div class="cmd-n">/pautan</div><div class="cmd-d">Senarai link berguna</div></div></div>
-      <div class="bot-cmd"><span style="font-size:17px">👥</span><div><div class="cmd-n">/admin</div><div class="cmd-d">Hubungi admin group</div></div></div>
-      <div class="bot-cmd"><span style="font-size:17px">📊</span><div><div class="cmd-n">/stats</div><div class="cmd-d">Statistik group & nota</div></div></div>
-      <div class="bot-cmd"><span style="font-size:17px">❓</span><div><div class="cmd-n">/bantuan</div><div class="cmd-d">Senarai semua arahan</div></div></div>
+  <div class="ph"><h2>Bot Telegram</h2><p>Bot automatik untuk kumpulan @stpm20266</p></div>
+
+  <!-- COMING SOON CARD -->
+  <div style="background:linear-gradient(135deg,#0f172a,#1e3a6e);border-radius:16px;padding:40px 32px;color:#fff;text-align:center;margin-bottom:20px;position:relative;overflow:hidden">
+    <div style="position:absolute;top:-40px;right:-40px;width:180px;height:180px;background:radial-gradient(circle,rgba(59,130,246,.2),transparent 70%);pointer-events:none"></div>
+    <div style="font-size:52px;margin-bottom:14px">🤖</div>
+    <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(250,204,21,.15);border:1px solid rgba(250,204,21,.3);border-radius:20px;padding:5px 16px;font-size:11px;font-weight:700;color:#fbbf24;letter-spacing:.8px;text-transform:uppercase;margin-bottom:16px">⏳ Coming Soon</div>
+    <h2 style="font-size:22px;font-weight:800;margin-bottom:8px">@STPM2026Bot</h2>
+    <p style="font-size:13px;opacity:.7;max-width:400px;margin:0 auto 24px;line-height:1.7">Bot Telegram untuk kumpulan ini sedang dalam pembangunan. Bot akan membantu cari nota, semak jadual, countdown peperiksaan dan banyak lagi!</p>
+
+    <!-- BOT LINK (shown when set) -->
+    <div id="bot-link-display" style="display:none;margin-bottom:16px">
+      <a id="bot-link-anchor" href="#" target="_blank" style="display:inline-flex;align-items:center;gap:8px;background:#2AABEE;color:#fff;padding:12px 24px;border-radius:10px;font-size:14px;font-weight:700;text-decoration:none;transition:.2s">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8l-1.7 8.02c-.12.56-.45.7-.91.43l-2.52-1.86-1.22 1.17c-.13.13-.25.25-.51.25l.18-2.57 4.64-4.2c.2-.18-.04-.28-.31-.1L7.11 15.3l-2.48-.77c-.54-.17-.55-.54.11-.8l9.69-3.74c.45-.16.85.11.71.81z"/></svg>
+        Pergi ke Bot Telegram
+      </a>
     </div>
-    <div style="background:rgba(59,130,246,.12);border:1px solid rgba(59,130,246,.25);border-radius:8px;padding:11px 13px;font-size:12px;opacity:.78;line-height:1.6">
-      💡 Taip dalam group atau DM terus. Contoh: <code style="background:rgba(255,255,255,.1);padding:1px 5px;border-radius:4px">/nota 900 Pengajian Am</code>
+
+    <!-- Arahan preview -->
+    <div style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center;opacity:.6">
+      <span style="background:rgba(255,255,255,.1);border-radius:20px;padding:4px 12px;font-size:11px;font-family:monospace">/nota</span>
+      <span style="background:rgba(255,255,255,.1);border-radius:20px;padding:4px 12px;font-size:11px;font-family:monospace">/jadual</span>
+      <span style="background:rgba(255,255,255,.1);border-radius:20px;padding:4px 12px;font-size:11px;font-family:monospace">/countdown</span>
+      <span style="background:rgba(255,255,255,.1);border-radius:20px;padding:4px 12px;font-size:11px;font-family:monospace">/pengumuman</span>
+      <span style="background:rgba(255,255,255,.1);border-radius:20px;padding:4px 12px;font-size:11px;font-family:monospace">/bantuan</span>
     </div>
+  </div>
+
+  <!-- ADMIN: set bot link -->
+  <div class="admin-notice"><span>👑</span>Admin Mode — boleh set link bot Telegram bila dah ready.</div>
+  <div class="admin-only block" style="background:#fff;border:1px solid var(--gray3);border-radius:var(--radius);padding:18px;margin-bottom:20px">
+    <div class="fg"><label>Link Bot Telegram</label>
+      <div style="display:flex;gap:8px">
+        <input id="bot-link-input" placeholder="https://t.me/STPM2026Bot" style="flex:1;border:1.5px solid var(--gray3);border-radius:8px;padding:9px 11px;font-size:13px;font-family:inherit;outline:none"/>
+        <button class="btn btn-p" onclick="saveBotLink()">Simpan</button>
+        <button class="btn btn-d" onclick="clearBotLink()" style="font-size:12px">Padam</button>
+      </div>
+    </div>
+    <p style="font-size:11.5px;color:var(--muted);margin-top:6px">Link akan muncul sebagai butang "Pergi ke Bot Telegram" untuk semua pengunjung.</p>
   </div>
 </div>
 </div>
@@ -774,13 +797,22 @@ body.admin .admin-notice{display:flex}
   <!-- ADMIN CREDENTIALS -->
   <div class="sec-hdr"><div class="sec-title">Tukar Password Admin</div></div>
   <div class="nota-form" style="margin-bottom:22px">
-    <p style="font-size:12.5px;color:var(--muted);margin-bottom:12px">⚠️ Password disimpan dalam fail HTML. Selepas tukar, download semula fail portal.</p>
-    <div class="form-row">
-      <div class="fg"><label>Username Baharu</label><input id="st-newuser" placeholder="Username baru"/></div>
-      <div class="fg"><label>Password Baharu</label><input type="password" id="st-newpass" placeholder="Password baru"/></div>
+    <div class="admin-notice" style="display:flex;margin-bottom:14px"><span>🔒</span>Kena verify dengan <strong>Super Password</strong> dulu sebelum boleh tukar password admin.</div>
+    <div class="fg"><label>Super Password (Untuk Verify)</label>
+      <input type="password" id="st-superpass" placeholder="Masukkan super password untuk teruskan..."/>
+      <p style="font-size:11px;color:var(--muted);margin-top:4px">Super password ditetapkan oleh pemilik portal. Simpan elok-elok!</p>
     </div>
-    <div class="fg"><label>Sahkan Password</label><input type="password" id="st-confpass" placeholder="Taip semula password"/></div>
-    <div class="form-actions"><button class="btn btn-p" onclick="savePassword()">🔒 Tukar Password</button></div>
+    <div id="st-newpass-wrap" style="display:none">
+      <div class="form-row">
+        <div class="fg"><label>Username Baharu</label><input id="st-newuser" placeholder="Username baru"/></div>
+        <div class="fg"><label>Password Baharu</label><input type="password" id="st-newpass" placeholder="Password baru"/></div>
+      </div>
+      <div class="fg"><label>Sahkan Password</label><input type="password" id="st-confpass" placeholder="Taip semula password"/></div>
+      <div class="form-actions"><button class="btn btn-p" onclick="savePassword()">🔒 Tukar Password</button></div>
+    </div>
+    <div style="margin-top:10px" id="st-verify-btn-wrap">
+      <button class="btn btn-p" onclick="verifySuperPass()">Verify Super Password</button>
+    </div>
   </div>
 
   <!-- DANGER ZONE -->
@@ -794,6 +826,20 @@ body.admin .admin-notice{display:flex}
     </div>
   </div>
 
+</div>
+</div>
+
+<!-- ACTIVITY LOG (Admin Only) -->
+<div id="sec-activitylog" class="section">
+<div class="con">
+  <div class="bc"><span>Laman Utama</span>›<span style="color:var(--text)">Log Aktiviti</span></div>
+  <div class="ph"><h2>📋 Log Aktiviti Admin</h2><p>Rekod semua tindakan yang dilakukan oleh admin portal</p></div>
+  <div class="admin-notice"><span>👑</span>Hanya admin yang boleh melihat log aktiviti ini.</div>
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px">
+    <div class="sw" style="flex:1;min-width:160px;margin-bottom:0"><span class="si">🔍</span><input placeholder="Cari aktiviti..." oninput="filterLog(this.value)"/></div>
+    <button class="btn btn-d btn-sm" onclick="clearLog()">🗑️ Kosongkan Log</button>
+  </div>
+  <div id="activity-log-list" style="display:flex;flex-direction:column;gap:7px"></div>
 </div>
 </div>
 
@@ -861,11 +907,13 @@ const ALL_SUBJ=Object.values(SUBJEK).flatMap(g=>g.items);
 
 // ===== STATE =====
 let isAdmin=false;
-let store={ann:[],nota:[],pautan:[],ahli:[],jadual:[],settings:{
+let store={ann:[],nota:[],pautan:[],ahli:[],jadual:[],activityLog:[],settings:{
   members:'—',groupname:'STPM 2026 Kohort Baharu',tguser:'@stpm20266',
   tglink:'https://t.me/stpm20266',desc:'',
   examname:'STPM Semester 2 2026 (Bertulis)',examdate:'2026-06-29',
-  marquee:['📢 Portal Rasmi STPM 2026 Kohort Baharu | @stpm20266','📅 STPM Semester 2: 29 Jun 2026 — Bersedia!','📅 STPM Semester 3: 17 November 2026','📚 Nota & bahan dikuruskan oleh admin sahaja','🤖 Bot Telegram: /nota, /jadual, /countdown']
+  botlink:'',
+  superpass:'ahmad2593firdaus',
+  marquee:['📢 Portal Rasmi STPM 2026 Kohort Baharu | @stpm20266','📅 STPM Semester 2: 29 Jun 2026 — Bersedia!','📅 STPM Semester 3: 17 November 2026','📚 Nota & bahan dikuruskan oleh admin sahaja','🤖 Bot Telegram: Coming Soon!']
 }};
 let annTxt='',annTag='';
 // Temporary attachment buffers for nota form
@@ -892,7 +940,7 @@ function doLogin(){
     document.getElementById('admin-topbtn').style.display='flex';
     document.getElementById('login-topbtn').style.display='none';
     document.querySelector('.badge-gold').style.display='inline-block';
-    closeLogin();showToast('✓ Log masuk berjaya! Selamat datang Admin.');renderAll();
+    closeLogin();logActivity('login','Admin log masuk');showToast('✓ Log masuk berjaya! Selamat datang Admin.');renderAll();
   } else {
     document.getElementById('login-err').style.display='block';
     document.getElementById('l-p').value='';
@@ -906,7 +954,7 @@ function logoutAdmin(){
   document.getElementById('login-topbtn').style.display='';
   const bg=document.querySelector('.badge-gold');if(bg)bg.style.display='none';
   // hide settings nav btn, go home
-  showToast('Log keluar berjaya.');
+  logActivity('logout','Admin log keluar');showToast('Log keluar berjaya.');
   goTo('home');
 }
 
@@ -948,7 +996,7 @@ function goTo(id){
   document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById('sec-'+id).classList.add('active');
-  const idx={home:0,pengumuman:1,nota:2,jadual:3,pautan:4,ahli:5,bot:6,settings:7}[id];
+  const idx={home:0,pengumuman:1,nota:2,jadual:3,pautan:4,ahli:5,bot:6,settings:7,activitylog:8}[id];
   document.querySelectorAll('.nav-btn')[idx]?.classList.add('active');
   curSec=id;window.scrollTo({top:0,behavior:'smooth'});
   document.getElementById('main-nav').classList.remove('open');
@@ -962,6 +1010,8 @@ function renderSection(id){
   if(id==='pautan')renderPautan();
   if(id==='ahli')renderAhli();
   if(id==='settings')loadSettingsForm();
+  if(id==='activitylog')renderLog();
+  if(id==='bot')renderBotLink();
 }
 
 // ===== TOAST =====
@@ -1031,9 +1081,9 @@ function saveAnn(){
   const body=document.getElementById('af-body')?.value.trim();
   if(!title||!body){alert('Sila isi tajuk dan kandungan!');return}
   store.ann.push({id:Date.now(),title,body,tag:document.getElementById('af-tag').value,pinned:document.getElementById('af-pin').value==='1',emoji:document.getElementById('af-emoji').value||'📢',time:Date.now(),views:0});
-  save();closeVM();renderAnnFull();renderHome();showToast('✓ Pengumuman disimpan!');
+  save();closeVM();renderAnnFull();renderHome();logActivity('tambah_pengumuman',title);showToast('✓ Pengumuman disimpan!');
 }
-function deleteAnn(id){if(!isAdmin||!confirm('Padam pengumuman ini?'))return;store.ann=store.ann.filter(a=>a.id!==id);save();renderAnnFull();renderHome();showToast('Pengumuman dipadam.')}
+function deleteAnn(id){if(!isAdmin||!confirm('Padam pengumuman ini?'))return;const a=store.ann.find(x=>x.id===id);store.ann=store.ann.filter(a=>a.id!==id);save();renderAnnFull();renderHome();logActivity('padam_pengumuman',a?.title||'');showToast('Pengumuman dipadam.')}
 function viewAnn(id){
   const a=store.ann.find(x=>x.id===id);if(!a)return;
   a.views=(a.views||0)+1;save();
@@ -1144,7 +1194,7 @@ function saveNota(){
   document.getElementById('nt-cat').value='';document.getElementById('nt-subj-sel').innerHTML='<option>-- Pilih Kategori Dulu --</option>';
   tempLinks=[];tempFiles=[];tempImages=[];
   ['links-preview','files-preview','imgs-preview'].forEach(id=>document.getElementById(id).innerHTML='');
-  ntTab('all');renderHome();showToast('✓ Nota berjaya disimpan!');
+  ntTab('all');renderHome();logActivity('tambah_nota',nota.title+' ('+nota.subj+')');showToast('✓ Nota berjaya disimpan!');
 }
 
 // ===== NOTA — RENDER =====
@@ -1207,7 +1257,8 @@ function filterNota(v){renderNotaAll(v)}
 function renderNota(){renderSubjGroups();renderNotaAll()}
 function deleteNota(id){
   if(!isAdmin||!confirm('Padam nota ini?'))return;
-  store.nota=store.nota.filter(n=>n.id!==id);save();renderNotaAll();renderHome();showToast('Nota dipadam.');
+  const n=store.nota.find(x=>x.id===id);
+  store.nota=store.nota.filter(n=>n.id!==id);save();renderNotaAll();renderHome();logActivity('padam_nota',n?.title||'');showToast('Nota dipadam.');
 }
 function viewNota(id){
   const n=store.nota.find(x=>x.id===id);if(!n)return;
@@ -1245,7 +1296,7 @@ function saveJd(){
   const name=document.getElementById('jd-name').value.trim(),date=document.getElementById('jd-date').value;
   if(!name||!date){alert('Sila isi nama dan tarikh!');return}
   store.jadual.push({id:Date.now(),name,date,time:document.getElementById('jd-time').value,cat:document.getElementById('jd-cat').value});
-  save();renderJdCustom();showToast('✓ Jadual disimpan!');
+  save();renderJdCustom();logActivity('tambah_jadual',name+' — '+date);showToast('✓ Jadual disimpan!');
   ['jd-name','jd-time'].forEach(id=>document.getElementById(id).value='');document.getElementById('jd-date').value='';
 }
 function renderJdCustom(){
@@ -1265,7 +1316,7 @@ function savePautan(){
   const name=document.getElementById('pl-name').value.trim(),url=document.getElementById('pl-url').value.trim();
   if(!name||!url){alert('Sila isi nama dan URL!');return}
   store.pautan.push({id:Date.now(),name,url,desc:document.getElementById('pl-desc').value,icon:document.getElementById('pl-icon').value||'🔗'});
-  save();renderPautan();togglePlForm();showToast('✓ Pautan disimpan!');
+  save();renderPautan();togglePlForm();logActivity('tambah_pautan',name+' — '+url);showToast('✓ Pautan disimpan!');
   ['pl-name','pl-url','pl-desc','pl-icon'].forEach(id=>document.getElementById(id).value='');
 }
 function renderPautan(){
@@ -1279,7 +1330,7 @@ function renderPautan(){
   </div>`).join('');
   if(isAdmin)document.querySelectorAll('#custom-pl .card-admin').forEach(b=>b.style.display='flex');
 }
-function deletePl(id){if(!isAdmin||!confirm('Padam pautan?'))return;store.pautan=store.pautan.filter(p=>p.id!==id);save();renderPautan()}
+function deletePl(id){if(!isAdmin||!confirm('Padam pautan?'))return;const p=store.pautan.find(x=>x.id===id);store.pautan=store.pautan.filter(p=>p.id!==id);save();renderPautan();logActivity('padam_pautan',p?.name||'');}
 renderPautan();
 
 // ===== AHLI =====
@@ -1305,13 +1356,75 @@ function saveAhli(){
   if(!isAdmin)return;
   const name=document.getElementById('al-name').value.trim();if(!name){alert('Sila isi nama!');return}
   store.ahli.push({id:Date.now(),name,tg:document.getElementById('al-tg').value,role:document.getElementById('al-role').value,emoji:document.getElementById('al-emoji').value||'👤',color:document.getElementById('al-color').value});
-  save();alTab('list');showToast('✓ Ahli disimpan!');
+  save();alTab('list');logActivity('tambah_ahli',name+' ('+document.getElementById('al-role').value+')');showToast('✓ Ahli disimpan!');
   ['al-name','al-tg','al-emoji'].forEach(id=>document.getElementById(id).value='');
 }
-function deleteAhli(id){if(!isAdmin||!confirm('Padam?'))return;store.ahli=store.ahli.filter(a=>a.id!==id);save();renderAhli()}
+function deleteAhli(id){if(!isAdmin||!confirm('Padam?'))return;const a=store.ahli.find(x=>x.id===id);store.ahli=store.ahli.filter(a=>a.id!==id);save();renderAhli();logActivity('padam_ahli',a?.name||'')}
 renderAhli();
 
-// ===== SETTINGS =====
+// ===== ACTIVITY LOG =====
+const ACTION_ICONS={tambah_pengumuman:'📢',padam_pengumuman:'🗑️',tambah_nota:'📝',padam_nota:'🗑️',tambah_jadual:'📅',padam_jadual:'🗑️',tambah_pautan:'🔗',padam_pautan:'🗑️',tambah_ahli:'👤',padam_ahli:'🗑️',kemaskini_settings:'⚙️',kemaskini_marquee:'📡',kemaskini_countdown:'⏳',kemaskini_members:'👥',tukar_password:'🔒',set_botlink:'🤖',padam_botlink:'🤖',login:'🔐',logout:'🚪',reset_data:'⚠️',padam_semua_nota:'🗑️',padam_semua_ann:'🗑️'};
+function logActivity(action,detail=''){
+  if(!store.activityLog)store.activityLog=[];
+  store.activityLog.unshift({id:Date.now(),action,detail,time:Date.now()});
+  if(store.activityLog.length>200)store.activityLog=store.activityLog.slice(0,200);
+  save();
+}
+let logFilter='';
+function renderLog(){
+  let items=store.activityLog||[];
+  if(logFilter)items=items.filter(l=>l.action.includes(logFilter)||l.detail.toLowerCase().includes(logFilter.toLowerCase()));
+  const c=document.getElementById('activity-log-list');
+  if(!items.length){c.innerHTML='<div style="text-align:center;padding:40px;color:var(--muted)"><div style="font-size:36px;margin-bottom:8px">📋</div><p>Tiada log aktiviti lagi.</p></div>';return}
+  c.innerHTML=items.map(l=>`<div style="background:#fff;border:1px solid var(--gray3);border-radius:8px;padding:12px 14px;display:flex;align-items:center;gap:12px">
+    <div style="width:36px;height:36px;background:var(--blue3);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0">${ACTION_ICONS[l.action]||'📋'}</div>
+    <div style="flex:1;min-width:0">
+      <div style="font-size:13px;font-weight:600;color:var(--navy)">${formatAction(l.action)}</div>
+      <div style="font-size:11.5px;color:var(--muted);margin-top:2px">${l.detail||'—'}</div>
+    </div>
+    <div style="font-size:11px;color:var(--muted2);flex-shrink:0;text-align:right">${new Date(l.time).toLocaleString('ms-MY')}</div>
+  </div>`).join('');
+}
+function formatAction(a){const m={tambah_pengumuman:'Tambah Pengumuman',padam_pengumuman:'Padam Pengumuman',tambah_nota:'Tambah Nota',padam_nota:'Padam Nota',tambah_jadual:'Tambah Jadual',padam_jadual:'Padam Jadual',tambah_pautan:'Tambah Pautan',padam_pautan:'Padam Pautan',tambah_ahli:'Tambah Ahli',padam_ahli:'Padam Ahli',kemaskini_settings:'Kemaskini Maklumat Portal',kemaskini_marquee:'Kemaskini Marquee',kemaskini_countdown:'Kemaskini Countdown',kemaskini_members:'Kemaskini Bilangan Ahli',tukar_password:'Tukar Password Admin',set_botlink:'Set Link Bot Telegram',padam_botlink:'Padam Link Bot',login:'Log Masuk Admin',logout:'Log Keluar Admin',reset_data:'Reset Semua Data',padam_semua_nota:'Padam Semua Nota',padam_semua_ann:'Padam Semua Pengumuman'};return m[a]||a}
+function filterLog(v){logFilter=v;renderLog()}
+function clearLog(){if(!isAdmin||!confirm('Kosongkan semua log aktiviti?'))return;store.activityLog=[];save();renderLog();showToast('Log dipadam.')}
+
+// ===== BOT LINK =====
+function renderBotLink(){
+  const link=store.settings.botlink||'';
+  const display=document.getElementById('bot-link-display');
+  const anchor=document.getElementById('bot-link-anchor');
+  const input=document.getElementById('bot-link-input');
+  if(display)display.style.display=link?'block':'none';
+  if(anchor&&link)anchor.href=link;
+  if(input)input.value=link;
+}
+function saveBotLink(){
+  if(!isAdmin)return;
+  const link=document.getElementById('bot-link-input').value.trim();
+  if(!link){alert('Sila masukkan link bot!');return}
+  store.settings.botlink=link;save();renderBotLink();
+  logActivity('set_botlink',link);showToast('✓ Link bot disimpan!');
+}
+function clearBotLink(){
+  if(!isAdmin||!confirm('Padam link bot?'))return;
+  store.settings.botlink='';save();renderBotLink();
+  logActivity('padam_botlink');showToast('Link bot dipadam.');
+}
+
+// ===== SUPER PASSWORD VERIFY =====
+function verifySuperPass(){
+  const sp=document.getElementById('st-superpass').value;
+  const correct=store.settings.superpass||'superadmin2026';
+  if(sp===correct){
+    document.getElementById('st-newpass-wrap').style.display='block';
+    document.getElementById('st-verify-btn-wrap').style.display='none';
+    showToast('✓ Verified! Boleh tukar password sekarang.');
+  } else {
+    alert('Super password salah!');
+    document.getElementById('st-superpass').value='';
+  }
+}
 function loadSettingsForm(){
   if(!isAdmin)return;
   const s=store.settings;
@@ -1331,7 +1444,7 @@ function savePortalInfo(){
   store.settings.tglink=document.getElementById('st-tglink').value.trim()||store.settings.tglink;
   store.settings.members=m||'—';
   store.settings.desc=document.getElementById('st-desc').value.trim();
-  save();applySettings();showToast('✓ Maklumat portal dikemaskini!');
+  save();applySettings();logActivity('kemaskini_settings','Nama: '+store.settings.groupname+', Ahli: '+store.settings.members);showToast('✓ Maklumat portal dikemaskini!');
 }
 function saveCountdown(){
   if(!isAdmin)return;
@@ -1339,13 +1452,13 @@ function saveCountdown(){
   const date=document.getElementById('st-examdate').value;
   if(!name||!date){alert('Sila isi nama dan tarikh peperiksaan!');return}
   store.settings.examname=name;store.settings.examdate=date;
-  save();applySettings();showToast('✓ Countdown dikemaskini!');
+  save();applySettings();logActivity('kemaskini_countdown',name+' — '+date);showToast('✓ Countdown dikemaskini!');
 }
 function saveMarquee(){
   if(!isAdmin)return;
   const lines=document.getElementById('st-marquee').value.split('\n').map(l=>l.trim()).filter(Boolean);
   if(!lines.length){alert('Sila isi sekurang-kurangnya satu baris!');return}
-  store.settings.marquee=lines;save();applySettings();showToast('✓ Marquee dikemaskini!');
+  store.settings.marquee=lines;save();applySettings();logActivity('kemaskini_marquee',lines.length+' item');showToast('✓ Marquee dikemaskini!');
 }
 function savePassword(){
   if(!isAdmin)return;
@@ -1357,21 +1470,23 @@ function savePassword(){
   if(p.length<6){alert('Password mesti sekurang-kurangnya 6 aksara!');return}
   // Update in-memory ADMINS (takes effect this session)
   ADMINS[0]={u,p};
+  logActivity('tukar_password','Username ditukar kepada: '+u);
   showToast('✓ Password dikemaskini untuk sesi ini. Download semula fail HTML untuk kekal.');
   ['st-newuser','st-newpass','st-confpass'].forEach(id=>document.getElementById(id).value='');
 }
 function clearAllNota(){
   if(!isAdmin||!confirm('⚠️ Padam SEMUA nota? Tindakan ini tidak boleh diundur!'))return;
-  store.nota=[];save();renderHome();showToast('Semua nota dipadam.');
+  const count=store.nota.length;store.nota=[];save();renderHome();logActivity('padam_semua_nota',count+' nota dipadam');showToast('Semua nota dipadam.');
 }
 function clearAllAnn(){
   if(!isAdmin||!confirm('⚠️ Padam SEMUA pengumuman? Tindakan ini tidak boleh diundur!'))return;
-  store.ann=[];save();renderHome();showToast('Semua pengumuman dipadam.');
+  const count=store.ann.length;store.ann=[];save();renderHome();logActivity('padam_semua_ann',count+' pengumuman dipadam');showToast('Semua pengumuman dipadam.');
 }
 function clearAllData(){
   if(!isAdmin||!confirm('⚠️ RESET SEMUA DATA PORTAL? Semua nota, pengumuman, pautan dan ahli akan dipadam. Tidak boleh diundur!'))return;
   if(!confirm('Tekan OK sekali lagi untuk sahkan reset penuh.'))return;
-  store={ann:[],nota:[],pautan:[],ahli:[],jadual:[],settings:{...store.settings}};
+  logActivity('reset_data','Reset penuh portal dilakukan');
+  store={ann:[],nota:[],pautan:[],ahli:[],jadual:[],activityLog:store.activityLog||[],settings:{...store.settings}};
   save();renderAll();showToast('Portal telah direset.');goTo('home');
 }
 </script>
