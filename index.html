@@ -1334,16 +1334,87 @@ let annTxt='',annTag='';
 // Temporary attachment buffers for nota form
 let tempLinks=[],tempFiles=[],tempImages=[];
 
-function save(){sessionStorage.setItem('stpm26v3',JSON.stringify(store))}
-function load(){
-  const d=sessionStorage.getItem('stpm26v3');
-  if(d){
-    const parsed=JSON.parse(d);
-    // merge to keep defaults for new fields
-    store={...store,...parsed,settings:{...store.settings,...(parsed.settings||{})}};
+// ===== FIREBASE DATA SYNC =====
+const PORTAL_DOC = 'portal_data';
+let saving = false;
+let saveTimer = null;
+
+async function save(){
+  // Debounce — tunggu 800ms sebelum save
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(async ()=>{
+    if(saving)return;
+    saving=true;
+    try {
+      // Split data ikut collection supaya tak exceed 1MB limit
+      await db.collection('portal').doc('ann').set({data: store.ann});
+      await db.collection('portal').doc('nota').set({data: store.nota});
+      await db.collection('portal').doc('pautan').set({data: store.pautan});
+      await db.collection('portal').doc('ahli').set({data: store.ahli});
+      await db.collection('portal').doc('jadual').set({data: store.jadual});
+      await db.collection('portal').doc('settings').set({data: store.settings});
+      await db.collection('portal').doc('feedbacks').set({data: store.feedbacks||[]});
+      await db.collection('portal').doc('drafts').set({data: store.drafts||[]});
+      await db.collection('portal').doc('activityLog').set({data: (store.activityLog||[]).slice(0,100)});
+      await db.collection('portal').doc('stats').set({data: store.stats||{}});
+    } catch(e){console.error('Save error:',e);}
+    saving=false;
+  }, 800);
+}
+
+async function load(){
+  try {
+    const docs = ['ann','nota','pautan','ahli','jadual','settings','feedbacks','drafts','activityLog','stats'];
+    const snaps = await Promise.all(docs.map(d=>db.collection('portal').doc(d).get()));
+    snaps.forEach((snap,i)=>{
+      if(snap.exists){
+        const key=docs[i];
+        if(key==='settings'){
+          store.settings={...store.settings,...snap.data().data};
+        } else {
+          store[key]=snap.data().data||store[key];
+        }
+      }
+    });
+  } catch(e){
+    console.error('Load error:',e);
+    // Fallback ke sessionStorage kalau Firebase fail
+    const d=sessionStorage.getItem('stpm26v3');
+    if(d){
+      const parsed=JSON.parse(d);
+      store={...store,...parsed,settings:{...store.settings,...(parsed.settings||{})}};
+    }
   }
 }
-load();
+
+// Real-time listener untuk sync antara devices
+function startRealtimeSync(){
+  const docs=['ann','nota','pautan','ahli','jadual','settings','feedbacks','drafts','activityLog'];
+  docs.forEach(key=>{
+    db.collection('portal').doc(key).onSnapshot(snap=>{
+      if(snap.exists&&!saving){
+        if(key==='settings'){
+          store.settings={...store.settings,...snap.data().data};
+        } else {
+          store[key]=snap.data().data||store[key];
+        }
+        // Re-render current section
+        renderSection(curSec);
+        updateNotifBadge();
+      }
+    });
+  });
+}
+
+// Load data then start app
+async function initApp(){
+  await load();
+  applySettings();
+  setTimeout(showWelcomeIfNeeded,800);
+  renderAll();
+  startRealtimeSync();
+}
+initApp();
 
 // ===== AUTH =====
 function openLogin(){document.getElementById('login-ov').classList.add('open');setTimeout(()=>document.getElementById('l-u').focus(),100)}
@@ -1450,8 +1521,7 @@ function applySettings(){
     const dt=document.querySelector('.cd-info .dt');if(dt)dt.textContent=s.examdate||'';
   }
 }
-applySettings();
-setTimeout(showWelcomeIfNeeded,800);
+// initApp() handles applySettings, showWelcome, renderAll
 
 // ===== NAV =====
 let curSec='home';
