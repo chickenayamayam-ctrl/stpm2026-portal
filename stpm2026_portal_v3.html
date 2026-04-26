@@ -1,0 +1,1379 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>STPM 2026 Kohort Baharu | Portal Rasmi</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --blue:#1a56db;--blue2:#1e429f;--blue3:#e8f0fe;--blue4:#3b82f6;
+  --navy:#0f1e3d;--navy2:#1e3a6e;
+  --white:#fff;--gray:#f8fafc;--gray2:#f1f5f9;--gray3:#e2e8f0;
+  --text:#0f172a;--muted:#64748b;--muted2:#94a3b8;
+  --green:#16a34a;--green2:#dcfce7;
+  --orange:#ea580c;--orange2:#fff7ed;
+  --red:#dc2626;--red2:#fef2f2;
+  --teal:#0d9488;--teal2:#ccfbf1;
+  --purple:#7c3aed;--purple2:#ede9fe;
+  --shadow:0 1px 3px rgba(0,0,0,.08),0 4px 16px rgba(0,0,0,.06);
+  --radius:12px;--radius2:8px;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--gray);color:var(--text);font-size:14px;line-height:1.6}
+
+/* TOPBAR */
+.topbar{background:var(--navy);color:rgba(255,255,255,.75);font-size:11.5px;padding:7px 24px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.topbar-l{display:flex;gap:18px;align-items:center}
+.live-dot{width:7px;height:7px;background:#22c55e;border-radius:50%;display:inline-block;animation:pulse 2s infinite;margin-right:4px}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.topbar-r{display:flex;gap:8px;align-items:center}
+.tplink{color:rgba(255,255,255,.7);text-decoration:none;font-size:11px;padding:3px 10px;border:1px solid rgba(255,255,255,.2);border-radius:20px;transition:.2s;background:none;cursor:pointer;font-family:inherit}
+.tplink:hover{color:#fff;border-color:rgba(255,255,255,.5)}
+.admin-pill{background:rgba(250,204,21,.12);border:1px solid rgba(250,204,21,.3) !important;color:#fbbf24 !important}
+.admin-pill:hover{background:rgba(250,204,21,.22) !important}
+
+/* HEADER */
+.header{background:#fff;border-bottom:1px solid var(--gray3);padding:13px 22px;display:flex;align-items:center;justify-content:space-between;gap:14px;position:sticky;top:0;z-index:200;box-shadow:0 2px 10px rgba(0,0,0,.06)}
+.h-brand{display:flex;align-items:center;gap:13px}
+.h-logo{width:48px;height:48px;background:linear-gradient(135deg,var(--blue),var(--blue2));border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#fff;flex-shrink:0;box-shadow:0 4px 12px rgba(26,86,219,.28)}
+.h-title{font-size:15px;font-weight:800;color:var(--navy);letter-spacing:-.3px}
+.h-sub{font-size:11px;color:var(--muted);margin-top:2px;display:flex;align-items:center;gap:5px;flex-wrap:wrap}
+.badge{font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px}
+.badge-blue{background:var(--blue3);color:var(--blue)}
+.badge-gold{background:#fef3c7;color:#b45309;display:none}
+.h-nav{display:flex;gap:2px;flex-wrap:wrap}
+.nav-btn{background:none;border:none;padding:7px 12px;border-radius:8px;font-size:13px;font-weight:600;color:var(--muted);cursor:pointer;font-family:inherit;white-space:nowrap;transition:.2s}
+.nav-btn:hover{background:var(--gray2);color:var(--text)}
+.nav-btn.active{background:var(--blue3);color:var(--blue)}
+.tg-btn{background:linear-gradient(135deg,#2AABEE,#229ED9);color:#fff;border:none;padding:8px 14px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:5px;font-family:inherit;text-decoration:none;flex-shrink:0}
+.ham{display:none;background:none;border:none;cursor:pointer;padding:5px;flex-direction:column;gap:5px}
+.ham span{display:block;width:21px;height:2px;background:var(--navy);border-radius:2px}
+
+/* MARQUEE */
+.mq{background:linear-gradient(90deg,var(--navy2),var(--blue),var(--blue4));padding:8px 0;overflow:hidden}
+.mq-track{display:flex;animation:mq 40s linear infinite;white-space:nowrap}
+.mq-track:hover{animation-play-state:paused}
+.mq-item{padding:0 34px;font-size:12px;color:rgba(255,255,255,.92);display:flex;align-items:center;gap:7px;font-weight:500}
+.mq-dot{width:4px;height:4px;background:rgba(255,255,255,.4);border-radius:50%}
+@keyframes mq{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+/* SECTIONS */
+.section{display:none;animation:fi .22s ease}
+.section.active{display:block}
+@keyframes fi{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+.con{max-width:1080px;margin:0 auto;padding:26px 18px}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,var(--navy) 0%,var(--navy2) 55%,#1a3f8f 100%);border-radius:16px;padding:34px 30px;color:#fff;margin-bottom:20px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;right:-70px;top:-70px;width:280px;height:280px;background:radial-gradient(circle,rgba(59,130,246,.18) 0%,transparent 70%);pointer-events:none}
+.hero-tag{display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.14);border-radius:20px;padding:4px 13px;font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;margin-bottom:12px}
+.hero h1{font-size:24px;font-weight:800;line-height:1.25;margin-bottom:9px;letter-spacing:-.4px}
+.hero h1 span{color:#93c5fd}
+.hero-sub{font-size:13px;opacity:.75;max-width:440px;margin-bottom:20px;line-height:1.7}
+.hero-btns{display:flex;gap:9px;flex-wrap:wrap}
+.hbtn{padding:9px 18px;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer;border:none;font-family:inherit;transition:.2s;display:inline-flex;align-items:center;gap:6px;text-decoration:none}
+.hbtn-w{background:#fff;color:var(--blue2)}.hbtn-w:hover{background:#e8f0fe}
+.hbtn-g{background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.2)}.hbtn-g:hover{background:rgba(255,255,255,.17)}
+.hero-stats{display:flex;gap:26px;margin-top:20px;padding-top:16px;border-top:1px solid rgba(255,255,255,.1);flex-wrap:wrap}
+.hs{text-align:left}
+.hs-n{font-size:20px;font-weight:900;line-height:1}
+.hs-l{font-size:10px;opacity:.52;margin-top:2px;text-transform:uppercase;letter-spacing:.5px}
+
+/* STATS */
+.stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:11px;margin-bottom:20px}
+.sc{background:#fff;border:1px solid var(--gray3);border-radius:var(--radius);padding:14px;display:flex;align-items:center;gap:11px}
+.sc-ico{width:38px;height:38px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.sc-n{font-size:20px;font-weight:800;color:var(--navy);line-height:1}
+.sc-l{font-size:11px;color:var(--muted);margin-top:2px}
+
+/* COUNTDOWN */
+.cd-card{background:linear-gradient(135deg,#1e3a6e,#1a56db);border-radius:var(--radius);padding:18px 22px;color:#fff;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px}
+.cd-info .lbl{font-size:10px;text-transform:uppercase;letter-spacing:.7px;opacity:.52;margin-bottom:3px}
+.cd-info .nm{font-size:14px;font-weight:700}
+.cd-info .dt{font-size:11px;opacity:.52;margin-top:2px}
+.cd-timer{display:flex;gap:9px}
+.cdu{text-align:center;background:rgba(255,255,255,.11);border-radius:8px;padding:9px 12px;min-width:50px}
+.cdu-n{font-size:22px;font-weight:900;line-height:1}
+.cdu-l{font-size:9px;opacity:.48;text-transform:uppercase;letter-spacing:.5px;margin-top:3px}
+
+/* SEC HDR */
+.sec-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:13px;gap:9px;flex-wrap:wrap}
+.sec-title{font-size:14px;font-weight:800;color:var(--navy);display:flex;align-items:center;gap:7px}
+.sec-title::before{content:'';width:4px;height:16px;background:var(--blue);border-radius:2px;display:inline-block}
+.sbtn{background:var(--blue3);color:var(--blue);border:none;padding:7px 12px;border-radius:7px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;transition:.2s;display:inline-flex;align-items:center;gap:4px}
+.sbtn:hover{background:#c7d8fb}
+.sbtn.primary{background:var(--blue);color:#fff}.sbtn.primary:hover{background:var(--blue2)}
+.sbtn.danger{background:var(--red2);color:var(--red)}
+
+/* ANNOUNCEMENTS */
+.ann-list{display:flex;flex-direction:column;gap:9px;margin-bottom:20px}
+.ann-item{background:#fff;border:1px solid var(--gray3);border-radius:var(--radius2);padding:14px 16px;display:flex;gap:12px;align-items:flex-start;cursor:pointer;transition:.2s}
+.ann-item:hover{border-color:var(--blue4);box-shadow:0 2px 9px rgba(26,86,219,.07)}
+.ann-item.pinned{border-left:3px solid var(--blue)}
+.ann-emoji{width:50px;height:50px;border-radius:8px;background:var(--blue3);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.ann-body{flex:1;min-width:0}
+.ann-tags{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:5px;align-items:center}
+.atag{font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px;text-transform:uppercase;letter-spacing:.3px}
+.atag.blue{background:var(--blue3);color:var(--blue)}
+.atag.green{background:var(--green2);color:var(--green)}
+.atag.orange{background:var(--orange2);color:var(--orange)}
+.atag.red{background:var(--red2);color:var(--red)}
+.atag.teal{background:var(--teal2);color:var(--teal)}
+.pin-badge{background:var(--blue);color:#fff;font-size:9px;font-weight:700;padding:2px 6px;border-radius:20px;text-transform:uppercase}
+.ann-title{font-size:13px;font-weight:700;color:var(--navy);margin-bottom:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ann-preview{font-size:12px;color:var(--muted);line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.ann-meta{display:flex;justify-content:space-between;margin-top:6px}
+.ann-date,.ann-views{font-size:11px;color:var(--muted2)}
+
+/* SUBJECT GROUPS */
+.subj-group{margin-bottom:24px}
+.subj-group-title{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.7px;color:var(--muted);margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--gray3)}
+.subj-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:11px}
+.subj-card{background:#fff;border:1px solid var(--gray3);border-radius:var(--radius);padding:15px;cursor:pointer;transition:.2s;position:relative;overflow:hidden}
+.subj-card:hover{border-color:var(--blue4);box-shadow:var(--shadow);transform:translateY(-2px)}
+.subj-accent{position:absolute;top:0;left:0;right:0;height:4px;border-radius:var(--radius) var(--radius) 0 0}
+.subj-icon{font-size:24px;margin-bottom:8px;display:block}
+.subj-card h3{font-size:13px;font-weight:700;color:var(--navy);margin-bottom:2px;line-height:1.3}
+.subj-card .subj-code{font-size:11px;color:var(--muted2);margin-bottom:3px}
+.subj-card p{font-size:11.5px;color:var(--muted)}
+.subj-footer{display:flex;justify-content:space-between;align-items:center;margin-top:10px;padding-top:10px;border-top:1px solid var(--gray3)}
+
+/* NOTA CARDS */
+.nota-card{background:#fff;border:1px solid var(--gray3);border-radius:var(--radius2);padding:12px 14px;display:flex;align-items:center;gap:10px;transition:.2s}
+.nota-card:hover{border-color:var(--blue4);box-shadow:0 2px 8px rgba(26,86,219,.07)}
+.nota-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.nota-info{flex:1;min-width:0;cursor:pointer}
+.nota-title{font-size:13px;font-weight:600;color:var(--navy);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.nota-sub{font-size:11px;color:var(--muted2);margin-top:2px}
+.nota-badge{font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px;background:var(--blue3);color:var(--blue);flex-shrink:0;white-space:nowrap}
+
+/* NOTA ATTACHMENTS */
+.attach-list{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+.attach-item{display:flex;align-items:center;gap:10px;background:var(--gray2);border-radius:8px;padding:10px 12px;font-size:13px}
+.attach-item a{color:var(--blue);text-decoration:none;font-weight:600;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.attach-item a:hover{text-decoration:underline}
+.attach-icon{font-size:18px;flex-shrink:0}
+.attach-type{font-size:10px;color:var(--muted);flex-shrink:0}
+
+/* NOTA IMAGES */
+.nota-images{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;margin-top:10px}
+.nota-images img{width:100%;border-radius:8px;cursor:pointer;transition:.2s;border:1px solid var(--gray3)}
+.nota-images img:hover{opacity:.9;transform:scale(1.02)}
+
+/* NOTA VIEWER */
+.nota-view-body{font-size:13.5px;line-height:1.8;color:var(--text);white-space:pre-line}
+.nota-view-section{margin-bottom:16px}
+.nota-view-section-title{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid var(--gray3)}
+
+/* ADD NOTA FORM */
+.nota-form{background:#fff;border:1px solid var(--gray3);border-radius:var(--radius);padding:20px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-bottom:11px}
+.fg{margin-bottom:11px}
+.fg label{font-size:11px;font-weight:700;color:var(--muted);display:block;margin-bottom:4px;text-transform:uppercase;letter-spacing:.4px}
+.fg input,.fg textarea,.fg select{width:100%;border:1.5px solid var(--gray3);border-radius:8px;padding:9px 11px;font-size:13px;font-family:inherit;outline:none;transition:.2s;color:var(--text);background:#fff}
+.fg input:focus,.fg textarea:focus,.fg select:focus{border-color:var(--blue4);box-shadow:0 0 0 3px rgba(59,130,246,.09)}
+.fg textarea{min-height:90px;resize:vertical;line-height:1.6}
+
+/* FILE UPLOAD AREA */
+.upload-area{border:2px dashed var(--gray3);border-radius:10px;padding:20px;text-align:center;cursor:pointer;transition:.2s;background:#fafbfc;position:relative}
+.upload-area:hover{border-color:var(--blue4);background:var(--blue3)}
+.upload-area input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.upload-area .upload-icon{font-size:28px;margin-bottom:8px}
+.upload-area p{font-size:12.5px;color:var(--muted)}
+.upload-area strong{color:var(--blue)}
+
+/* ATTACHMENT PREVIEW (in form) */
+.attach-preview{display:flex;flex-direction:column;gap:6px;margin-top:10px}
+.ap-item{display:flex;align-items:center;gap:9px;background:var(--gray2);border-radius:7px;padding:8px 11px;font-size:12px}
+.ap-item .ap-name{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--navy);font-weight:600}
+.ap-item .ap-size{color:var(--muted2);flex-shrink:0}
+.ap-item button{background:var(--red2);border:none;color:var(--red);border-radius:5px;padding:2px 8px;cursor:pointer;font-size:11px;flex-shrink:0}
+
+/* IMAGE PREVIEW */
+.img-preview-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:6px;margin-top:8px}
+.img-preview-grid .img-thumb{position:relative;border-radius:7px;overflow:hidden;aspect-ratio:1}
+.img-thumb img{width:100%;height:100%;object-fit:cover}
+.img-thumb button{position:absolute;top:3px;right:3px;background:rgba(220,38,38,.85);border:none;color:#fff;border-radius:50%;width:18px;height:18px;cursor:pointer;font-size:11px;display:flex;align-items:center;justify-content:center}
+
+/* JADUAL */
+.tbl{width:100%;border-collapse:collapse;background:#fff;border-radius:var(--radius);overflow:hidden;border:1px solid var(--gray3)}
+.tbl thead{background:var(--navy);color:#fff}
+.tbl th{padding:11px 14px;font-size:12px;font-weight:700;text-align:left;text-transform:uppercase;letter-spacing:.5px}
+.tbl td{padding:11px 14px;font-size:13px;border-bottom:1px solid var(--gray3)}
+.tbl tr:last-child td{border-bottom:none}
+.tbl tr:hover td{background:var(--gray)}
+.status{font-size:11px;font-weight:700;padding:3px 9px;border-radius:20px;display:inline-flex;align-items:center;gap:4px}
+.status.akan{background:#dbeafe;color:#1d4ed8}
+.status.tamat{background:var(--gray2);color:var(--muted)}
+.status.soon{background:#fef3c7;color:#b45309}
+
+/* PAUTAN */
+.pl-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:10px}
+.pl-card{background:#fff;border:1px solid var(--gray3);border-radius:var(--radius2);padding:14px;text-align:center;cursor:pointer;transition:.2s;text-decoration:none;display:block}
+.pl-card:hover{border-color:var(--blue4);box-shadow:0 4px 14px rgba(26,86,219,.09);transform:translateY(-2px)}
+.pl-icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;margin:0 auto 8px}
+.pl-card h4{font-size:12px;font-weight:700;color:var(--navy);margin-bottom:2px}
+.pl-card p{font-size:11px;color:var(--muted)}
+
+/* AHLI */
+.ahli-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:10px}
+.ahli-card{background:#fff;border:1px solid var(--gray3);border-radius:var(--radius2);padding:14px;text-align:center}
+.ahli-av{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:19px;margin:0 auto 8px}
+.ahli-name{font-size:13px;font-weight:700;color:var(--navy);margin-bottom:2px}
+.ahli-tg{font-size:11px;color:var(--muted)}
+.ahli-role{display:inline-block;font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px;margin-top:5px}
+
+/* BOT */
+.bot-wrap{background:linear-gradient(135deg,#0f172a,#1e3a6e);border-radius:var(--radius);padding:24px;color:#fff;margin-bottom:20px}
+.bot-cmds{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px;margin-bottom:16px}
+.bot-cmd{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:10px 12px;display:flex;gap:8px}
+.cmd-n{font-size:12px;font-weight:700;color:#93c5fd;font-family:monospace;margin-bottom:2px}
+.cmd-d{font-size:11px;opacity:.58;line-height:1.4}
+
+/* TABS */
+.tab-bar{display:flex;gap:3px;background:var(--gray2);border-radius:9px;padding:3px;margin-bottom:16px;flex-wrap:wrap}
+.tab-btn{flex:1;min-width:65px;background:none;border:none;padding:7px 11px;border-radius:7px;font-size:12px;font-weight:600;color:var(--muted);cursor:pointer;font-family:inherit;transition:.2s;white-space:nowrap}
+.tab-btn.active{background:#fff;color:var(--blue);box-shadow:0 1px 4px rgba(0,0,0,.09)}
+.tab-content{display:none}.tab-content.active{display:block}
+
+/* SEARCH */
+.sw{position:relative;margin-bottom:13px}
+.sw input{width:100%;border:1.5px solid var(--gray3);border-radius:9px;padding:9px 13px 9px 36px;font-size:13px;font-family:inherit;outline:none;transition:.2s;background:#fff}
+.sw input:focus{border-color:var(--blue4);box-shadow:0 0 0 3px rgba(59,130,246,.09)}
+.si{position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:14px;color:var(--muted2)}
+
+/* ADMIN ONLY */
+.admin-only{display:none}
+body.admin .admin-only{display:flex}
+body.admin .admin-only.block{display:block}
+body.admin .admin-only.grid{display:grid}
+.card-admin{display:none;gap:5px;flex-shrink:0}
+body.admin .card-admin{display:flex}
+
+/* ADMIN NOTICE */
+.admin-notice{background:linear-gradient(135deg,#fef3c7,#fde68a);border:1px solid #fbbf24;border-radius:9px;padding:11px 15px;margin-bottom:16px;display:none;align-items:center;gap:9px;font-size:13px;font-weight:600;color:#92400e}
+body.admin .admin-notice{display:flex}
+
+/* LOGIN MODAL */
+.login-ov{position:fixed;inset:0;background:rgba(15,30,61,.72);z-index:900;display:none;align-items:center;justify-content:center;backdrop-filter:blur(6px)}
+.login-ov.open{display:flex}
+.login-box{background:#fff;border-radius:18px;padding:34px;width:100%;max-width:370px;box-shadow:0 20px 60px rgba(0,0,0,.24);animation:lb .22s ease}
+@keyframes lb{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:none}}
+.login-logo{width:56px;height:56px;background:linear-gradient(135deg,var(--blue),var(--blue2));border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:900;color:#fff;margin:0 auto 16px}
+.login-box h2{text-align:center;font-size:17px;font-weight:800;color:var(--navy);margin-bottom:4px}
+.login-box p{text-align:center;font-size:12px;color:var(--muted);margin-bottom:20px}
+.login-input{width:100%;border:1.5px solid var(--gray3);border-radius:9px;padding:11px 13px;font-size:13.5px;font-family:inherit;outline:none;margin-bottom:10px;transition:.2s}
+.login-input:focus{border-color:var(--blue4);box-shadow:0 0 0 3px rgba(59,130,246,.1)}
+.login-btn{width:100%;background:linear-gradient(135deg,var(--blue),var(--blue2));color:#fff;border:none;padding:11px;border-radius:9px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;margin-top:3px;transition:.2s}
+.login-btn:hover{opacity:.9}
+.login-err{background:var(--red2);color:var(--red);border-radius:8px;padding:9px 12px;font-size:12px;font-weight:600;margin-bottom:10px;display:none;text-align:center}
+.login-cancel{width:100%;background:none;border:none;color:var(--muted);font-size:12px;margin-top:11px;cursor:pointer;font-family:inherit}
+
+/* VIEW MODAL */
+.modal-ov{position:fixed;inset:0;background:rgba(0,0,0,.44);z-index:500;display:none;align-items:center;justify-content:center;padding:14px;backdrop-filter:blur(3px)}
+.modal-ov.open{display:flex}
+.modal{background:#fff;border-radius:15px;width:100%;max-width:600px;max-height:90vh;overflow-y:auto;animation:mi .2s ease}
+@keyframes mi{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:none}}
+.modal-hdr{padding:17px 20px 14px;border-bottom:1px solid var(--gray3);display:flex;justify-content:space-between;align-items:flex-start;gap:10px;position:sticky;top:0;background:#fff;z-index:1}
+.modal-hdr h3{font-size:15px;font-weight:800;color:var(--navy);line-height:1.3}
+.modal-x{background:var(--gray2);border:none;width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.modal-x:hover{background:var(--gray3)}
+.modal-body{padding:18px 20px 22px}
+
+/* TOAST */
+.toast{position:fixed;bottom:20px;right:20px;background:var(--navy);color:#fff;padding:10px 15px;border-radius:10px;font-size:13px;font-weight:600;display:none;align-items:center;gap:7px;z-index:1000;box-shadow:0 8px 24px rgba(0,0,0,.2)}
+.toast.show{display:flex}
+
+/* IMG LIGHTBOX */
+.lightbox{position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:800;display:none;align-items:center;justify-content:center;cursor:zoom-out}
+.lightbox.open{display:flex}
+.lightbox img{max-width:90vw;max-height:90vh;border-radius:8px;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+
+/* BC */
+.bc{font-size:11px;color:var(--muted2);margin-bottom:7px;display:flex;align-items:center;gap:5px}
+.ph{margin-bottom:20px}
+.ph h2{font-size:20px;font-weight:800;color:var(--navy);letter-spacing:-.3px}
+.ph p{font-size:13px;color:var(--muted);margin-top:3px}
+
+/* BUTTONS */
+.btn{padding:8px 16px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;border:none;font-family:inherit;transition:.2s;display:inline-flex;align-items:center;gap:5px}
+.btn-p{background:var(--blue);color:#fff}.btn-p:hover{background:var(--blue2)}
+.btn-o{background:#fff;color:var(--blue);border:1.5px solid var(--blue3)}.btn-o:hover{background:var(--blue3)}
+.btn-d{background:var(--red2);color:var(--red)}.btn-d:hover{background:#fecaca}
+.btn-sm{padding:5px 10px;font-size:11px}
+.form-actions{display:flex;gap:8px;margin-top:4px;flex-wrap:wrap}
+
+@media(max-width:768px){
+  .h-nav{display:none}.h-nav.open{display:flex;flex-direction:column;position:absolute;top:100%;left:0;right:0;background:#fff;border-bottom:1px solid var(--gray3);padding:8px;gap:3px;box-shadow:0 8px 24px rgba(0,0,0,.09);z-index:100}
+  .ham{display:flex}.form-row{grid-template-columns:1fr}
+  .hero h1{font-size:20px}.hero{padding:20px 16px}
+  .topbar{flex-direction:column;gap:4px;text-align:center}
+  .cd-card{flex-direction:column}
+}
+.gap-2{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div class="login-ov" id="login-ov">
+  <div class="login-box">
+    <div class="login-logo">S</div>
+    <h2>Log Masuk Admin</h2>
+    <p>Portal STPM 2026 Kohort Baharu<br>Pentadbir sahaja dibenarkan</p>
+    <div class="login-err" id="login-err">Username atau password tidak sah.</div>
+    <input class="login-input" id="l-u" type="text" placeholder="Username" autocomplete="username"/>
+    <input class="login-input" id="l-p" type="password" placeholder="Password" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()"/>
+    <button class="login-btn" onclick="doLogin()">Log Masuk</button>
+    <button class="login-cancel" onclick="closeLogin()">Batal — Sambung sebagai Pengunjung</button>
+  </div>
+</div>
+
+<!-- VIEW MODAL -->
+<div class="modal-ov" id="view-modal" onclick="closeVM(event)">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-hdr">
+      <h3 id="vm-title">—</h3>
+      <button class="modal-x" onclick="closeVM()">✕</button>
+    </div>
+    <div class="modal-body" id="vm-body"></div>
+  </div>
+</div>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="this.classList.remove('open')">
+  <img id="lb-img" src="" alt="">
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="topbar-l">
+    <span><span class="live-dot"></span>Portal Aktif</span>
+    <span id="top-date"></span>
+    <span>Ahli: <strong id="top-members" style="color:#fff">—</strong></span>
+  </div>
+  <div class="topbar-r">
+    <a href="https://t.me/stpm20266" target="_blank" class="tplink">Telegram</a>
+    <a href="https://portal.mpm.edu.my" target="_blank" class="tplink">Portal MPM</a>
+    <button class="tplink admin-pill" id="admin-topbtn" onclick="logoutAdmin()" style="display:none">👑 Admin — Log Keluar</button>
+    <button class="tplink" id="login-topbtn" onclick="openLogin()">Admin Login</button>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header class="header" id="main-header">
+  <div class="h-brand">
+    <div class="h-logo">S</div>
+    <div>
+      <div class="h-title">STPM 2026 Kohort Baharu</div>
+      <div class="h-sub">
+        <span>@stpm20266</span>
+        <span class="badge badge-blue">Sem 1–3</span>
+        <span class="badge badge-gold admin-only" id="admin-badge">👑 Admin Mode</span>
+      </div>
+    </div>
+  </div>
+  <nav class="h-nav" id="main-nav">
+    <button class="nav-btn active" onclick="goTo('home')">Laman Utama</button>
+    <button class="nav-btn" onclick="goTo('pengumuman')">Pengumuman</button>
+    <button class="nav-btn" onclick="goTo('nota')">Nota & Bahan</button>
+    <button class="nav-btn" onclick="goTo('jadual')">Jadual</button>
+    <button class="nav-btn" onclick="goTo('pautan')">Pautan</button>
+    <button class="nav-btn" onclick="goTo('ahli')">Ahli</button>
+    <button class="nav-btn" onclick="goTo('bot')">Bot</button>
+    <button class="nav-btn admin-only" onclick="goTo('settings')" style="color:#b45309;background:#fef3c7">⚙️ Settings</button>
+  </nav>
+  <div style="display:flex;gap:7px;align-items:center">
+    <a class="tg-btn" href="https://t.me/stpm20266" target="_blank">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8l-1.7 8.02c-.12.56-.45.7-.91.43l-2.52-1.86-1.22 1.17c-.13.13-.25.25-.51.25l.18-2.57 4.64-4.2c.2-.18-.04-.28-.31-.1L7.11 15.3l-2.48-.77c-.54-.17-.55-.54.11-.8l9.69-3.74c.45-.16.85.11.71.81z"/></svg>
+      Join
+    </a>
+    <button class="ham" onclick="document.getElementById('main-nav').classList.toggle('open')"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+<!-- MARQUEE -->
+<div class="mq">
+  <div class="mq-track">
+    <span class="mq-item"><span class="mq-dot"></span>📢 Portal Rasmi STPM 2026 Kohort Baharu | @stpm20266</span>
+    <span class="mq-item"><span class="mq-dot"></span>📅 STPM Semester 2: 29 Jun 2026 — Bersedia!</span>
+    <span class="mq-item"><span class="mq-dot"></span>📅 STPM Semester 3: 17 November 2026</span>
+    <span class="mq-item"><span class="mq-dot"></span>📚 Nota & bahan dikuruskan oleh admin sahaja</span>
+    <span class="mq-item"><span class="mq-dot"></span>🤖 Bot Telegram: /nota, /jadual, /countdown</span>
+    <span class="mq-item"><span class="mq-dot"></span>📢 Portal Rasmi STPM 2026 Kohort Baharu | @stpm20266</span>
+    <span class="mq-item"><span class="mq-dot"></span>📅 STPM Semester 2: 29 Jun 2026 — Bersedia!</span>
+    <span class="mq-item"><span class="mq-dot"></span>📅 STPM Semester 3: 17 November 2026</span>
+    <span class="mq-item"><span class="mq-dot"></span>📚 Nota & bahan dikuruskan oleh admin sahaja</span>
+    <span class="mq-item"><span class="mq-dot"></span>🤖 Bot Telegram: /nota, /jadual, /countdown</span>
+  </div>
+</div>
+
+<!-- HOME -->
+<div id="sec-home" class="section active">
+<div class="con">
+  <div class="hero">
+    <div class="hero-tag">🎓 Portal Rasmi</div>
+    <h1>STPM 2026<br><span>Kohort Baharu</span></h1>
+    <p class="hero-sub">Platform rasmi group Telegram <strong>@stpm20266</strong> — pengumuman, nota, jadual peperiksaan dan bahan pembelajaran STPM.</p>
+    <div class="hero-btns">
+      <a href="https://t.me/stpm20266" target="_blank" class="hbtn hbtn-w">📱 Join Telegram</a>
+      <button class="hbtn hbtn-g" onclick="goTo('nota')">📚 Bahan Belajar</button>
+      <button class="hbtn hbtn-g" onclick="goTo('jadual')">📅 Jadual Exam</button>
+    </div>
+    <div class="hero-stats">
+      <div class="hs"><div class="hs-n" id="hs-members">—</div><div class="hs-l">Ahli</div></div>
+      <div class="hs"><div class="hs-n" id="hs-nota">0</div><div class="hs-l">Nota</div></div>
+      <div class="hs"><div class="hs-n" id="hs-ann">0</div><div class="hs-l">Pengumuman</div></div>
+      <div class="hs"><div class="hs-n">3</div><div class="hs-l">Semester</div></div>
+    </div>
+  </div>
+
+  <div class="cd-card">
+    <div class="cd-info">
+      <div class="lbl">Peperiksaan Seterusnya</div>
+      <div class="nm">STPM Semester 2 2026 (Bertulis)</div>
+      <div class="dt">29 Jun 2026</div>
+    </div>
+    <div class="cd-timer">
+      <div class="cdu"><div class="cdu-n" id="cd-d">--</div><div class="cdu-l">Hari</div></div>
+      <div class="cdu"><div class="cdu-n" id="cd-h">--</div><div class="cdu-l">Jam</div></div>
+      <div class="cdu"><div class="cdu-n" id="cd-m">--</div><div class="cdu-l">Minit</div></div>
+      <div class="cdu"><div class="cdu-n" id="cd-s">--</div><div class="cdu-l">Saat</div></div>
+    </div>
+  </div>
+
+  <div class="stats-row">
+    <div class="sc"><div class="sc-ico" style="background:#dbeafe">👥</div><div><div class="sc-n" id="s-members">—</div><div class="sc-l">Ahli Aktif</div></div></div>
+    <div class="sc"><div class="sc-ico" style="background:#dcfce7">📝</div><div><div class="sc-n" id="s-nota">0</div><div class="sc-l">Nota Dikongsi</div></div></div>
+    <div class="sc"><div class="sc-ico" style="background:#fff7ed">📢</div><div><div class="sc-n" id="s-ann">0</div><div class="sc-l">Pengumuman</div></div></div>
+    <div class="sc"><div class="sc-ico" style="background:#ccfbf1">⏳</div><div><div class="sc-n" id="s-hari">—</div><div class="sc-l">Hari ke Sem 2</div></div></div>
+  </div>
+
+  <div class="sec-hdr"><div class="sec-title">Pengumuman Terkini</div><button class="sbtn" onclick="goTo('pengumuman')">Lihat Semua →</button></div>
+  <div id="home-ann" class="ann-list"></div>
+
+  <div class="sec-hdr" style="margin-top:6px"><div class="sec-title">Akses Pantas</div></div>
+  <div class="pl-grid" style="margin-bottom:22px">
+    <div class="pl-card" onclick="goTo('pengumuman')"><div class="pl-icon" style="background:#dbeafe">📢</div><h4>Pengumuman</h4><p>Info terkini admin</p></div>
+    <div class="pl-card" onclick="goTo('nota')"><div class="pl-icon" style="background:#dcfce7">📚</div><h4>Nota & Bahan</h4><p>Koleksi nota subjek</p></div>
+    <div class="pl-card" onclick="goTo('jadual')"><div class="pl-icon" style="background:#fef3c7">📅</div><h4>Jadual Exam</h4><p>Tarikh peperiksaan</p></div>
+    <div class="pl-card" onclick="goTo('pautan')"><div class="pl-icon" style="background:#fee2e2">🔗</div><h4>Pautan Berguna</h4><p>MPM, UPU & lain</p></div>
+    <div class="pl-card" onclick="goTo('ahli')"><div class="pl-icon" style="background:#ede9fe">👥</div><h4>Admin & Mod</h4><p>Hubungi pentadbir</p></div>
+    <div class="pl-card" onclick="goTo('bot')"><div class="pl-icon" style="background:#ccfbf1">🤖</div><h4>Bot Telegram</h4><p>Arahan bot group</p></div>
+  </div>
+</div>
+</div>
+
+<!-- PENGUMUMAN -->
+<div id="sec-pengumuman" class="section">
+<div class="con">
+  <div class="bc"><span>Laman Utama</span>›<span style="color:var(--text)">Pengumuman</span></div>
+  <div class="ph"><h2>Pengumuman</h2><p>Maklumat dan kemas kini rasmi dari pentadbir kumpulan</p></div>
+  <div class="admin-notice"><span>👑</span>Admin Mode — boleh tambah, pin dan padam pengumuman.</div>
+  <div style="display:flex;gap:9px;margin-bottom:13px;flex-wrap:wrap;align-items:center">
+    <div class="sw" style="flex:1;min-width:160px;margin-bottom:0"><span class="si">🔍</span><input placeholder="Cari pengumuman..." oninput="filterAnn(this.value)"/></div>
+    <button class="sbtn primary admin-only" onclick="openAnnForm()">+ Tambah Pengumuman</button>
+  </div>
+  <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:13px">
+    <button class="sbtn" style="font-size:11px" onclick="setAnnTag('',this)">Semua</button>
+    <button class="sbtn" style="font-size:11px;background:var(--gray2);color:var(--muted)" onclick="setAnnTag('Umum',this)">Umum</button>
+    <button class="sbtn" style="font-size:11px;background:var(--red2);color:var(--red)" onclick="setAnnTag('Penting',this)">Penting</button>
+    <button class="sbtn" style="font-size:11px;background:#fef3c7;color:#b45309" onclick="setAnnTag('Peperiksaan',this)">Peperiksaan</button>
+    <button class="sbtn" style="font-size:11px;background:var(--green2);color:var(--green)" onclick="setAnnTag('Nota',this)">Nota</button>
+  </div>
+  <div id="ann-full" class="ann-list"></div>
+</div>
+</div>
+
+<!-- NOTA -->
+<div id="sec-nota" class="section">
+<div class="con">
+  <div class="bc"><span>Laman Utama</span>›<span style="color:var(--text)">Nota & Bahan</span></div>
+  <div class="ph"><h2>Nota & Bahan Pembelajaran</h2><p>Koleksi nota, fail, gambar dan bahan dikuruskan oleh admin — <strong>64 subjek STPM</strong></p></div>
+  <div class="admin-notice"><span>👑</span>Admin Mode — boleh tambah nota dengan text, fail, gambar dan link.</div>
+  <div class="tab-bar">
+    <button class="tab-btn active" onclick="ntTab('subj')">Mengikut Subjek</button>
+    <button class="tab-btn" onclick="ntTab('all')">Semua Nota</button>
+    <button class="tab-btn admin-only" onclick="ntTab('add')">+ Tambah Nota</button>
+  </div>
+  <div id="nt-subj" class="tab-content active" id="nt-subj"></div>
+  <div id="nt-all" class="tab-content">
+    <div class="sw"><span class="si">🔍</span><input placeholder="Cari nota atau subjek..." oninput="filterNota(this.value)"/></div>
+    <div id="nota-list" style="display:flex;flex-direction:column;gap:7px"></div>
+  </div>
+  <div id="nt-add" class="tab-content admin-only block">
+    <div class="nota-form">
+      <div class="form-row">
+        <div class="fg"><label>Kategori Subjek</label>
+          <select id="nt-cat" onchange="updateSubjList()">
+            <option value="">-- Pilih Kategori --</option>
+            <option value="teras">Teras / Wajib</option>
+            <option value="bahasa">Bahasa & Kesusasteraan</option>
+            <option value="islam">Pengajian Islam</option>
+            <option value="sosial">Sains Sosial & Kemanusiaan</option>
+            <option value="sains">Sains & Matematik</option>
+          </select>
+        </div>
+        <div class="fg"><label>Subjek</label>
+          <select id="nt-subj-sel">
+            <option value="">-- Pilih Kategori Dulu --</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="fg"><label>Tajuk Nota</label><input id="nt-title" placeholder="Cth: Bab 3 — Permintaan & Penawaran"/></div>
+        <div class="fg"><label>Jenis Bahan</label>
+          <select id="nt-type"><option>Nota</option><option>Soalan Latihan</option><option>Ringkasan</option><option>Soalan Peperiksaan Lalu</option><option>Mindmap</option><option>Rujukan</option><option>Lain-lain</option></select>
+        </div>
+      </div>
+      <div class="fg"><label>Kandungan Teks (optional)</label><textarea id="nt-body" placeholder="Taip atau paste nota, poin penting, penjelasan...&#10;&#10;Boleh guna:&#10;📌 Poin penting&#10;✅ Konsep yang perlu tahu&#10;❗ Perhatian / peringatan"></textarea></div>
+
+      <!-- LINK -->
+      <div class="fg"><label>🔗 Link Tambahan (optional)</label>
+        <div style="display:flex;gap:8px;margin-bottom:6px">
+          <input id="nt-link-url" placeholder="https://drive.google.com/..." style="flex:1;border:1.5px solid var(--gray3);border-radius:8px;padding:9px 11px;font-size:13px;font-family:inherit;outline:none"/>
+          <input id="nt-link-label" placeholder="Label (cth: Nota PDF)" style="width:160px;border:1.5px solid var(--gray3);border-radius:8px;padding:9px 11px;font-size:13px;font-family:inherit;outline:none"/>
+          <button class="btn btn-o btn-sm" onclick="addLink()" style="flex-shrink:0">+ Add</button>
+        </div>
+        <div id="links-preview" class="attach-preview"></div>
+      </div>
+
+      <!-- FILE UPLOAD -->
+      <div class="fg"><label>📎 Fail (PDF, DOC, PPT, dll — max 10MB setiap fail)</label>
+        <div class="upload-area">
+          <input type="file" id="nt-files" multiple accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.txt,.zip" onchange="handleFiles(this)"/>
+          <div class="upload-icon">📎</div>
+          <p><strong>Klik untuk pilih fail</strong> atau seret ke sini<br><span style="font-size:11px;color:var(--muted2)">PDF, Word, PowerPoint, Excel, ZIP — max 10MB</span></p>
+        </div>
+        <div id="files-preview" class="attach-preview"></div>
+      </div>
+
+      <!-- IMAGE UPLOAD -->
+      <div class="fg"><label>🖼️ Gambar / Screenshot (JPG, PNG, GIF — max 5MB setiap gambar)</label>
+        <div class="upload-area">
+          <input type="file" id="nt-images" multiple accept="image/*" onchange="handleImages(this)"/>
+          <div class="upload-icon">🖼️</div>
+          <p><strong>Klik untuk pilih gambar</strong> atau seret ke sini<br><span style="font-size:11px;color:var(--muted2)">JPG, PNG, GIF, WebP — max 5MB</span></p>
+        </div>
+        <div id="imgs-preview" class="img-preview-grid"></div>
+      </div>
+
+      <div class="fg"><label>Penyumbang</label><input id="nt-author" placeholder="Nama atau @username admin"/></div>
+      <div class="form-actions">
+        <button class="btn btn-p" onclick="saveNota()">💾 Simpan Nota</button>
+        <button class="btn btn-o" onclick="ntTab('all')">Batal</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- JADUAL -->
+<div id="sec-jadual" class="section">
+<div class="con">
+  <div class="bc"><span>Laman Utama</span>›<span style="color:var(--text)">Jadual</span></div>
+  <div class="ph"><h2>Jadual Peperiksaan STPM 2026</h2><p>Tarikh peperiksaan rasmi Majlis Peperiksaan Malaysia</p></div>
+  <div class="admin-notice"><span>👑</span>Admin Mode — boleh tambah tarikh peperiksaan dan kerja kursus.</div>
+  <div class="tab-bar">
+    <button class="tab-btn active" onclick="jdTab('rasmi')">Jadual Rasmi MPM</button>
+    <button class="tab-btn" onclick="jdTab('kk')">Kerja Kursus</button>
+    <button class="tab-btn admin-only" onclick="jdTab('add')">+ Tambah</button>
+  </div>
+  <div id="jd-rasmi" class="tab-content active" style="overflow-x:auto">
+    <table class="tbl">
+      <thead><tr><th>Peperiksaan</th><th>Tarikh</th><th>Masa</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td>MUET Sesi 1 2026 (Speaking)</td><td>14 April 2026</td><td>—</td><td><span class="status tamat">✓ Selesai</span></td></tr>
+        <tr><td>MUET Sesi 1 2026 (Writing)</td><td>25 April 2026</td><td>—</td><td><span class="status tamat">✓ Selesai</span></td></tr>
+        <tr><td><strong>STPM Semester 2 2026 (Bertulis)</strong></td><td><strong>29 Jun 2026</strong></td><td>8:00 pagi</td><td><span class="status soon">⏳ Hampir</span></td></tr>
+        <tr><td>STPM Semester 3 2026 (ULBA)</td><td>27 Oktober 2026</td><td>—</td><td><span class="status akan">📅 Akan Datang</span></td></tr>
+        <tr><td>STPM Semester 3 2026 (Bertulis)</td><td>17 November 2026</td><td>8:00 pagi</td><td><span class="status akan">📅 Akan Datang</span></td></tr>
+        <tr><td>STPM Ulangan 1 2026 (Bertulis)</td><td>30 November 2026</td><td>8:00 pagi</td><td><span class="status akan">📅 Akan Datang</span></td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:11px;color:var(--muted2);margin-top:9px">* Semak <a href="https://portal.mpm.edu.my" target="_blank" style="color:var(--blue)">portal.mpm.edu.my</a> untuk pengesahan rasmi.</p>
+  </div>
+  <div id="jd-kk" class="tab-content" style="overflow-x:auto">
+    <table class="tbl">
+      <thead><tr><th>Subjek</th><th>Kerja Kursus</th><th>Tarikh Hantar</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td>900 Pengajian Am</td><td>Kertas 2 — Esei & Analisis</td><td>—</td><td><span class="status akan">📅 Akan Datang</span></td></tr>
+        <tr><td>960 Physics</td><td>Laporan Eksperimen</td><td>—</td><td><span class="status akan">📅 Akan Datang</span></td></tr>
+        <tr><td>962 Chemistry</td><td>Kerja Amali</td><td>—</td><td><span class="status akan">📅 Akan Datang</span></td></tr>
+        <tr><td>964 Biology</td><td>Kerja Kursus Lapangan</td><td>—</td><td><span class="status akan">📅 Akan Datang</span></td></tr>
+        <tr><td>958 ICT</td><td>Projek ICT</td><td>—</td><td><span class="status akan">📅 Akan Datang</span></td></tr>
+        <tr><td>970 Seni Visual</td><td>Kerja Studio / Portfolio</td><td>—</td><td><span class="status akan">📅 Akan Datang</span></td></tr>
+        <tr><td>966 Sains Sukan</td><td>Kerja Kursus Sukan</td><td>—</td><td><span class="status akan">📅 Akan Datang</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div id="jd-add" class="tab-content admin-only block">
+    <div class="nota-form" style="margin-bottom:16px">
+      <div class="form-row">
+        <div class="fg"><label>Nama Peperiksaan / Acara</label><input id="jd-name" placeholder="Cth: STPM Semester 2 (Bertulis)"/></div>
+        <div class="fg"><label>Tarikh</label><input type="date" id="jd-date"/></div>
+      </div>
+      <div class="form-row">
+        <div class="fg"><label>Masa</label><input id="jd-time" placeholder="8:00 pagi"/></div>
+        <div class="fg"><label>Kategori</label>
+          <select id="jd-cat"><option>Peperiksaan Bertulis</option><option>Kerja Kursus</option><option>ULBA</option><option>MUET</option><option>Lain-lain</option></select>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button class="btn btn-p" onclick="saveJd()">Simpan</button>
+        <button class="btn btn-o" onclick="jdTab('rasmi')">Batal</button>
+      </div>
+    </div>
+    <div style="overflow-x:auto"><table class="tbl"><thead><tr><th>Nama</th><th>Tarikh</th><th>Masa</th><th>Kategori</th><th></th></tr></thead><tbody id="jd-custom-body"></tbody></table></div>
+  </div>
+</div>
+</div>
+
+<!-- PAUTAN -->
+<div id="sec-pautan" class="section">
+<div class="con">
+  <div class="bc"><span>Laman Utama</span>›<span style="color:var(--text)">Pautan Berguna</span></div>
+  <div class="ph"><h2>Pautan Berguna</h2><p>Link penting untuk pelajar STPM 2026</p></div>
+  <div class="admin-notice"><span>👑</span>Admin Mode — boleh tambah pautan kumpulan.</div>
+  <div class="sec-hdr"><div class="sec-title">Portal Rasmi</div></div>
+  <div class="pl-grid" style="margin-bottom:24px">
+    <a href="https://portal.mpm.edu.my" target="_blank" class="pl-card"><div class="pl-icon" style="background:#dbeafe">🏛️</div><h4>Portal MPM</h4><p>Majlis Peperiksaan Malaysia</p></a>
+    <a href="https://mecea.mpm.edu.my/SS_STPM" target="_blank" class="pl-card"><div class="pl-icon" style="background:#dcfce7">📋</div><h4>Semak Keputusan STPM</h4><p>Rayuan semak semula</p></a>
+    <a href="https://muet.mpm.edu.my" target="_blank" class="pl-card"><div class="pl-icon" style="background:#fef3c7">🇬🇧</div><h4>Portal MUET</h4><p>Pendaftaran & keputusan</p></a>
+    <a href="https://online.mohe.gov.my/UPUOnlinev2/login" target="_blank" class="pl-card"><div class="pl-icon" style="background:#ede9fe">🎓</div><h4>UPU Online</h4><p>Permohonan masuk IPTA</p></a>
+    <a href="https://achievea.mpm.edu.my" target="_blank" class="pl-card"><div class="pl-icon" style="background:#fee2e2">⭐</div><h4>Achieve A</h4><p>Platform persediaan MPM</p></a>
+    <a href="https://t.me/stpm20266" target="_blank" class="pl-card"><div class="pl-icon" style="background:#e0f2fe">📱</div><h4>Telegram @stpm20266</h4><p>Kumpulan utama</p></a>
+  </div>
+  <div class="sec-hdr"><div class="sec-title">Pautan Kumpulan</div><button class="sbtn primary admin-only" onclick="togglePlForm()">+ Tambah Pautan</button></div>
+  <div id="pl-form" style="display:none;margin-bottom:14px">
+    <div class="nota-form">
+      <div class="form-row">
+        <div class="fg"><label>Nama</label><input id="pl-name" placeholder="Cth: Channel Nota Biology"/></div>
+        <div class="fg"><label>URL</label><input id="pl-url" placeholder="https://t.me/..."/></div>
+      </div>
+      <div class="form-row">
+        <div class="fg"><label>Penerangan</label><input id="pl-desc" placeholder="Penerangan ringkas..."/></div>
+        <div class="fg"><label>Emoji Icon</label><input id="pl-icon" placeholder="📱" maxlength="4"/></div>
+      </div>
+      <div class="form-actions">
+        <button class="btn btn-p" onclick="savePautan()">Simpan</button>
+        <button class="btn btn-o" onclick="togglePlForm()">Batal</button>
+      </div>
+    </div>
+  </div>
+  <div id="custom-pl" class="pl-grid"></div>
+  <div id="pl-empty" style="display:none" class="empty"><div style="font-size:36px;margin-bottom:8px">🔗</div><p style="font-size:13px;color:var(--muted)">Tiada pautan tambahan lagi.</p></div>
+</div>
+</div>
+
+<!-- AHLI -->
+<div id="sec-ahli" class="section">
+<div class="con">
+  <div class="bc"><span>Laman Utama</span>›<span style="color:var(--text)">Ahli</span></div>
+  <div class="ph"><h2>Pentadbir & Moderator</h2><p>Hubungi admin atau mod untuk sebarang pertanyaan</p></div>
+  <div class="admin-notice"><span>👑</span>Admin Mode — boleh tambah atau padam ahli pentadbiran.</div>
+  <div class="tab-bar">
+    <button class="tab-btn active" onclick="alTab('list')">Senarai</button>
+    <button class="tab-btn admin-only" onclick="alTab('add')">+ Tambah</button>
+  </div>
+  <div id="al-list" class="tab-content active"><div class="ahli-grid" id="ahli-grid"></div></div>
+  <div id="al-add" class="tab-content admin-only block">
+    <div class="nota-form">
+      <div class="form-row">
+        <div class="fg"><label>Nama</label><input id="al-name" placeholder="Nama / nickname"/></div>
+        <div class="fg"><label>Telegram</label><input id="al-tg" placeholder="@username"/></div>
+      </div>
+      <div class="form-row">
+        <div class="fg"><label>Peranan</label><select id="al-role"><option>Admin</option><option>Moderator</option><option>Pengurus Nota</option><option>Ahli Biasa</option></select></div>
+        <div class="fg"><label>Emoji</label><input id="al-emoji" placeholder="👤" maxlength="4"/></div>
+      </div>
+      <div class="fg"><label>Warna Avatar</label>
+        <select id="al-color"><option value="#1a56db">Biru</option><option value="#16a34a">Hijau</option><option value="#dc2626">Merah</option><option value="#ea580c">Oren</option><option value="#7c3aed">Ungu</option><option value="#0d9488">Teal</option></select>
+      </div>
+      <div class="form-actions">
+        <button class="btn btn-p" onclick="saveAhli()">Simpan</button>
+        <button class="btn btn-o" onclick="alTab('list')">Batal</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- BOT -->
+<div id="sec-bot" class="section">
+<div class="con">
+  <div class="bc"><span>Laman Utama</span>›<span style="color:var(--text)">Bot Telegram</span></div>
+  <div class="ph"><h2>Bot Telegram</h2><p>Panduan bot automatik untuk kumpulan @stpm20266</p></div>
+  <div class="bot-wrap">
+    <h3 style="font-size:17px;font-weight:800;margin-bottom:5px">🤖 @STPM2026Bot</h3>
+    <p style="font-size:13px;opacity:.72;margin-bottom:18px;max-width:460px;line-height:1.7">Bot automatik — cari nota, semak jadual dan akses maklumat peperiksaan terus dari Telegram.</p>
+    <div class="bot-cmds">
+      <div class="bot-cmd"><span style="font-size:17px">📚</span><div><div class="cmd-n">/nota [subjek]</div><div class="cmd-d">Cari nota. Contoh: /nota Biology</div></div></div>
+      <div class="bot-cmd"><span style="font-size:17px">📅</span><div><div class="cmd-n">/jadual</div><div class="cmd-d">Jadual peperiksaan terkini</div></div></div>
+      <div class="bot-cmd"><span style="font-size:17px">📢</span><div><div class="cmd-n">/pengumuman</div><div class="cmd-d">Pengumuman terkini admin</div></div></div>
+      <div class="bot-cmd"><span style="font-size:17px">⏳</span><div><div class="cmd-n">/countdown</div><div class="cmd-d">Countdown ke peperiksaan</div></div></div>
+      <div class="bot-cmd"><span style="font-size:17px">🔗</span><div><div class="cmd-n">/pautan</div><div class="cmd-d">Senarai link berguna</div></div></div>
+      <div class="bot-cmd"><span style="font-size:17px">👥</span><div><div class="cmd-n">/admin</div><div class="cmd-d">Hubungi admin group</div></div></div>
+      <div class="bot-cmd"><span style="font-size:17px">📊</span><div><div class="cmd-n">/stats</div><div class="cmd-d">Statistik group & nota</div></div></div>
+      <div class="bot-cmd"><span style="font-size:17px">❓</span><div><div class="cmd-n">/bantuan</div><div class="cmd-d">Senarai semua arahan</div></div></div>
+    </div>
+    <div style="background:rgba(59,130,246,.12);border:1px solid rgba(59,130,246,.25);border-radius:8px;padding:11px 13px;font-size:12px;opacity:.78;line-height:1.6">
+      💡 Taip dalam group atau DM terus. Contoh: <code style="background:rgba(255,255,255,.1);padding:1px 5px;border-radius:4px">/nota 900 Pengajian Am</code>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- SETTINGS (Admin Only) -->
+<div id="sec-settings" class="section">
+<div class="con">
+  <div class="bc"><span>Laman Utama</span>›<span style="color:var(--text)">Settings Portal</span></div>
+  <div class="ph"><h2>⚙️ Settings Portal</h2><p>Kemaskini maklumat dan tetapan portal rasmi kumpulan</p></div>
+
+  <!-- PORTAL INFO -->
+  <div class="sec-hdr"><div class="sec-title">Maklumat Portal</div></div>
+  <div class="nota-form" style="margin-bottom:22px">
+    <div class="form-row">
+      <div class="fg"><label>Nama Kumpulan</label><input id="st-groupname" placeholder="Cth: STPM 2026 Kohort Baharu"/></div>
+      <div class="fg"><label>Username Telegram</label><input id="st-tguser" placeholder="@stpm20266"/></div>
+    </div>
+    <div class="form-row">
+      <div class="fg"><label>Bilangan Ahli (update manual)</label><input id="st-members" type="number" placeholder="Cth: 247" min="0"/></div>
+      <div class="fg"><label>Link Telegram Group</label><input id="st-tglink" placeholder="https://t.me/stpm20266"/></div>
+    </div>
+    <div class="fg"><label>Penerangan Portal</label><textarea id="st-desc" placeholder="Penerangan ringkas tentang portal / kumpulan..." style="min-height:70px"></textarea></div>
+    <div class="form-actions"><button class="btn btn-p" onclick="savePortalInfo()">💾 Simpan Maklumat</button></div>
+  </div>
+
+  <!-- COUNTDOWN TARGET -->
+  <div class="sec-hdr"><div class="sec-title">Countdown Peperiksaan</div></div>
+  <div class="nota-form" style="margin-bottom:22px">
+    <div class="form-row">
+      <div class="fg"><label>Nama Peperiksaan</label><input id="st-examname" placeholder="Cth: STPM Semester 2 2026 (Bertulis)"/></div>
+      <div class="fg"><label>Tarikh Peperiksaan</label><input type="date" id="st-examdate"/></div>
+    </div>
+    <div class="form-actions"><button class="btn btn-p" onclick="saveCountdown()">💾 Simpan</button></div>
+    <p style="font-size:11.5px;color:var(--muted);margin-top:10px">* Countdown di Laman Utama akan dikemaskini mengikut tarikh ini.</p>
+  </div>
+
+  <!-- MARQUEE TEXT -->
+  <div class="sec-hdr"><div class="sec-title">Teks Marquee (Ticker)</div></div>
+  <div class="nota-form" style="margin-bottom:22px">
+    <p style="font-size:12.5px;color:var(--muted);margin-bottom:12px">Teks yang berjalan di bahagian atas portal. Satu baris = satu item ticker.</p>
+    <div class="fg"><label>Item Ticker (satu baris satu item)</label>
+      <textarea id="st-marquee" style="min-height:110px;font-size:12.5px" placeholder="📢 Portal Rasmi STPM 2026 Kohort Baharu&#10;📅 STPM Semester 2: 29 Jun 2026&#10;📚 Nota dikemaskini setiap minggu"></textarea>
+    </div>
+    <div class="form-actions"><button class="btn btn-p" onclick="saveMarquee()">💾 Simpan Marquee</button></div>
+  </div>
+
+  <!-- ADMIN CREDENTIALS -->
+  <div class="sec-hdr"><div class="sec-title">Tukar Password Admin</div></div>
+  <div class="nota-form" style="margin-bottom:22px">
+    <p style="font-size:12.5px;color:var(--muted);margin-bottom:12px">⚠️ Password disimpan dalam fail HTML. Selepas tukar, download semula fail portal.</p>
+    <div class="form-row">
+      <div class="fg"><label>Username Baharu</label><input id="st-newuser" placeholder="Username baru"/></div>
+      <div class="fg"><label>Password Baharu</label><input type="password" id="st-newpass" placeholder="Password baru"/></div>
+    </div>
+    <div class="fg"><label>Sahkan Password</label><input type="password" id="st-confpass" placeholder="Taip semula password"/></div>
+    <div class="form-actions"><button class="btn btn-p" onclick="savePassword()">🔒 Tukar Password</button></div>
+  </div>
+
+  <!-- DANGER ZONE -->
+  <div class="sec-hdr"><div class="sec-title" style="color:var(--red)">Zon Bahaya</div></div>
+  <div class="nota-form" style="border:1.5px solid var(--red);margin-bottom:22px">
+    <p style="font-size:13px;color:var(--muted);margin-bottom:14px">Tindakan ini <strong>tidak boleh diundur</strong>. Semua data akan dipadam.</p>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <button class="btn btn-d" onclick="clearAllNota()">🗑️ Padam Semua Nota</button>
+      <button class="btn btn-d" onclick="clearAllAnn()">🗑️ Padam Semua Pengumuman</button>
+      <button class="btn btn-d" onclick="clearAllData()">⚠️ Reset Semua Data Portal</button>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- FOOTER -->
+<footer style="background:var(--navy);color:rgba(255,255,255,.48);padding:20px;text-align:center;font-size:11px;margin-top:36px">
+  <div style="display:flex;justify-content:center;gap:16px;margin-bottom:8px;flex-wrap:wrap">
+    <a href="https://t.me/stpm20266" target="_blank" style="color:rgba(255,255,255,.6);text-decoration:none">Telegram</a>
+    <a href="https://portal.mpm.edu.my" target="_blank" style="color:rgba(255,255,255,.6);text-decoration:none">Portal MPM</a>
+    <a href="https://muet.mpm.edu.my" target="_blank" style="color:rgba(255,255,255,.6);text-decoration:none">MUET</a>
+    <a href="https://achievea.mpm.edu.my" target="_blank" style="color:rgba(255,255,255,.6);text-decoration:none">Achieve A</a>
+  </div>
+  <div>© 2026 STPM 2026 Kohort Baharu | @stpm20266 · Kandungan diurus oleh Admin sahaja</div>
+</footer>
+
+<script>
+// ===== ADMIN CREDENTIALS =====
+const ADMINS=[{u:'admin',p:'stpm2026'},{u:'stpm2026',p:'kohortbaharu'}];
+// Tambah admin lain: {u:'username',p:'password'}
+
+// ===== MEMBER COUNT =====
+function getMemberCount(){return store.settings?.members||'—'}
+function updateMemberUI(){
+  const n=getMemberCount();
+  ['top-members','s-members','hs-members'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=n});
+}
+
+// ===== SUBJEK DATA =====
+const SUBJEK={
+  teras:{label:'Teras / Wajib',color:'#1a56db',icon:'⭐',items:[
+    {code:'900',name:'Pengajian Am',icon:'📖',color:'#1a56db'},
+    {code:'MUET',name:'Malaysian University English Test',icon:'🇬🇧',color:'#0d9488'},
+  ]},
+  bahasa:{label:'Bahasa & Kesusasteraan',color:'#7c3aed',icon:'📝',items:[
+    {code:'910',name:'Bahasa Melayu',icon:'🌺',color:'#7c3aed'},
+    {code:'911',name:'Bahasa Cina',icon:'🀄',color:'#dc2626'},
+    {code:'912',name:'Bahasa Tamil',icon:'🏵️',color:'#ea580c'},
+    {code:'913',name:'Bahasa Arab',icon:'☪️',color:'#16a34a'},
+    {code:'920',name:'Literature in English',icon:'📚',color:'#0d9488'},
+    {code:'922',name:'Kesusasteraan Melayu Komunikatif',icon:'✍️',color:'#7c3aed'},
+  ]},
+  islam:{label:'Pengajian Islam',color:'#16a34a',icon:'☪️',items:[
+    {code:'930',name:'Syariah',icon:'⚖️',color:'#16a34a'},
+    {code:'931',name:'Usuluddin',icon:'🕌',color:'#0d9488'},
+    {code:'932',name:'Tahfiz Al-Quran',icon:'📖',color:'#059669'},
+  ]},
+  sosial:{label:'Sains Sosial & Kemanusiaan',color:'#ea580c',icon:'🌍',items:[
+    {code:'940',name:'Sejarah',icon:'📜',color:'#9333ea'},
+    {code:'942',name:'Geografi',icon:'🌏',color:'#16a34a'},
+    {code:'944',name:'Ekonomi',icon:'📊',color:'#ea580c'},
+    {code:'946',name:'Pengajian Perniagaan',icon:'💼',color:'#d97706'},
+    {code:'948',name:'Perakaunan',icon:'🧮',color:'#0891b2'},
+    {code:'970',name:'Seni Visual',icon:'🎨',color:'#ec4899'},
+    {code:'966',name:'Sains Sukan',icon:'⚽',color:'#16a34a'},
+  ]},
+  sains:{label:'Sains & Matematik',color:'#2563eb',icon:'🔬',items:[
+    {code:'950',name:'Mathematics (M)',icon:'📏',color:'#7c3aed'},
+    {code:'954',name:'Mathematics (T)',icon:'📐',color:'#4f46e5'},
+    {code:'958',name:'ICT',icon:'💻',color:'#1d4ed8'},
+    {code:'960',name:'Physics',icon:'⚛️',color:'#2563eb'},
+    {code:'962',name:'Chemistry',icon:'⚗️',color:'#0d9488'},
+    {code:'964',name:'Biology',icon:'🧬',color:'#16a34a'},
+  ]}
+};
+const ALL_SUBJ=Object.values(SUBJEK).flatMap(g=>g.items);
+
+// ===== STATE =====
+let isAdmin=false;
+let store={ann:[],nota:[],pautan:[],ahli:[],jadual:[],settings:{
+  members:'—',groupname:'STPM 2026 Kohort Baharu',tguser:'@stpm20266',
+  tglink:'https://t.me/stpm20266',desc:'',
+  examname:'STPM Semester 2 2026 (Bertulis)',examdate:'2026-06-29',
+  marquee:['📢 Portal Rasmi STPM 2026 Kohort Baharu | @stpm20266','📅 STPM Semester 2: 29 Jun 2026 — Bersedia!','📅 STPM Semester 3: 17 November 2026','📚 Nota & bahan dikuruskan oleh admin sahaja','🤖 Bot Telegram: /nota, /jadual, /countdown']
+}};
+let annTxt='',annTag='';
+// Temporary attachment buffers for nota form
+let tempLinks=[],tempFiles=[],tempImages=[];
+
+function save(){sessionStorage.setItem('stpm26v3',JSON.stringify(store))}
+function load(){
+  const d=sessionStorage.getItem('stpm26v3');
+  if(d){
+    const parsed=JSON.parse(d);
+    // merge to keep defaults for new fields
+    store={...store,...parsed,settings:{...store.settings,...(parsed.settings||{})}};
+  }
+}
+load();
+
+// ===== AUTH =====
+function openLogin(){document.getElementById('login-ov').classList.add('open');setTimeout(()=>document.getElementById('l-u').focus(),100)}
+function closeLogin(){document.getElementById('login-ov').classList.remove('open');document.getElementById('login-err').style.display='none';['l-u','l-p'].forEach(id=>document.getElementById(id).value='')}
+function doLogin(){
+  const u=document.getElementById('l-u').value.trim(),p=document.getElementById('l-p').value;
+  if(ADMINS.some(a=>a.u===u&&a.p===p)){
+    isAdmin=true;document.body.classList.add('admin');
+    document.getElementById('admin-topbtn').style.display='flex';
+    document.getElementById('login-topbtn').style.display='none';
+    document.querySelector('.badge-gold').style.display='inline-block';
+    closeLogin();showToast('✓ Log masuk berjaya! Selamat datang Admin.');renderAll();
+  } else {
+    document.getElementById('login-err').style.display='block';
+    document.getElementById('l-p').value='';
+  }
+}
+function logoutAdmin(){
+  if(!confirm('Log keluar dari Admin Mode?'))return;
+  isAdmin=false;
+  document.body.classList.remove('admin');
+  document.getElementById('admin-topbtn').style.display='none';
+  document.getElementById('login-topbtn').style.display='';
+  const bg=document.querySelector('.badge-gold');if(bg)bg.style.display='none';
+  // hide settings nav btn, go home
+  showToast('Log keluar berjaya.');
+  goTo('home');
+}
+
+// ===== COUNTDOWN =====
+let cdTarget=new Date((store.settings.examdate||'2026-06-29')+'T08:00:00');
+function tick(){
+  const diff=cdTarget-new Date();
+  if(diff<0){['cd-d','cd-h','cd-m','cd-s'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent='00'});return}
+  const d=Math.floor(diff/86400000),h=Math.floor(diff%86400000/3600000),m=Math.floor(diff%3600000/60000),s=Math.floor(diff%60000/1000);
+  ['cd-d','cd-h','cd-m','cd-s'].forEach((id,i)=>{const el=document.getElementById(id);if(el)el.textContent=String([d,h,m,s][i]).padStart(2,'0')});
+  const sh=document.getElementById('s-hari');if(sh)sh.textContent=d;
+}
+setInterval(tick,1000);tick();
+document.getElementById('top-date').textContent=new Date().toLocaleDateString('ms-MY',{weekday:'short',day:'numeric',month:'long',year:'numeric'});
+
+// ===== APPLY SETTINGS =====
+function applySettings(){
+  const s=store.settings;
+  const ht=document.querySelector('.h-title');if(ht)ht.textContent=s.groupname||'STPM 2026 Kohort Baharu';
+  const hsub=document.querySelector('.h-sub span');if(hsub)hsub.textContent=s.tguser||'@stpm20266';
+  document.querySelectorAll('a[href*="t.me/stpm20266"]').forEach(a=>{if(s.tglink)a.href=s.tglink});
+  const heroSub=document.querySelector('.hero-sub strong');if(heroSub)heroSub.textContent=s.tguser||'@stpm20266';
+  updateMemberUI();
+  if(s.marquee&&s.marquee.length){
+    const items=[...s.marquee,...s.marquee].map(t=>`<span class="mq-item"><span class="mq-dot"></span>${t}</span>`).join('');
+    const track=document.querySelector('.mq-track');if(track)track.innerHTML=items;
+  }
+  if(s.examdate){cdTarget=new Date(s.examdate+'T08:00:00');tick();}
+  if(s.examname){
+    const nm=document.querySelector('.cd-info .nm');if(nm)nm.textContent=s.examname;
+    const dt=document.querySelector('.cd-info .dt');if(dt)dt.textContent=s.examdate||'';
+  }
+}
+applySettings();
+
+// ===== NAV =====
+let curSec='home';
+function goTo(id){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('sec-'+id).classList.add('active');
+  const idx={home:0,pengumuman:1,nota:2,jadual:3,pautan:4,ahli:5,bot:6,settings:7}[id];
+  document.querySelectorAll('.nav-btn')[idx]?.classList.add('active');
+  curSec=id;window.scrollTo({top:0,behavior:'smooth'});
+  document.getElementById('main-nav').classList.remove('open');
+  renderSection(id);
+}
+function renderAll(){renderSection(curSec)}
+function renderSection(id){
+  if(id==='home')renderHome();
+  if(id==='pengumuman')renderAnnFull();
+  if(id==='nota')renderNota();
+  if(id==='pautan')renderPautan();
+  if(id==='ahli')renderAhli();
+  if(id==='settings')loadSettingsForm();
+}
+
+// ===== TOAST =====
+function showToast(msg,dur=2800){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),dur)}
+
+// ===== MODAL =====
+function openVM(title,bodyHTML){
+  document.getElementById('vm-title').textContent=title;
+  document.getElementById('vm-body').innerHTML=bodyHTML;
+  document.getElementById('view-modal').classList.add('open');
+}
+function closeVM(e){if(!e||e.target.id==='view-modal')document.getElementById('view-modal').classList.remove('open')}
+
+// ===== LIGHTBOX =====
+function openLB(src){document.getElementById('lb-img').src=src;document.getElementById('lightbox').classList.add('open')}
+
+// ===== HOME =====
+function renderHome(){
+  document.getElementById('hs-nota').textContent=store.nota.length;
+  document.getElementById('hs-ann').textContent=store.ann.length;
+  document.getElementById('s-nota').textContent=store.nota.length;
+  document.getElementById('s-ann').textContent=store.ann.length;
+  const c=document.getElementById('home-ann');
+  const items=[...store.ann].sort((a,b)=>(b.pinned||0)-(a.pinned||0)||(b.time-a.time)).slice(0,3);
+  c.innerHTML=items.length?items.map(a=>annHTML(a)).join(''):'<div style="text-align:center;padding:32px;color:var(--muted)"><div style="font-size:36px;margin-bottom:8px">📢</div><p style="font-size:13px">Belum ada pengumuman.</p></div>';
+}
+renderHome();
+
+// ===== ANN =====
+const tagCls={Umum:'blue',Penting:'red',Peperiksaan:'orange',Nota:'green',Jadual:'teal'};
+function annHTML(a){
+  return `<div class="ann-item${a.pinned?' pinned':''}" onclick="viewAnn(${a.id})">
+    <div class="ann-emoji">${a.emoji||'📢'}</div>
+    <div class="ann-body" style="min-width:0;flex:1">
+      <div class="ann-tags">${a.pinned?'<span class="pin-badge">📌 Pin</span>':''}<span class="atag ${tagCls[a.tag]||'blue'}">${a.tag}</span></div>
+      <div class="ann-title">${a.title}</div>
+      <div class="ann-preview">${a.body}</div>
+      <div class="ann-meta"><span class="ann-date">${new Date(a.time).toLocaleDateString('ms-MY',{day:'numeric',month:'short',year:'numeric'})}</span><span class="ann-views">👁 ${a.views||0}</span></div>
+    </div>
+    <div class="card-admin"><button class="btn btn-d btn-sm" onclick="event.stopPropagation();deleteAnn(${a.id})">Padam</button></div>
+  </div>`;
+}
+function renderAnnFull(){
+  let items=[...store.ann].sort((a,b)=>(b.pinned||0)-(a.pinned||0)||(b.time-a.time));
+  if(annTxt)items=items.filter(a=>a.title.toLowerCase().includes(annTxt.toLowerCase())||a.body.toLowerCase().includes(annTxt.toLowerCase()));
+  if(annTag)items=items.filter(a=>a.tag===annTag);
+  document.getElementById('ann-full').innerHTML=items.length?items.map(a=>annHTML(a)).join(''):'<div style="text-align:center;padding:40px;color:var(--muted)"><div style="font-size:36px;margin-bottom:8px">📢</div><p>Tiada pengumuman ditemui.</p></div>';
+}
+function filterAnn(v){annTxt=v;renderAnnFull()}
+function setAnnTag(t,btn){annTag=t;document.querySelectorAll('#sec-pengumuman .sbtn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderAnnFull()}
+function openAnnForm(){
+  if(!isAdmin)return;
+  openVM('Tambah Pengumuman',`
+    <div class="fg"><label>Tajuk</label><input id="af-title" placeholder="Tajuk pengumuman..." style="width:100%;border:1.5px solid var(--gray3);border-radius:8px;padding:9px 11px;font-size:13px;font-family:inherit;outline:none"/></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0">
+      <div class="fg"><label>Tag</label><select id="af-tag" style="width:100%;border:1.5px solid var(--gray3);border-radius:8px;padding:9px 11px;font-size:13px;font-family:inherit;outline:none;background:#fff"><option>Umum</option><option>Penting</option><option>Peperiksaan</option><option>Nota</option><option>Jadual</option></select></div>
+      <div class="fg"><label>Pin di Atas?</label><select id="af-pin" style="width:100%;border:1.5px solid var(--gray3);border-radius:8px;padding:9px 11px;font-size:13px;font-family:inherit;outline:none;background:#fff"><option value="0">Tidak</option><option value="1">Ya — Pin</option></select></div>
+    </div>
+    <div class="fg"><label>Kandungan</label><textarea id="af-body" placeholder="Isi pengumuman..." style="width:100%;border:1.5px solid var(--gray3);border-radius:8px;padding:9px 11px;font-size:13px;font-family:inherit;outline:none;min-height:90px;resize:vertical;line-height:1.6"></textarea></div>
+    <div class="fg" style="margin-bottom:14px"><label>Emoji (optional)</label><input id="af-emoji" placeholder="📢" maxlength="4" style="width:100%;border:1.5px solid var(--gray3);border-radius:8px;padding:9px 11px;font-size:13px;font-family:inherit;outline:none"/></div>
+    <div style="display:flex;gap:8px"><button class="btn btn-p" onclick="saveAnn()">Simpan</button><button class="btn btn-o" onclick="closeVM()">Batal</button></div>
+  `);
+}
+function saveAnn(){
+  if(!isAdmin)return;
+  const title=document.getElementById('af-title')?.value.trim();
+  const body=document.getElementById('af-body')?.value.trim();
+  if(!title||!body){alert('Sila isi tajuk dan kandungan!');return}
+  store.ann.push({id:Date.now(),title,body,tag:document.getElementById('af-tag').value,pinned:document.getElementById('af-pin').value==='1',emoji:document.getElementById('af-emoji').value||'📢',time:Date.now(),views:0});
+  save();closeVM();renderAnnFull();renderHome();showToast('✓ Pengumuman disimpan!');
+}
+function deleteAnn(id){if(!isAdmin||!confirm('Padam pengumuman ini?'))return;store.ann=store.ann.filter(a=>a.id!==id);save();renderAnnFull();renderHome();showToast('Pengumuman dipadam.')}
+function viewAnn(id){
+  const a=store.ann.find(x=>x.id===id);if(!a)return;
+  a.views=(a.views||0)+1;save();
+  openVM(a.title,`<span class="atag ${tagCls[a.tag]||'blue'}" style="display:inline-block;margin-bottom:12px">${a.tag}</span>
+    <p style="white-space:pre-line;font-size:13.5px;line-height:1.8;color:var(--text)">${a.body}</p>
+    <div style="margin-top:14px;padding-top:13px;border-top:1px solid var(--gray3);font-size:11.5px;color:var(--muted2);display:flex;justify-content:space-between">
+      <span>${new Date(a.time).toLocaleString('ms-MY')}</span><span>👁 ${a.views} tontonan</span>
+    </div>`);
+}
+
+// ===== NOTA — SUBJEK LIST =====
+const SUBJ_MAP={
+  teras:['900 Pengajian Am','MUET'],
+  bahasa:['910 Bahasa Melayu','911 Bahasa Cina','912 Bahasa Tamil','913 Bahasa Arab','920 Literature in English','922 Kesusasteraan Melayu Komunikatif'],
+  islam:['930 Syariah','931 Usuluddin','932 Tahfiz Al-Quran'],
+  sosial:['940 Sejarah','942 Geografi','944 Ekonomi','946 Pengajian Perniagaan','948 Perakaunan','970 Seni Visual','966 Sains Sukan'],
+  sains:['950 Mathematics (M)','954 Mathematics (T)','958 ICT','960 Physics','962 Chemistry','964 Biology']
+};
+function updateSubjList(){
+  const cat=document.getElementById('nt-cat').value;
+  const sel=document.getElementById('nt-subj-sel');
+  sel.innerHTML=cat?SUBJ_MAP[cat].map(s=>`<option>${s}</option>`).join(''):'<option value="">-- Pilih Kategori Dulu --</option>';
+}
+
+// ===== NOTA — ATTACHMENTS =====
+function addLink(){
+  const url=document.getElementById('nt-link-url').value.trim();
+  const label=document.getElementById('nt-link-label').value.trim()||url;
+  if(!url){alert('Sila masukkan URL!');return}
+  tempLinks.push({url,label});
+  document.getElementById('nt-link-url').value='';document.getElementById('nt-link-label').value='';
+  renderLinkPreview();
+}
+function renderLinkPreview(){
+  document.getElementById('links-preview').innerHTML=tempLinks.map((l,i)=>`
+    <div class="ap-item">
+      <span style="font-size:16px">🔗</span>
+      <span class="ap-name">${l.label}</span>
+      <span class="ap-size" style="font-size:11px;color:var(--muted2);max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${l.url}</span>
+      <button onclick="removeLink(${i})">✕</button>
+    </div>`).join('');
+}
+function removeLink(i){tempLinks.splice(i,1);renderLinkPreview()}
+
+function handleFiles(input){
+  Array.from(input.files).forEach(f=>{
+    if(f.size>10*1024*1024){alert(`${f.name} terlalu besar (max 10MB)`);return}
+    const reader=new FileReader();
+    reader.onload=e=>tempFiles.push({name:f.name,size:f.size,type:f.type,data:e.target.result});
+    reader.onloadend=renderFilesPreview;
+    reader.readAsDataURL(f);
+  });
+  input.value='';
+}
+function renderFilesPreview(){
+  document.getElementById('files-preview').innerHTML=tempFiles.map((f,i)=>`
+    <div class="ap-item">
+      <span style="font-size:16px">${fileIcon(f.name)}</span>
+      <span class="ap-name">${f.name}</span>
+      <span class="ap-size">${(f.size/1024).toFixed(0)}KB</span>
+      <button onclick="removeFile(${i})">✕</button>
+    </div>`).join('');
+}
+function removeFile(i){tempFiles.splice(i,1);renderFilesPreview()}
+function fileIcon(name){const ext=name.split('.').pop().toLowerCase();return{pdf:'📄',doc:'📝',docx:'📝',ppt:'📊',pptx:'📊',xls:'📋',xlsx:'📋',txt:'📃',zip:'🗜️'}[ext]||'📎'}
+
+function handleImages(input){
+  Array.from(input.files).forEach(f=>{
+    if(f.size>5*1024*1024){alert(`${f.name} terlalu besar (max 5MB)`);return}
+    const reader=new FileReader();
+    reader.onload=e=>tempImages.push({name:f.name,data:e.target.result});
+    reader.onloadend=renderImgsPreview;
+    reader.readAsDataURL(f);
+  });
+  input.value='';
+}
+function renderImgsPreview(){
+  document.getElementById('imgs-preview').innerHTML=tempImages.map((img,i)=>`
+    <div class="img-thumb">
+      <img src="${img.data}" alt="${img.name}" onclick="openLB('${img.data}')"/>
+      <button onclick="removeImg(${i})">✕</button>
+    </div>`).join('');
+}
+function removeImg(i){tempImages.splice(i,1);renderImgsPreview()}
+
+// ===== NOTA — SAVE =====
+function saveNota(){
+  if(!isAdmin)return;
+  const subj=document.getElementById('nt-subj-sel').value;
+  const title=document.getElementById('nt-title').value.trim();
+  if(!subj){alert('Sila pilih kategori dan subjek!');return}
+  if(!title&&!document.getElementById('nt-body').value.trim()&&!tempLinks.length&&!tempFiles.length&&!tempImages.length){alert('Sila isi sekurang-kurangnya tajuk atau kandungan!');return}
+  const nota={
+    id:Date.now(),
+    subj,cat:document.getElementById('nt-cat').value,
+    title:title||'Nota '+subj,
+    type:document.getElementById('nt-type').value,
+    body:document.getElementById('nt-body').value.trim(),
+    links:[...tempLinks],
+    files:[...tempFiles],
+    images:[...tempImages],
+    author:document.getElementById('nt-author').value||'Admin',
+    time:Date.now()
+  };
+  store.nota.push(nota);save();
+  // Reset
+  ['nt-title','nt-body','nt-author','nt-link-url','nt-link-label'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('nt-cat').value='';document.getElementById('nt-subj-sel').innerHTML='<option>-- Pilih Kategori Dulu --</option>';
+  tempLinks=[];tempFiles=[];tempImages=[];
+  ['links-preview','files-preview','imgs-preview'].forEach(id=>document.getElementById(id).innerHTML='');
+  ntTab('all');renderHome();showToast('✓ Nota berjaya disimpan!');
+}
+
+// ===== NOTA — RENDER =====
+function ntTab(t){
+  document.querySelectorAll('#sec-nota .tab-btn').forEach((b,i)=>b.classList.toggle('active',['subj','all','add'][i]===t));
+  ['nt-subj','nt-all','nt-add'].forEach(id=>{const el=document.getElementById(id);if(el){el.classList.remove('active')}});
+  const el=document.getElementById('nt-'+t);if(el)el.classList.add('active');
+  if(t==='subj')renderSubjGroups();
+  if(t==='all')renderNotaAll();
+}
+function renderSubjGroups(){
+  const c=document.getElementById('nt-subj');
+  c.innerHTML=Object.entries(SUBJEK).map(([cat,g])=>{
+    const cards=g.items.map(s=>{
+      const count=store.nota.filter(n=>n.subj&&n.subj.includes(s.code)).length;
+      return `<div class="subj-card" onclick="viewSubjNota('${s.code}','${s.name}')">
+        <div class="subj-accent" style="background:${s.color}"></div>
+        <span class="subj-icon">${s.icon}</span>
+        <div class="subj-code" style="font-size:11px;color:var(--muted2)">${s.code}</div>
+        <h3>${s.name}</h3>
+        <p>${count} bahan</p>
+        <div class="subj-footer"><span style="font-size:11px;color:var(--muted2)">${count} nota</span><span style="color:var(--blue);font-weight:700;font-size:13px">→</span></div>
+      </div>`;
+    }).join('');
+    return `<div class="subj-group">
+      <div class="subj-group-title">${g.icon} ${g.label}</div>
+      <div class="subj-grid">${cards}</div>
+    </div>`;
+  }).join('');
+}
+function viewSubjNota(code,name){
+  ntTab('all');
+  setTimeout(()=>{
+    const inp=document.querySelector('#nt-all input');
+    if(inp){inp.value=code;filterNota(code)}
+  },80);
+}
+function renderNotaAll(f=''){
+  let items=[...store.nota].reverse().filter(n=>!f||(n.subj||'').toLowerCase().includes(f.toLowerCase())||(n.title||'').toLowerCase().includes(f.toLowerCase()));
+  const c=document.getElementById('nota-list');
+  if(!items.length){
+    c.innerHTML=`<div style="text-align:center;padding:40px;color:var(--muted)"><div style="font-size:36px;margin-bottom:8px">📚</div><p style="font-size:13px">${isAdmin?'Tambah nota melalui tab "+ Tambah Nota".':'Nota akan dipaparkan di sini setelah admin menambahkannya.'}</p></div>`;
+    return;
+  }
+  c.innerHTML=items.map(n=>{
+    const s=ALL_SUBJ.find(x=>n.subj&&n.subj.includes(x.code))||{icon:'📝',color:'#6b7280'};
+    const hasAttach=[n.files?.length,n.images?.length,n.links?.length].some(Boolean);
+    return `<div class="nota-card">
+      <div class="nota-icon" style="background:${s.color}18">${s.icon}</div>
+      <div class="nota-info" onclick="viewNota(${n.id})">
+        <div class="nota-title">${n.title}</div>
+        <div class="nota-sub">${n.subj||'—'} · ${n.type} · ${n.author} · ${new Date(n.time).toLocaleDateString('ms-MY')}${hasAttach?' · 📎':''}</div>
+      </div>
+      <span class="nota-badge">${n.type}</span>
+      <div class="card-admin"><button class="btn btn-d btn-sm" onclick="deleteNota(${n.id})">Padam</button></div>
+    </div>`;
+  }).join('');
+}
+function filterNota(v){renderNotaAll(v)}
+function renderNota(){renderSubjGroups();renderNotaAll()}
+function deleteNota(id){
+  if(!isAdmin||!confirm('Padam nota ini?'))return;
+  store.nota=store.nota.filter(n=>n.id!==id);save();renderNotaAll();renderHome();showToast('Nota dipadam.');
+}
+function viewNota(id){
+  const n=store.nota.find(x=>x.id===id);if(!n)return;
+  let html=`<div class="atag blue" style="display:inline-block;margin-bottom:11px;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;text-transform:uppercase">${n.subj||''} · ${n.type}</div>`;
+  if(n.body){
+    html+=`<div class="nota-view-section"><div class="nota-view-body">${n.body}</div></div>`;
+  }
+  if(n.images&&n.images.length){
+    html+=`<div class="nota-view-section"><div class="nota-view-section-title">🖼️ Gambar (${n.images.length})</div>
+    <div class="nota-images">${n.images.map(img=>`<img src="${img.data}" alt="${img.name}" onclick="openLB('${img.data}')" title="${img.name}"/>`).join('')}</div></div>`;
+  }
+  if(n.files&&n.files.length){
+    html+=`<div class="nota-view-section"><div class="nota-view-section-title">📎 Fail (${n.files.length})</div>
+    <div class="attach-list">${n.files.map(f=>`<div class="attach-item"><span class="attach-icon">${fileIcon(f.name)}</span><a href="${f.data}" download="${f.name}">${f.name}</a><span class="attach-type">${(f.size/1024).toFixed(0)}KB</span></div>`).join('')}</div></div>`;
+  }
+  if(n.links&&n.links.length){
+    html+=`<div class="nota-view-section"><div class="nota-view-section-title">🔗 Link (${n.links.length})</div>
+    <div class="attach-list">${n.links.map(l=>`<div class="attach-item"><span class="attach-icon">🔗</span><a href="${l.url}" target="_blank" rel="noopener">${l.label}</a></div>`).join('')}</div></div>`;
+  }
+  html+=`<div style="margin-top:13px;padding-top:12px;border-top:1px solid var(--gray3);font-size:11px;color:var(--muted2);display:flex;justify-content:space-between;flex-wrap:wrap;gap:5px">
+    <span>${n.author?'Oleh: '+n.author+' · ':''}</span><span>${new Date(n.time).toLocaleDateString('ms-MY')}</span>
+  </div>`;
+  openVM(n.title,html);
+}
+
+// ===== JADUAL =====
+function jdTab(t){
+  document.querySelectorAll('#sec-jadual .tab-btn').forEach((b,i)=>b.classList.toggle('active',['rasmi','kk','add'][i]===t));
+  ['jd-rasmi','jd-kk','jd-add'].forEach(id=>{const el=document.getElementById(id);if(el)el.classList.remove('active')});
+  const el=document.getElementById('jd-'+t);if(el)el.classList.add('active');
+  if(t==='add')renderJdCustom();
+}
+function saveJd(){
+  if(!isAdmin)return;
+  const name=document.getElementById('jd-name').value.trim(),date=document.getElementById('jd-date').value;
+  if(!name||!date){alert('Sila isi nama dan tarikh!');return}
+  store.jadual.push({id:Date.now(),name,date,time:document.getElementById('jd-time').value,cat:document.getElementById('jd-cat').value});
+  save();renderJdCustom();showToast('✓ Jadual disimpan!');
+  ['jd-name','jd-time'].forEach(id=>document.getElementById(id).value='');document.getElementById('jd-date').value='';
+}
+function renderJdCustom(){
+  const tb=document.getElementById('jd-custom-body');if(!tb)return;
+  tb.innerHTML=store.jadual.length?store.jadual.map(j=>`<tr>
+    <td>${j.name}</td><td>${j.date}</td><td>${j.time||'—'}</td><td>${j.cat}</td>
+    <td><button class="btn btn-d btn-sm card-admin" onclick="deleteJd(${j.id})" style="display:${isAdmin?'flex':'none'}">Padam</button></td>
+  </tr>`).join(''):'<tr><td colspan="5" style="text-align:center;color:var(--muted2);padding:16px">Tiada jadual tambahan</td></tr>';
+}
+function deleteJd(id){if(!isAdmin)return;store.jadual=store.jadual.filter(j=>j.id!==id);save();renderJdCustom()}
+
+// ===== PAUTAN =====
+let plFormOpen=false;
+function togglePlForm(){plFormOpen=!plFormOpen;document.getElementById('pl-form').style.display=plFormOpen&&isAdmin?'block':'none'}
+function savePautan(){
+  if(!isAdmin)return;
+  const name=document.getElementById('pl-name').value.trim(),url=document.getElementById('pl-url').value.trim();
+  if(!name||!url){alert('Sila isi nama dan URL!');return}
+  store.pautan.push({id:Date.now(),name,url,desc:document.getElementById('pl-desc').value,icon:document.getElementById('pl-icon').value||'🔗'});
+  save();renderPautan();togglePlForm();showToast('✓ Pautan disimpan!');
+  ['pl-name','pl-url','pl-desc','pl-icon'].forEach(id=>document.getElementById(id).value='');
+}
+function renderPautan(){
+  const c=document.getElementById('custom-pl');
+  const empty=document.getElementById('pl-empty');
+  if(!store.pautan.length){c.innerHTML='';empty.style.display='block';return}
+  empty.style.display='none';
+  c.innerHTML=store.pautan.map(p=>`<div style="position:relative">
+    <a href="${p.url}" target="_blank" class="pl-card"><div class="pl-icon" style="background:#f1f5f9">${p.icon}</div><h4>${p.name}</h4><p>${p.desc||''}</p></a>
+    <button class="card-admin" style="position:absolute;top:5px;right:5px;background:var(--red2);border:none;color:var(--red);border-radius:50%;width:20px;height:20px;cursor:pointer;font-size:11px;align-items:center;justify-content:center" onclick="deletePl(${p.id})">✕</button>
+  </div>`).join('');
+  if(isAdmin)document.querySelectorAll('#custom-pl .card-admin').forEach(b=>b.style.display='flex');
+}
+function deletePl(id){if(!isAdmin||!confirm('Padam pautan?'))return;store.pautan=store.pautan.filter(p=>p.id!==id);save();renderPautan()}
+renderPautan();
+
+// ===== AHLI =====
+const defaultAhli=[{id:1,name:'Admin Utama',tg:'@stpm20266',role:'Admin',emoji:'👑',color:'#1a56db'},{id:2,name:'Moderator',tg:'@mod_stpm',role:'Moderator',emoji:'🛡️',color:'#16a34a'}];
+const roleColors={Admin:'#1a56db',Moderator:'#16a34a','Pengurus Nota':'#ea580c','Ahli Biasa':'#6b7280'};
+function alTab(t){
+  document.querySelectorAll('#sec-ahli .tab-btn').forEach((b,i)=>b.classList.toggle('active',['list','add'][i]===t));
+  ['al-list','al-add'].forEach(id=>{const el=document.getElementById(id);if(el)el.classList.remove('active')});
+  const el=document.getElementById('al-'+t);if(el)el.classList.add('active');
+  if(t==='list')renderAhli();
+}
+function renderAhli(){
+  const all=[...defaultAhli,...store.ahli];
+  document.getElementById('ahli-grid').innerHTML=all.map(a=>`<div class="ahli-card">
+    <div class="ahli-av" style="background:${a.color};color:#fff">${a.emoji||'👤'}</div>
+    <div class="ahli-name">${a.name}</div>
+    <div class="ahli-tg">${a.tg||''}</div>
+    <div class="ahli-role" style="background:${(roleColors[a.role]||'#6b7280')}15;color:${roleColors[a.role]||'#6b7280'}">${a.role}</div>
+    ${(!defaultAhli.find(d=>d.id===a.id)&&isAdmin)?`<button class="btn btn-d btn-sm" style="margin-top:7px" onclick="deleteAhli(${a.id})">Padam</button>`:''}
+  </div>`).join('');
+}
+function saveAhli(){
+  if(!isAdmin)return;
+  const name=document.getElementById('al-name').value.trim();if(!name){alert('Sila isi nama!');return}
+  store.ahli.push({id:Date.now(),name,tg:document.getElementById('al-tg').value,role:document.getElementById('al-role').value,emoji:document.getElementById('al-emoji').value||'👤',color:document.getElementById('al-color').value});
+  save();alTab('list');showToast('✓ Ahli disimpan!');
+  ['al-name','al-tg','al-emoji'].forEach(id=>document.getElementById(id).value='');
+}
+function deleteAhli(id){if(!isAdmin||!confirm('Padam?'))return;store.ahli=store.ahli.filter(a=>a.id!==id);save();renderAhli()}
+renderAhli();
+
+// ===== SETTINGS =====
+function loadSettingsForm(){
+  if(!isAdmin)return;
+  const s=store.settings;
+  const fields={
+    'st-groupname':s.groupname,'st-tguser':s.tguser,'st-tglink':s.tglink,
+    'st-members':s.members==='—'?'':s.members,'st-desc':s.desc,
+    'st-examname':s.examname,'st-examdate':s.examdate,
+    'st-marquee':(s.marquee||[]).join('\n')
+  };
+  Object.entries(fields).forEach(([id,val])=>{const el=document.getElementById(id);if(el)el.value=val||''});
+}
+function savePortalInfo(){
+  if(!isAdmin)return;
+  const m=document.getElementById('st-members').value.trim();
+  store.settings.groupname=document.getElementById('st-groupname').value.trim()||store.settings.groupname;
+  store.settings.tguser=document.getElementById('st-tguser').value.trim()||store.settings.tguser;
+  store.settings.tglink=document.getElementById('st-tglink').value.trim()||store.settings.tglink;
+  store.settings.members=m||'—';
+  store.settings.desc=document.getElementById('st-desc').value.trim();
+  save();applySettings();showToast('✓ Maklumat portal dikemaskini!');
+}
+function saveCountdown(){
+  if(!isAdmin)return;
+  const name=document.getElementById('st-examname').value.trim();
+  const date=document.getElementById('st-examdate').value;
+  if(!name||!date){alert('Sila isi nama dan tarikh peperiksaan!');return}
+  store.settings.examname=name;store.settings.examdate=date;
+  save();applySettings();showToast('✓ Countdown dikemaskini!');
+}
+function saveMarquee(){
+  if(!isAdmin)return;
+  const lines=document.getElementById('st-marquee').value.split('\n').map(l=>l.trim()).filter(Boolean);
+  if(!lines.length){alert('Sila isi sekurang-kurangnya satu baris!');return}
+  store.settings.marquee=lines;save();applySettings();showToast('✓ Marquee dikemaskini!');
+}
+function savePassword(){
+  if(!isAdmin)return;
+  const u=document.getElementById('st-newuser').value.trim();
+  const p=document.getElementById('st-newpass').value;
+  const c=document.getElementById('st-confpass').value;
+  if(!u||!p){alert('Sila isi username dan password!');return}
+  if(p!==c){alert('Password tidak sepadan!');return}
+  if(p.length<6){alert('Password mesti sekurang-kurangnya 6 aksara!');return}
+  // Update in-memory ADMINS (takes effect this session)
+  ADMINS[0]={u,p};
+  showToast('✓ Password dikemaskini untuk sesi ini. Download semula fail HTML untuk kekal.');
+  ['st-newuser','st-newpass','st-confpass'].forEach(id=>document.getElementById(id).value='');
+}
+function clearAllNota(){
+  if(!isAdmin||!confirm('⚠️ Padam SEMUA nota? Tindakan ini tidak boleh diundur!'))return;
+  store.nota=[];save();renderHome();showToast('Semua nota dipadam.');
+}
+function clearAllAnn(){
+  if(!isAdmin||!confirm('⚠️ Padam SEMUA pengumuman? Tindakan ini tidak boleh diundur!'))return;
+  store.ann=[];save();renderHome();showToast('Semua pengumuman dipadam.');
+}
+function clearAllData(){
+  if(!isAdmin||!confirm('⚠️ RESET SEMUA DATA PORTAL? Semua nota, pengumuman, pautan dan ahli akan dipadam. Tidak boleh diundur!'))return;
+  if(!confirm('Tekan OK sekali lagi untuk sahkan reset penuh.'))return;
+  store={ann:[],nota:[],pautan:[],ahli:[],jadual:[],settings:{...store.settings}};
+  save();renderAll();showToast('Portal telah direset.');goTo('home');
+}
+</script>
+</body>
+</html>
