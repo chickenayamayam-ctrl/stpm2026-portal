@@ -386,6 +386,7 @@ body.admin .admin-notice{display:flex}
     <button class="nav-btn" onclick="goTo('pautan')">Pautan</button>
     <button class="nav-btn" onclick="goTo('ahli')">Ahli</button>
     <button class="nav-btn" onclick="goTo('bot')">Bot</button>
+    <button class="nav-btn" onclick="goTo('feedback')">💬 Feedback</button>
     <button class="nav-btn admin-only" onclick="goTo('settings')" style="color:#b45309;background:#fef3c7">⚙️ Settings</button>
     <button class="nav-btn admin-only" onclick="goTo('activitylog')" style="color:#0d9488;background:#ccfbf1">📋 Log</button>
   </nav>
@@ -466,6 +467,7 @@ body.admin .admin-notice{display:flex}
     <div class="pl-card" onclick="goTo('pautan')"><div class="pl-icon" style="background:#fee2e2">🔗</div><h4>Pautan Berguna</h4><p>MPM, UPU & lain</p></div>
     <div class="pl-card" onclick="goTo('ahli')"><div class="pl-icon" style="background:#ede9fe">👥</div><h4>Admin & Mod</h4><p>Hubungi pentadbir</p></div>
     <div class="pl-card" onclick="goTo('bot')"><div class="pl-icon" style="background:#ccfbf1">🤖</div><h4>Bot Telegram</h4><p>Arahan bot group</p></div>
+    <div class="pl-card" onclick="goTo('feedback')"><div class="pl-icon" style="background:#fef3c7">💬</div><h4>Feedback</h4><p>Hantar cadangan</p></div>
   </div>
 </div>
 </div>
@@ -829,6 +831,71 @@ body.admin .admin-notice{display:flex}
 </div>
 </div>
 
+<!-- FEEDBACK -->
+<div id="sec-feedback" class="section">
+<div class="con">
+  <div class="bc"><span>Laman Utama</span>›<span style="color:var(--text)">Feedback & Cadangan</span></div>
+  <div class="ph"><h2>💬 Feedback & Cadangan</h2><p>Hantar maklum balas, cadangan atau pertanyaan kepada admin</p></div>
+
+  <!-- PUBLIC: SUBMIT FORM -->
+  <div id="fb-form-wrap" style="background:#fff;border:1px solid var(--gray3);border-radius:var(--radius);padding:22px;margin-bottom:20px">
+    <div style="font-size:15px;font-weight:700;color:var(--navy);margin-bottom:4px">✍️ Hantar Feedback</div>
+    <p style="font-size:12.5px;color:var(--muted);margin-bottom:16px">Feedback kamu akan dihantar kepada admin. Boleh letak nama atau anonymous.</p>
+    <div class="form-row">
+      <div class="fg"><label>Nama (optional)</label><input id="fb-name" placeholder="Nama kamu / Anonymous"/></div>
+      <div class="fg"><label>Jenis</label>
+        <select id="fb-type" style="width:100%;border:1.5px solid var(--gray3);border-radius:8px;padding:9px 11px;font-size:13px;font-family:inherit;outline:none;background:#fff">
+          <option>💡 Cadangan</option>
+          <option>🐛 Laporan Masalah</option>
+          <option>❓ Pertanyaan</option>
+          <option>👍 Pujian</option>
+          <option>📝 Lain-lain</option>
+        </select>
+      </div>
+    </div>
+    <div class="fg"><label>Mesej</label><textarea id="fb-msg" placeholder="Tulis feedback atau cadangan kamu di sini..."></textarea></div>
+    <!-- RATING -->
+    <div class="fg"><label>Rating Portal (optional)</label>
+      <div style="display:flex;gap:8px;margin-top:4px" id="fb-stars">
+        <span onclick="setRating(1)" style="font-size:26px;cursor:pointer;transition:.2s" class="fb-star">⭐</span>
+        <span onclick="setRating(2)" style="font-size:26px;cursor:pointer;transition:.2s" class="fb-star">⭐</span>
+        <span onclick="setRating(3)" style="font-size:26px;cursor:pointer;transition:.2s" class="fb-star">⭐</span>
+        <span onclick="setRating(4)" style="font-size:26px;cursor:pointer;transition:.2s" class="fb-star">⭐</span>
+        <span onclick="setRating(5)" style="font-size:26px;cursor:pointer;transition:.2s" class="fb-star">⭐</span>
+      </div>
+      <div id="fb-rating-label" style="font-size:11.5px;color:var(--muted);margin-top:5px">Tiada rating</div>
+    </div>
+    <div class="form-actions"><button class="btn btn-p" onclick="submitFeedback()">📨 Hantar Feedback</button></div>
+    <div id="fb-success" style="display:none;background:var(--green2);border:1px solid var(--green);border-radius:8px;padding:11px 14px;font-size:13px;font-weight:600;color:var(--green);margin-top:12px">✅ Feedback berjaya dihantar! Terima kasih.</div>
+  </div>
+
+  <!-- ADMIN: VIEW FEEDBACKS -->
+  <div class="admin-notice"><span>👑</span>Admin Mode — boleh tengok, balas dan padam semua feedback.</div>
+  <div class="admin-only block">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px">
+      <div class="sec-title">Semua Feedback</div>
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+        <select id="fb-filter-type" onchange="renderFeedback()" style="border:1.5px solid var(--gray3);border-radius:8px;padding:6px 10px;font-size:12px;font-family:inherit;outline:none;background:#fff">
+          <option value="">Semua Jenis</option>
+          <option>💡 Cadangan</option>
+          <option>🐛 Laporan Masalah</option>
+          <option>❓ Pertanyaan</option>
+          <option>👍 Pujian</option>
+          <option>📝 Lain-lain</option>
+        </select>
+        <select id="fb-filter-status" onchange="renderFeedback()" style="border:1.5px solid var(--gray3);border-radius:8px;padding:6px 10px;font-size:12px;font-family:inherit;outline:none;background:#fff">
+          <option value="">Semua Status</option>
+          <option value="baru">🔵 Baru</option>
+          <option value="dibaca">✅ Dibaca</option>
+          <option value="dibalas">💬 Dibalas</option>
+        </select>
+      </div>
+    </div>
+    <div id="fb-admin-list" style="display:flex;flex-direction:column;gap:10px"></div>
+  </div>
+</div>
+</div>
+
 <!-- ACTIVITY LOG (Admin Only) -->
 <div id="sec-activitylog" class="section">
 <div class="con">
@@ -907,7 +974,7 @@ const ALL_SUBJ=Object.values(SUBJEK).flatMap(g=>g.items);
 
 // ===== STATE =====
 let isAdmin=false;
-let store={ann:[],nota:[],pautan:[],ahli:[],jadual:[],activityLog:[],settings:{
+let store={ann:[],nota:[],pautan:[],ahli:[],jadual:[],activityLog:[],feedbacks:[],settings:{
   members:'—',groupname:'STPM 2026 Kohort Baharu',tguser:'@stpm20266',
   tglink:'https://t.me/stpm20266',desc:'',
   examname:'STPM Semester 2 2026 (Bertulis)',examdate:'2026-06-29',
@@ -996,7 +1063,7 @@ function goTo(id){
   document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById('sec-'+id).classList.add('active');
-  const idx={home:0,pengumuman:1,nota:2,jadual:3,pautan:4,ahli:5,bot:6,settings:7,activitylog:8}[id];
+  const idx={home:0,pengumuman:1,nota:2,jadual:3,pautan:4,ahli:5,bot:6,feedback:7,settings:8,activitylog:9}[id];
   document.querySelectorAll('.nav-btn')[idx]?.classList.add('active');
   curSec=id;window.scrollTo({top:0,behavior:'smooth'});
   document.getElementById('main-nav').classList.remove('open');
@@ -1012,6 +1079,7 @@ function renderSection(id){
   if(id==='settings')loadSettingsForm();
   if(id==='activitylog')renderLog();
   if(id==='bot')renderBotLink();
+  if(id==='feedback')renderFeedback();
 }
 
 // ===== TOAST =====
@@ -1362,7 +1430,82 @@ function saveAhli(){
 function deleteAhli(id){if(!isAdmin||!confirm('Padam?'))return;const a=store.ahli.find(x=>x.id===id);store.ahli=store.ahli.filter(a=>a.id!==id);save();renderAhli();logActivity('padam_ahli',a?.name||'')}
 renderAhli();
 
-// ===== ACTIVITY LOG =====
+// ===== FEEDBACK =====
+let fbRating=0;
+const ratingLabels=['','😞 Teruk','😐 Biasa','🙂 Okay','😊 Bagus','🤩 Sangat Bagus!'];
+function setRating(n){
+  fbRating=n;
+  document.querySelectorAll('.fb-star').forEach((s,i)=>s.style.filter=i<n?'none':'grayscale(1)');
+  document.getElementById('fb-rating-label').textContent=ratingLabels[n]||'Tiada rating';
+}
+function submitFeedback(){
+  const msg=document.getElementById('fb-msg').value.trim();
+  if(!msg){alert('Sila tulis feedback atau cadangan kamu!');return}
+  const fb={
+    id:Date.now(),
+    name:document.getElementById('fb-name').value.trim()||'Anonymous',
+    type:document.getElementById('fb-type').value,
+    msg,rating:fbRating,
+    status:'baru',reply:'',
+    device:getDeviceInfo(),
+    time:Date.now()
+  };
+  if(!store.feedbacks)store.feedbacks=[];
+  store.feedbacks.unshift(fb);save();
+  // Reset form
+  ['fb-name','fb-msg'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('fb-type').value='💡 Cadangan';
+  fbRating=0;
+  document.querySelectorAll('.fb-star').forEach(s=>s.style.filter='grayscale(1)');
+  document.getElementById('fb-rating-label').textContent='Tiada rating';
+  const suc=document.getElementById('fb-success');suc.style.display='block';
+  setTimeout(()=>suc.style.display='none',3500);
+  if(isAdmin)renderFeedback();
+}
+function renderFeedback(){
+  const c=document.getElementById('fb-admin-list');if(!c)return;
+  const typeFilter=document.getElementById('fb-filter-type')?.value||'';
+  const statusFilter=document.getElementById('fb-filter-status')?.value||'';
+  let items=(store.feedbacks||[]).filter(f=>(!typeFilter||f.type===typeFilter)&&(!statusFilter||f.status===statusFilter));
+  if(!items.length){
+    c.innerHTML='<div style="text-align:center;padding:36px;color:var(--muted)"><div style="font-size:36px;margin-bottom:8px">💬</div><p>Tiada feedback lagi.</p></div>';
+    return;
+  }
+  const statusBadge={baru:'<span style="background:#dbeafe;color:#1d4ed8;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px">🔵 Baru</span>',dibaca:'<span style="background:var(--green2);color:var(--green);font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px">✅ Dibaca</span>',dibalas:'<span style="background:#ede9fe;color:#7c3aed;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px">💬 Dibalas</span>'};
+  c.innerHTML=items.map(f=>`<div style="background:#fff;border:1px solid var(--gray3);border-radius:var(--radius);padding:16px;${f.status==='baru'?'border-left:3px solid var(--blue)':''}">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap;margin-bottom:10px">
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+        <span style="font-size:13px;font-weight:700;color:var(--navy)">${f.name}</span>
+        <span style="font-size:12px;color:var(--muted)">${f.type}</span>
+        ${f.rating?'<span style="font-size:12px">'+('⭐'.repeat(f.rating))+'</span>':''}
+        ${statusBadge[f.status]||''}
+      </div>
+      <div style="display:flex;gap:6px;align-items:center;flex-shrink:0">
+        <span style="font-size:11px;color:var(--muted2)">${new Date(f.time).toLocaleString('ms-MY')}</span>
+        <button class="btn btn-sm" style="background:var(--blue3);color:var(--blue);border:none;font-size:11px" onclick="markFbRead(${f.id})">✅ Baca</button>
+        <button class="btn btn-sm" style="background:#ede9fe;color:#7c3aed;border:none;font-size:11px" onclick="replyFb(${f.id})">💬 Balas</button>
+        <button class="btn btn-d btn-sm" onclick="deleteFb(${f.id})">Padam</button>
+      </div>
+    </div>
+    <div style="font-size:13.5px;color:var(--text);line-height:1.7;background:var(--gray);padding:10px 13px;border-radius:8px;margin-bottom:8px">${f.msg}</div>
+    ${f.reply?`<div style="background:#ede9fe;border-left:3px solid #7c3aed;padding:10px 13px;border-radius:0 8px 8px 0;font-size:12.5px;color:#4c1d95"><strong>💬 Balas Admin:</strong><br>${f.reply}</div>`:''}
+    <div style="font-size:11px;color:var(--muted2);margin-top:6px">${f.device||''}</div>
+  </div>`).join('');
+}
+function markFbRead(id){
+  const f=store.feedbacks.find(x=>x.id===id);
+  if(f&&f.status==='baru'){f.status='dibaca';save();renderFeedback();}
+}
+function replyFb(id){
+  const f=store.feedbacks.find(x=>x.id===id);if(!f)return;
+  const reply=prompt('Tulis balasan untuk "'+f.name+'":',f.reply||'');
+  if(reply===null)return;
+  f.reply=reply;f.status='dibalas';save();renderFeedback();showToast('✓ Balasan disimpan!');
+}
+function deleteFb(id){
+  if(!confirm('Padam feedback ini?'))return;
+  store.feedbacks=store.feedbacks.filter(x=>x.id!==id);save();renderFeedback();showToast('Feedback dipadam.');
+}
 const ACTION_ICONS={tambah_pengumuman:'📢',padam_pengumuman:'🗑️',tambah_nota:'📝',padam_nota:'🗑️',tambah_jadual:'📅',padam_jadual:'🗑️',tambah_pautan:'🔗',padam_pautan:'🗑️',tambah_ahli:'👤',padam_ahli:'🗑️',kemaskini_settings:'⚙️',kemaskini_marquee:'📡',kemaskini_countdown:'⏳',kemaskini_members:'👥',tukar_password:'🔒',set_botlink:'🤖',padam_botlink:'🤖',login:'🔐',logout:'🚪',reset_data:'⚠️',padam_semua_nota:'🗑️',padam_semua_ann:'🗑️'};
 function getDeviceInfo(){
   const ua=navigator.userAgent;
